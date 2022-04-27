@@ -1,0 +1,41 @@
+{
+    "name": "@paolomagic/react-checkout",
+    "version": "1.0.0",
+    "description": "react-component based cart for a shop checkout",
+    "main": "dist/index.cjs.js",
+    "module": "dist/index.esm.js",
+    "files": [
+        "dist"
+    ],
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
+    "scripts": {
+        "build": "rollup -c",
+        "build-watch": "rollup -c -w"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/paolomagic/react-checkout.git"
+    },
+    "keywords": [
+        "react-checkout",
+        "react-cart"
+    ],
+    "author": "vonAffenfels GmbH",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/paolomagic/react-checkout/issues"
+    },
+    "homepage": "https://github.com/paolomagic/react-checkout#readme",
+    "peerDependencies": {
+        "react": "^18.1.0",
+        "react-dom": "^18.1.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.0.8",
+        "@types/react-dom": "^18.0.2",
+        "rollup": "^2.70.2",
+        "rollup-plugin-delete": "^2.0.0"
+    }
+}
