@@ -21,9 +21,6 @@ export default [
         ],
         plugins: [
             resolve(),
-            commonjs({
-                include: /node-modules/
-            }),
             babel({
                 exclude: "node_modules/**",
                 extensions: [".js", ".jsx"],
@@ -36,6 +33,9 @@ export default [
                     "@babel/plugin-transform-async-to-generator"
                 ],
                 runtimeHelpers: true
+            }),
+            commonjs({
+                include: /node-modules/
             }),
             del({targets: ["dist/*"]})
         ],
