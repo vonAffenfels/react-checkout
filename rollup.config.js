@@ -25,7 +25,7 @@ export default [
                 exclude: "node_modules/**",
                 extensions: [".js", ".jsx"],
                 presets: [
-                    ["@babel/preset-env", {targets: {esmodules: true}}],
+                    ["@babel/preset-env", {useBuiltIns: "usage"}],
                     "@babel/preset-react"
                 ],
                 plugins: [
