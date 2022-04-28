@@ -26,7 +26,13 @@ export default [
             }),
             babel({
                 exclude: "node_modules/**",
-                presets: ["@babel/env", "@babel/preset-react"]
+                presets: [
+                    "@babel/env",
+                    "@babel/preset-react"
+                ],
+                plugins: [
+                    ["@babel/plugin-transform-runtime", {regenerator: true}]
+                ]
             }),
             del({targets: ["dist/*"]})
         ],
