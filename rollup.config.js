@@ -27,7 +27,7 @@ export default [
             babel({
                 exclude: "node_modules/**",
                 presets: [
-                    "@babel/preset-env",
+                    ["@babel/preset-env", {targets: {esmodules: true}}],
                     "@babel/preset-react"
                 ],
                 plugins: [
