@@ -29,7 +29,7 @@ export default [
                     "@babel/preset-react"
                 ],
                 plugins: [
-                    ["@babel/plugin-transform-runtime", {regenerator: true, corejs: 3}],
+                    ["@babel/plugin-transform-runtime", {regenerator: true}],
                     "@babel/plugin-transform-async-to-generator"
                 ],
                 runtimeHelpers: true
