@@ -27,11 +27,11 @@ export default [
             babel({
                 exclude: "node_modules/**",
                 presets: [
-                    "@babel/env",
+                    "@babel/preset-env",
                     "@babel/preset-react"
                 ],
                 plugins: [
-                    ["@babel/plugin-transform-runtime", {regenerator: true}]
+                    ["@babel/plugin-transform-runtime", {regenerator: true, corejs: 3}]
                 ]
             }),
             del({targets: ["dist/*"]})
