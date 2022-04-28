@@ -1,4 +1,7 @@
 import del from "rollup-plugin-delete";
+import resolve from "rollup-plugin-node-resolve";
+import commonjs from "rollup-plugin-commonjs";
+import babel from "rollup-plugin-babel";
 import pkg from "./package.json";
 
 export default [
@@ -15,6 +18,14 @@ export default [
             }
         ],
         plugins: [
+            resolve(),
+            commonjs({
+                include: /node-modules/
+            }),
+            babel({
+                exclude: "node_modules/**",
+                presets: ["@babel/env", "@babel/preset-react"]
+            }),
             del({targets: ["dist/*"]})
         ],
         external: Object.keys(pkg.peerDependencies || {})
