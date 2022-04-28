@@ -26,6 +26,7 @@ export default [
             }),
             babel({
                 exclude: "node_modules/**",
+                extensions: [".js", ".jsx"],
                 presets: [
                     ["@babel/preset-env", {targets: {esmodules: true}}],
                     "@babel/preset-react"
@@ -33,7 +34,8 @@ export default [
                 plugins: [
                     ["@babel/plugin-transform-runtime", {regenerator: true, corejs: 3}],
                     "@babel/plugin-transform-async-to-generator"
-                ]
+                ],
+                runtimeHelpers: true
             }),
             del({targets: ["dist/*"]})
         ],
