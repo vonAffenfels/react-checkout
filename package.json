@@ -1,6 +1,6 @@
 {
     "name": "react-ez-checkout",
-    "version": "1.0.16",
+    "version": "1.0.17",
     "description": "react-component based cart for a shop checkout",
     "main": "dist/index.cjs.js",
     "module": "dist/index.esm.js",
@@ -43,6 +43,7 @@
         "@babel/preset-react": "^7.16.7",
         "@types/react": "^18.0.8",
         "@types/react-dom": "^18.0.2",
+        "regenerator-runtime": "^0.13.9",
         "rollup": "^2.70.2",
         "rollup-plugin-babel": "^4.4.0",
         "rollup-plugin-commonjs": "^10.1.0",
