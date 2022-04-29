@@ -21,9 +21,6 @@ export default [
         ],
         plugins: [
             resolve(),
-            commonjs({
-                include: /node-modules/
-            }),
             babel({
                 exclude: "node_modules/**",
                 extensions: [".js", ".jsx"],
@@ -32,10 +29,12 @@ export default [
                     "@babel/preset-react"
                 ],
                 plugins: [
-                    "@babel/plugin-transform-modules-commonjs",
-                    "@babel/plugin-transform-runtime",
+                    ["@babel/transform-runtime", {regenerator: true}],
                 ],
                 runtimeHelpers: true
+            }),
+            commonjs({
+                include: /node-modules/
             }),
             del({targets: ["dist/*"]})
         ],
