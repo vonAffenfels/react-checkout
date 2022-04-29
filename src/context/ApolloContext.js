@@ -8,10 +8,6 @@ import {
 export const ApolloContext = createContext({});
 
 export const ApolloContextProvider = ({children, uri}) => {
-    if (!uri) {
-        throw new Error("no uri provided in ApolloContext");
-    }
-
     const client = new ApolloClient({
         uri: uri,
         cache: new InMemoryCache()

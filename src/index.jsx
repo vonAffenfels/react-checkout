@@ -9,15 +9,21 @@ import Cart from "./cart.jsx";
 Cart.ApolloContext = ApolloContext;
 Cart.CartContext = CartContext;
 Cart.CheckoutContext = CheckoutContext;
-Cart.BuyContext = ({children, uri, channel}) => (
-    <ApolloContextProvider uri={uri}>
-        <CheckoutContextProvider channel={channel}>
-            <CartContextProvider>
-                {children}
-            </CartContextProvider>
-        </CheckoutContextProvider>
-    </ApolloContextProvider>
-);
+Cart.BuyContext = ({children, uri, channel}) => {
+    if (!uri) {
+        return null;
+    }
+
+    return (
+        <ApolloContextProvider uri={uri}>
+            <CheckoutContextProvider channel={channel}>
+                <CartContextProvider>
+                    {children}
+                </CartContextProvider>
+            </CheckoutContextProvider>
+        </ApolloContextProvider>
+    );
+};
 Cart.useLocalStorage = useLocalStorage;
 Cart.CHECKOUT_KEY = CONST.CHECKOUT_KEY;
 
