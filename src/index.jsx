@@ -1,4 +1,6 @@
+/*before import */
 import "regenerator-runtime/runtime.js";
+/* after import */
 
 import ApolloContext, {ApolloContextProvider} from "./context/ApolloContext";
 import CartContext, {CartContextProvider} from "./context/CartContext";
