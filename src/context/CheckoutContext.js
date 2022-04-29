@@ -23,7 +23,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         const data = client.mutate({
             mutation: CHECKOUT_CREATE,
             variables: {
-                //TODO what is actually required?
+                //TODO what is required?
                 email: "anonymous@example.com",
                 channel: channel,
                 lines: [
