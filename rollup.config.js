@@ -21,27 +21,19 @@ export default [
         ],
         plugins: [
             resolve(),
+            commonjs({
+                include: /node-modules/
+            }),
             babel({
                 exclude: "node_modules/**",
                 extensions: [".js", ".jsx"],
                 presets: [
-                    ["@babel/preset-env", {
-                        targets: {
-                            "esmodules": false,
-                            "browsers": [
-                                "ie >= 11",
-                                "last 2 versions",
-                                "safari >= 7",
-                            ]
-                        }, useBuiltIns: "usage"
-                    }],
+                    ["@babel/preset-env", {targets: {esmodules: true}}],
                     "@babel/preset-react"
                 ],
                 plugins: [
-                    "@babel/plugin-transform-modules-commonjs",
-                    ["@babel/plugin-transform-runtime", {
-                        regenerator: true
-                    }],
+                    ["@babel/plugin-transform-runtime", {regenerator: true, corejs: 3}],
+                    "@babel/plugin-transform-async-to-generator"
                 ],
                 runtimeHelpers: true
             }),
@@ -53,3 +45,4 @@ export default [
         external: Object.keys(pkg.peerDependencies || {})
     }
 ]
+
