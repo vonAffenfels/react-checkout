@@ -21,22 +21,21 @@ export default [
         ],
         plugins: [
             resolve(),
+            commonjs({
+                include: /node-modules/
+            }),
             babel({
                 exclude: "node_modules/**",
                 extensions: [".js", ".jsx"],
                 presets: [
-                    ["@babel/preset-env", {useBuiltIns: "usage"}],
+                    "@babel/preset-env",
                     "@babel/preset-react"
                 ],
                 plugins: [
-                    ["@babel/plugin-transform-runtime", {regenerator: true}],
                     "@babel/plugin-transform-modules-commonjs",
-                    "@babel/plugin-transform-async-to-generator"
+                    "@babel/plugin-transform-runtime",
                 ],
                 runtimeHelpers: true
-            }),
-            commonjs({
-                include: /node-modules/
             }),
             del({targets: ["dist/*"]})
         ],
