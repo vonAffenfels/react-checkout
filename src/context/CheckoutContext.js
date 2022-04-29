@@ -1,3 +1,5 @@
+import "regenerator-runtime/runtime.js";
+
 import {createContext, useState, useEffect, useContext} from "react";
 import {useQuery} from "@apollo/client";
 import ApolloContext from "./ApolloContext";

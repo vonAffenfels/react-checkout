@@ -1,3 +1,5 @@
+import "regenerator-runtime/runtime.js";
+
 import {createContext, useState, useContext, useEffect} from "react";
 import ApolloContext from "./ApolloContext";
 import CheckoutContext from "./CheckoutContext";

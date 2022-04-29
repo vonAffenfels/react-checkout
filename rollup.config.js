@@ -25,12 +25,23 @@ export default [
                 exclude: "node_modules/**",
                 extensions: [".js", ".jsx"],
                 presets: [
-                    ["@babel/preset-env", {targets: {browsers: ["IE 11"]}, useBuiltIns: "usage"}],
+                    ["@babel/preset-env", {
+                        targets: {
+                            "esmodules": false,
+                            "browsers": [
+                                "ie >= 11",
+                                "last 2 versions",
+                                "safari >= 7",
+                            ]
+                        }, useBuiltIns: "usage"
+                    }],
                     "@babel/preset-react"
                 ],
                 plugins: [
-                    "@babel/plugin-transform-modules-commonjs"
-                    ["@babel/plugin-transform-runtime", {regenerator: true}],
+                    "@babel/plugin-transform-modules-commonjs",
+                    ["@babel/plugin-transform-runtime", {
+                        regenerator: true
+                    }],
                 ],
                 runtimeHelpers: true
             }),

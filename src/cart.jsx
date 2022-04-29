@@ -1,3 +1,5 @@
+import "regenerator-runtime/runtime.js";
+
 import React, {Fragment, useContext, useState} from "react";
 import CartContext from "./context/CartContext";
 
