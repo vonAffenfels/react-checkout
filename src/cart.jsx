@@ -4,7 +4,6 @@ import CartContext from "./context/CartContext";
 const Cart = ({...props}) => {
     const cartContext = useContext(CartContext);
     const {addItemToCart} = cartContext;
-    console.log("cartContext", cartContext);
 
     const [variantId, setVariantId] = useState("");
 

@@ -1,6 +1,5 @@
 import React, {createContext, useState, useEffect, useContext} from "react";
-import {useQuery} from "@apollo/client";
-import ApolloContext from "./ApolloContext";
+import {useQuery, useApolloClient} from "@apollo/client";
 import useLocalStorage from "../hooks/useLocalStorage";
 import CONST from "../lib/const";
 import CHECKOUT_BY_TOKEN from "../queries/checkoutByToken";
@@ -9,7 +8,7 @@ import CHECKOUT_CREATE from "../mutations/checkoutCreate";
 export const CheckoutContext = createContext({});
 
 export const CheckoutContextProvider = ({children, channel}) => {
-    const {client} = useContext(ApolloContext);
+    const client = useApolloClient();
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
 
