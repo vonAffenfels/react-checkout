@@ -7,7 +7,6 @@ export const CartContext = createContext({
 });
 
 export const CartContextProvider = ({children}) => {
-    const {client} = useContext(ApolloContext);
     const {checkout, createCheckout} = useContext(CheckoutContext);
     const [cartItems, setCartItems] = useState([]);
 

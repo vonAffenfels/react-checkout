@@ -17,6 +17,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     });
 
     const createCheckout = async (variantId) => {
+        console.log("client from useapolloclient", client);
         const data = client.mutate({
             mutation: CHECKOUT_CREATE,
             variables: {
