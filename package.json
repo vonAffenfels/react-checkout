@@ -1,6 +1,6 @@
 {
     "name": "react-ez-checkout",
-    "version": "1.0.31",
+    "version": "1.0.32",
     "description": "react-component based cart for a shop checkout",
     "main": "dist/index.cjs.js",
     "module": "dist/index.esm.js",
@@ -30,7 +30,9 @@
     "homepage": "https://github.com/paolomagic/react-checkout#readme",
     "peerDependencies": {
         "@apollo/client": "^3.5.8",
-        "graphql": "^16.4.0"
+        "graphql": "^16.4.0",
+        "react": "^18.1.0",
+        "react-dom": "^18.1.0"
     },
     "devDependencies": {
         "@babel/core": "^7.17.9",
@@ -41,8 +43,6 @@
         "@babel/preset-react": "^7.16.7",
         "@types/react": "^18.0.8",
         "@types/react-dom": "^18.0.2",
-        "react": "^18.1.0",
-        "react-dom": "^18.1.0",
         "rollup": "^2.70.2",
         "rollup-plugin-babel": "^4.4.0",
         "rollup-plugin-commonjs": "^10.1.0",

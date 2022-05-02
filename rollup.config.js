@@ -29,7 +29,7 @@ export default [
                 extensions: [".js", ".jsx"],
                 presets: [
                     ["@babel/preset-env", {targets: {esmodules: true}}],
-                    "@babel/preset-react"
+                    ["@babel/preset-react", {runtime: "automatic"}]
                 ],
                 plugins: [
                     ["@babel/plugin-transform-runtime", {regenerator: true, helpers: false, corejs: 3}],
