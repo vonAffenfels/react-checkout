@@ -1,4 +1,4 @@
-import {createContext, useState, useEffect, useContext} from "react";
+import React, {createContext, useState, useEffect, useContext} from "react";
 import {useQuery} from "@apollo/client";
 import ApolloContext from "./ApolloContext";
 import useLocalStorage from "../hooks/useLocalStorage";

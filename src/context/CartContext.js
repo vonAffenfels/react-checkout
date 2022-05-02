@@ -1,4 +1,4 @@
-import {createContext, useState, useContext, useEffect} from "react";
+import React, {createContext, useState, useContext, useEffect} from "react";
 import ApolloContext from "./ApolloContext";
 import CheckoutContext from "./CheckoutContext";
 
