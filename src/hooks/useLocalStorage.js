@@ -3,6 +3,11 @@ import {useState, useCallback, useEffect} from "react";
 const useLocalStorage = (key, initialValue = "") => {
     const [storedValue, setStoredValue] = useState(() => {
         let result = initialValue;
+
+        if (typeof window === "undefined") {
+            return result;
+        }
+
         try {
             const item = window.localStorage.getItem(key);
             result = JSON.parse(item);
@@ -15,6 +20,10 @@ const useLocalStorage = (key, initialValue = "") => {
 
     const setValue = (value) => {
         setStoredValue(value);
+
+        if (typeof window === "undefined") {
+            return;
+        }
 
         try {
             window.localStorage.setItem(key, JSON.stringify(value));
@@ -37,6 +46,10 @@ const useLocalStorage = (key, initialValue = "") => {
     }, [key]);
 
     useEffect(() => {
+        if (typeof window === "undefined") {
+            return;
+        }
+
         window.addEventListener("storage", onStorage);
 
         return () => {

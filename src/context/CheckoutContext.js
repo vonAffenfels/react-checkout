@@ -9,6 +9,7 @@ export const CheckoutContext = createContext({});
 
 export const CheckoutContextProvider = ({children, channel}) => {
     const client = useApolloClient();
+    console.log("useApolloClient", client);
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
 

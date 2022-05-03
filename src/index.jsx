@@ -12,7 +12,6 @@ Cart.ApolloContext = ApolloContext;
 Cart.CartContext = CartContext;
 Cart.CheckoutContext = CheckoutContext;
 Cart.BuyContext = ({children, uri, channel}) => {
-    console.log(children, uri, channel);
     if (!uri || typeof window === "undefined") {
         return children;
     }
