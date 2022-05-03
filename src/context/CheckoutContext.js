@@ -9,7 +9,6 @@ export const CheckoutContext = createContext({});
 
 export const CheckoutContextProvider = ({children, channel}) => {
     const client = useApolloClient();
-    console.log("useApolloClient", client);
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
 
@@ -19,7 +18,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     const createCheckout = async (variantId) => {
         console.log("client from useapolloclient", client);
-        const data = client.mutate({
+        const data = await client.mutate({
             mutation: CHECKOUT_CREATE,
             variables: {
                 //TODO what is required?
