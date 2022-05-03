@@ -4,6 +4,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import CONST from "../lib/const";
 import CHECKOUT_BY_TOKEN from "../queries/checkoutByToken";
 import CHECKOUT_CREATE from "../mutations/checkoutCreate";
+import VARIANT_BY_SKU from "../queries/variantBySku";
 
 export const CheckoutContext = createContext({});
 
@@ -15,10 +16,17 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const {loading, error, data, refetch} = useQuery(CHECKOUT_BY_TOKEN, {
         variables: {checkoutToken}
     });
+    const variantBySkuResult = useQuery(VARIANT_BY_SKU, {
+        variables: {
+            sku: "ZD-16303",
+            locale: "DE_DE"
+        }
+    });
+    console.log("variantBySkuResult", variantBySkuResult);
 
     const createCheckout = async (variantId) => {
         console.log("client from useapolloclient", client);
-        const data = await client.mutate({
+        const {data} = await client.mutate({
             mutation: CHECKOUT_CREATE,
             variables: {
                 //TODO what is required?
@@ -33,6 +41,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
             }
         });
         console.log("createCheckout, data:", data);
+        if (data?.checkoutCreate?.errors?.length) {
+            data.checkoutCreate.errors.forEach(err => console.warn(err));
+        }
+
         if (data?.checkoutCreate?.checkout?.token) {
             setCheckoutToken(data.checkoutCreate.checkout.token);
         }
