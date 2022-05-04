@@ -60,6 +60,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
         setCheckout(data?.checkout);
     }, [loading, error, data]);
 
+    console.log("CheckoutContext, checkout:", checkout);
+
     return (
         <CheckoutContext.Provider value={{
             checkout,
