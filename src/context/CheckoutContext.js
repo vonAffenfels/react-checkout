@@ -16,16 +16,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const {loading, error, data, refetch} = useQuery(CHECKOUT_BY_TOKEN, {
         variables: {checkoutToken}
     });
-    const variantBySkuResult = useQuery(VARIANT_BY_SKU, {
-        variables: {
-            sku: "ZD-16303",
-            locale: "DE_DE"
-        }
-    });
-    console.log("variantBySkuResult", variantBySkuResult);
 
     const createCheckout = async (variantId) => {
-        console.log("client from useapolloclient", client);
         const {data} = await client.mutate({
             mutation: CHECKOUT_CREATE,
             variables: {

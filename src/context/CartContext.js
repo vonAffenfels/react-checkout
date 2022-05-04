@@ -15,7 +15,7 @@ export const CartContextProvider = ({children}) => {
         if (!checkout) {
             await createCheckout(variantId);
         } else {
-            //TODO addProductToCheckout
+            //TODO addProductToCheckout (existing)
         }
     };
 
