@@ -1,5 +1,4 @@
-import React, {useContext} from "react";
-import {useApolloClient} from "@apollo/client";
+import React from "react";
 
 import ApolloContext, {ApolloContextProvider} from "./context/ApolloContext";
 import CartContext, {CartContextProvider} from "./context/CartContext";
@@ -26,19 +25,6 @@ Cart.BuyContext = ({children, uri, channel}) => {
             </CheckoutContextProvider>
         </ApolloContextProvider>
     );
-};
-Cart.useApi = () => {
-    const apolloContext = useContext(ApolloContext);
-    const client = useApolloClient();
-    const cartContext = useContext(CartContext);
-    const checkoutContext = useContext(CheckoutContext);
-
-    return [
-        apolloContext,
-        client,
-        cartContext,
-        checkoutContext
-    ];
 };
 Cart.useLocalStorage = useLocalStorage;
 Cart.CHECKOUT_KEY = CONST.CHECKOUT_KEY;

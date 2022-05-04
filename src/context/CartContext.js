@@ -8,7 +8,6 @@ export const CartContext = createContext({
 
 export const CartContextProvider = ({children}) => {
     const {checkout, createCheckout} = useContext(CheckoutContext);
-    const [cartItems, setCartItems] = useState([]);
 
     const addItemToCart = async (variantId) => {
         console.log("addItemToCart", variantId);
@@ -19,14 +18,8 @@ export const CartContextProvider = ({children}) => {
         }
     };
 
-    useEffect(() => {
-        //TODO setcartitems when updated checkout
-    }, [checkout]);
-
     return (
         <CartContext.Provider value={{
-            cartItems,
-            setCartItems,
             addItemToCart,
         }}>
             {children}

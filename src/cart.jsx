@@ -1,13 +1,14 @@
 import React, {Fragment, useContext, useState} from "react";
-import CartContext from "./context/CartContext";
+import CheckoutContext from "./context/CheckoutContext";
 
 const Cart = ({...props}) => {
-    const cartContext = useContext(CartContext);
-    const {cartItems} = cartContext;
+    const {checkout} = useContext(CheckoutContext);
+
+    console.log("Cart, checkout:", checkout);
 
     return (
         <Fragment>
-            {cartItems.map((cartItem, i) => (
+            {checkout?.lines?.map((cartItem, i) => (
                 <div key={"cart-item-" + i}>
                     {JSON.stringify(cartItem)}
                 </div>
