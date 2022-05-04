@@ -46,7 +46,15 @@ export const CheckoutContextProvider = ({children, channel}) => {
         console.log("addItemToCheckout", variantId);
         const {data} = await client.mutate({
             mutation: CHECKOUT_ADD_PRODUCT_LINE,
-            variables: {checkoutToken}
+            variables: {
+                checkoutToken,
+                lines: [
+                    {
+                        quantity: 1,
+                        variantId: variantId
+                    }
+                ]
+            }
         });
         console.log("CHECKOUT_ADD_PRODUCT_LINE, data:", data);
         if (data?.checkoutLinesAdd?.errors?.length) {

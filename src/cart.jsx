@@ -10,7 +10,10 @@ const Cart = ({...props}) => {
         <Fragment>
             {checkout?.lines?.map((cartItem, i) => (
                 <div key={"cart-item-" + i}>
-                    {JSON.stringify(cartItem)}
+                    <p>
+                        <span>{cartItem.variant.product.name} {cartItem.variant.name} x{cartItem.quantity}</span>
+                        <span>Preis: {cartItem.totalPrice.gross.amount} {cartItem.totalPrice.gross.currency}</span>
+                    </p>
                 </div>
             ))}
         </Fragment>
