@@ -56,7 +56,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [checkoutToken]);
 
     useEffect(() => {
-        console.log(loading, error, data);
+        console.log(loading, data, "setCheckout to:", data?.checkout);
         setCheckout(data?.checkout);
     }, [loading, error, data]);
 
