@@ -4,6 +4,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import CONST from "../lib/const";
 import CHECKOUT_BY_TOKEN from "../queries/checkoutByToken";
 import CHECKOUT_CREATE from "../mutations/checkoutCreate";
+import CHECKOUT_ADD_PRODUCT_LINE from "../mutations/checkoutAddProductLine";
 import VARIANT_BY_SKU from "../queries/variantBySku";
 
 export const CheckoutContext = createContext({});
@@ -21,7 +22,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
         const {data} = await client.mutate({
             mutation: CHECKOUT_CREATE,
             variables: {
-                //TODO what is required?
                 email: "anonymous@example.com",
                 channel: channel,
                 lines: [
@@ -42,6 +42,21 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
     };
 
+    const addItemToCheckout = async (variantId) => {
+        const {data} = await client.mutate({
+            mutation: CHECKOUT_ADD_PRODUCT_LINE,
+            variables: {checkoutToken}
+        });
+        console.log("CHECKOUT_ADD_PRODUCT_LINE, data:", data);
+        if (data?.checkoutLinesAdd?.errors?.length) {
+            data.checkoutLinesAdd.errors.forEach(err => console.warn(err));
+        }
+
+        if (data?.checkoutLinesAdd?.checkout) {
+            setCheckout(data.checkoutLinesAdd.checkout);
+        }
+    };
+
     const getCheckoutByToken = async () => {
         console.log("getCheckoutByToken", checkoutToken);
         if (checkoutToken) {
@@ -53,19 +68,18 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     useEffect(() => {
         getCheckoutByToken();
-    }, [checkoutToken]);
+    }, [checkoutToken, checkout?.lines?.length]);
 
     useEffect(() => {
         console.log(loading, data, "setCheckout to:", data?.checkout);
         setCheckout(data?.checkout);
     }, [loading, error, data]);
 
-    console.log("CheckoutContext, checkout:", checkout);
-
     return (
         <CheckoutContext.Provider value={{
             checkout,
-            createCheckout
+            createCheckout,
+            addItemToCheckout,
         }}>
             {children}
         </CheckoutContext.Provider>

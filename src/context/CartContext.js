@@ -7,14 +7,14 @@ export const CartContext = createContext({
 });
 
 export const CartContextProvider = ({children}) => {
-    const {checkout, createCheckout} = useContext(CheckoutContext);
+    const {checkout, createCheckout, addItemToCheckout} = useContext(CheckoutContext);
 
     const addItemToCart = async (variantId) => {
         console.log("addItemToCart", variantId);
         if (!checkout) {
             await createCheckout(variantId);
         } else {
-            //TODO addProductToCheckout (existing)
+            await addItemToCheckout(variantId);
         }
     };
 

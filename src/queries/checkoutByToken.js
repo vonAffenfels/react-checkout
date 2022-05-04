@@ -1,26 +1,12 @@
 import {gql} from "@apollo/client";
 
+import CheckoutDetailsFragment from "../fragments/checkoutDetailsFragment";
+
 export default gql`
+    ${CheckoutDetailsFragment}
     query CheckoutByToken($checkoutToken: UUID!) {
         checkout(token: $checkoutToken) {
-            id
-            token
-            email
-            availableShippingMethods {
-                id
-            }
-            availablePaymentGateways {
-                id
-            }
-            lines {
-                id
-                variant {
-                    id
-                    product {
-                        id
-                    }
-                }
-            }
+            ...CheckoutDetailsFragment
         }
     }
 `;
