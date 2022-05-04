@@ -12,12 +12,6 @@ export default gql`
             id
         }
         lines {
-            unitPrice {
-                gross {
-                    currency
-                    amount
-                }
-            }
             totalPrice {
                 gross {
                     currency
@@ -27,9 +21,13 @@ export default gql`
             variant {
                 id
                 name
-                thumbnail {
-                    url
-                    alt
+                pricing {
+                    price {
+                        gross {
+                            currency
+                            amount
+                        }
+                    }
                 }
                 product {
                     id
