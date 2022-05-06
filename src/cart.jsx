@@ -1,6 +1,8 @@
 import React, {Fragment, useContext, useState} from "react";
 import CheckoutContext from "./context/CheckoutContext";
 
+import "./styles.scss";
+
 const Cart = ({...props}) => {
     const {checkout} = useContext(CheckoutContext);
 
