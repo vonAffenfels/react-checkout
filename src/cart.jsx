@@ -9,7 +9,7 @@ const Cart = ({...props}) => {
     return (
         <Fragment>
             {checkout?.lines?.map((cartItem, i) => (
-                <div key={"cart-item-" + i}>
+                <div key={"cart-item-" + i} className="cart-item">
                     <p>
                         <span>{cartItem.variant.product.name} {cartItem.variant.name} x{cartItem.quantity}</span>
                         <span>Preis: {cartItem.totalPrice.gross.amount} {cartItem.totalPrice.gross.currency}</span>

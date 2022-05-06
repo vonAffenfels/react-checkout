@@ -1,6 +1,7 @@
 import del from "rollup-plugin-delete";
 import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
+import sass from "rollup-plugin-sass";
 import babel from "rollup-plugin-babel";
 import pkg from "./package.json";
 
@@ -20,6 +21,7 @@ export default [
             }
         ],
         plugins: [
+            sass({insert: true}),
             resolve(),
             commonjs({
                 include: /node-modules/
