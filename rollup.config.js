@@ -21,7 +21,7 @@ export default [
             }
         ],
         plugins: [
-            sass(),
+            sass({insert: true}),
             resolve(),
             commonjs({
                 include: /node-modules/
