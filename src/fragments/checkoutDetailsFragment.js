@@ -9,9 +9,7 @@ export default gql`
         token
         email
         discount {
-            gross {
-                ...PriceFragment
-            }
+            ...PriceFragment
         }
         discountName
         subtotalPrice {
