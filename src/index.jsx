@@ -8,6 +8,9 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import CONST from "./lib/const";
 
 import Cart from "./cart.jsx";
+import CheckoutLine from "./checkoutLine.jsx";
+
+Cart.CheckoutLine = CheckoutLine;
 
 Cart.ApolloContext = ApolloContext;
 Cart.CartContext = CartContext;

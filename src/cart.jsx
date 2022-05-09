@@ -2,7 +2,7 @@ import React, {Fragment, useContext, useState} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 
 import CheckoutContext from "./context/CheckoutContext";
-import CheckoutLine from "./checkoutLine";
+import CheckoutLine from "./checkoutLine.jsx";
 
 const Cart = ({...props}) => {
     const {checkout} = useContext(CheckoutContext);
