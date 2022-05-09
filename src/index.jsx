@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles.scss";
+import "./styles/tailwind.css";
 
 import ApolloContext, {ApolloContextProvider} from "./context/ApolloContext";
 import CartContext, {CartContextProvider} from "./context/CartContext";

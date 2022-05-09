@@ -1,7 +1,7 @@
 import del from "rollup-plugin-delete";
 import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
-import sass from "rollup-plugin-sass";
+import postcss from "rollup-plugin-postcss";
 import babel from "rollup-plugin-babel";
 import pkg from "./package.json";
 
@@ -21,7 +21,16 @@ export default [
             }
         ],
         plugins: [
-            sass({insert: true}),
+            postcss({
+                config: {
+                    path: "./postcss.config.js"
+                },
+                extensions: [".css"],
+                minimize: true,
+                inject: {
+                    insertAt: "top"
+                }
+            }),
             resolve(),
             commonjs({
                 include: /node-modules/
