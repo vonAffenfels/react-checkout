@@ -43,6 +43,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const addItemToCheckout = async (variantId) => {
+        if (!checkout) {
+            return createCheckout(variantId);
+        }
         console.log("addItemToCheckout", variantId);
         const {data} = await client.mutate({
             mutation: CHECKOUT_ADD_PRODUCT_LINE,
@@ -51,6 +54,34 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 lines: [
                     {
                         quantity: 1,
+                        variantId: variantId
+                    }
+                ]
+            }
+        });
+        console.log("CHECKOUT_ADD_PRODUCT_LINE, data:", data);
+        if (data?.checkoutLinesAdd?.errors?.length) {
+            data.checkoutLinesAdd.errors.forEach(err => console.warn(err));
+        }
+
+        if (data?.checkoutLinesAdd?.checkout) {
+            setCheckout(data.checkoutLinesAdd.checkout);
+        }
+    };
+
+    const removeItemFromCheckout = async (variantId) => {
+        console.log("removeItemFromCheckout", variantId);
+        if (!checkout) {
+            return;
+        }
+
+        const {data} = await client.mutate({
+            mutation: CHECKOUT_ADD_PRODUCT_LINE,
+            variables: {
+                checkoutToken,
+                lines: [
+                    {
+                        quantity: 0,
                         variantId: variantId
                     }
                 ]
@@ -89,6 +120,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             checkout,
             createCheckout,
             addItemToCheckout,
+            removeItemFromCheckout,
         }}>
             {children}
         </CheckoutContext.Provider>

@@ -1,4 +1,6 @@
-import React from "react";
+import React, {useContext} from "react";
+
+import CheckoutContext from "./context/CheckoutContext";
 
 const CheckoutLine = ({
     variant: {
@@ -9,18 +11,20 @@ const CheckoutLine = ({
     quantity,
     totalPrice
 }) => {
+    const {removeItemFromCheckout} = useContext(CheckoutContext);
 
-    const onRemove = () => {
+    const onRemove = async () => {
         // TODO
         console.warn("implement onRemove");
+        await removeItemFromCheckout(id);
     };
 
     return (
         <li key={id} className="flex py-6">
             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                 <img
-                    src={product.imageSrc}
-                    alt={product.imageAlt}
+                    src={product.thumbnail?.url}
+                    alt={product.thumbnail?.alt}
                     className="h-full w-full object-cover object-center"
                 />
             </div>
