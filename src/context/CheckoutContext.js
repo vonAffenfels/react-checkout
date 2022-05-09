@@ -5,7 +5,7 @@ import CONST from "../lib/const";
 import CHECKOUT_BY_TOKEN from "../queries/checkoutByToken";
 import CHECKOUT_CREATE from "../mutations/checkoutCreate";
 import CHECKOUT_ADD_PRODUCT_LINE from "../mutations/checkoutAddProductLine";
-import VARIANT_BY_SKU from "../queries/variantBySku";
+import CHECKOUT_DELETE_PRODUCT_LINE from "../mutations/checkoutLineDelete";
 
 export const CheckoutContext = createContext({});
 
@@ -69,31 +69,26 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
     };
 
-    const removeItemFromCheckout = async (variantId) => {
-        console.log("removeItemFromCheckout", variantId);
+    const removeItemFromCheckout = async (lineId) => {
+        console.log("removeItemFromCheckout", lineId);
         if (!checkout) {
             return;
         }
 
         const {data} = await client.mutate({
-            mutation: CHECKOUT_ADD_PRODUCT_LINE,
+            mutation: CHECKOUT_DELETE_PRODUCT_LINE,
             variables: {
                 checkoutToken,
-                lines: [
-                    {
-                        quantity: 0,
-                        variantId: variantId
-                    }
-                ]
+                lineId
             }
         });
-        console.log("CHECKOUT_ADD_PRODUCT_LINE, data:", data);
-        if (data?.checkoutLinesAdd?.errors?.length) {
-            data.checkoutLinesAdd.errors.forEach(err => console.warn(err));
+        console.log("CHECKOUT_DELETE_PRODUCT_LINE, data:", data);
+        if (data?.checkoutLineDelete?.errors?.length) {
+            data.checkoutLineDelete.errors.forEach(err => console.warn(err));
         }
 
-        if (data?.checkoutLinesAdd?.checkout) {
-            setCheckout(data.checkoutLinesAdd.checkout);
+        if (data?.checkoutLineDelete?.checkout) {
+            setCheckout(data.checkoutLineDelete.checkout);
         }
     };
 
