@@ -4,7 +4,7 @@ import CheckoutDetailsFragment from "../fragments/checkoutDetailsFragment";
 
 export default gql`
     ${CheckoutDetailsFragment}
-    mutation CheckoutLineDelete($checkoutToken: UUID!, $lines: [CheckoutLineInput!]!) {
+    mutation CheckoutLineDelete($checkoutToken: UUID!, $lineId: ID!) {
         checkoutLineDelete(
             token: $checkoutToken
             lineId: $lineId

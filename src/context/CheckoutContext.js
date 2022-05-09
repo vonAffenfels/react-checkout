@@ -70,7 +70,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const removeItemFromCheckout = async (lineId) => {
-        console.log("removeItemFromCheckout", lineId);
+        console.log("removeItemFromCheckout", lineId, {
+            checkoutToken,
+            lineId
+        });
         if (!checkout) {
             return;
         }
