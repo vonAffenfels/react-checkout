@@ -1,10 +1,37 @@
 import {gql} from "@apollo/client";
 
+import PriceFragment from "../fragments/PriceFragment";
+
 export default gql`
+    ${PriceFragment}
     fragment CheckoutDetailsFragment on Checkout {
         id
         token
         email
+        discount {
+            gross {
+                ...PriceFragment
+            }
+        }
+        discountName
+        subtotalPrice {
+            net {
+                ...PriceFragment
+            }
+            tax {
+                ...PriceFragment
+            }
+        }
+        shippingPrice {
+            gross {
+                ...PriceFragment
+            }
+        }
+        totalPrice {
+            gross {
+                ...PriceFragment
+            }
+        }
         availableShippingMethods {
             id
         }
@@ -14,8 +41,7 @@ export default gql`
         lines {
             totalPrice {
                 gross {
-                    currency
-                    amount
+                    ...PriceFragment
                 }
             }
             variant {
@@ -24,8 +50,7 @@ export default gql`
                 pricing {
                     price {
                         gross {
-                            currency
-                            amount
+                            ...PriceFragment
                         }
                     }
                 }
