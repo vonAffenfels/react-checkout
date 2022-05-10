@@ -13,7 +13,7 @@ const Cart = ({...props}) => {
     return (
         <Fragment>
             {!open && (
-                <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div className="border border-gray-300 rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-opacity-50 flex justify-center items-center absolute top-0 right-0">
                     <div className="bg-white px-16 py-14 rounded-md text-center">
                         <h1 className="text-xl mb-4 font-bold text-slate-500">Warenkorb</h1>
                         <button
