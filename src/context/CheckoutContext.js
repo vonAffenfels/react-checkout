@@ -13,6 +13,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const client = useApolloClient();
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
+    const [displayState, setDisplayState] = useState("widget");
+    const [isCartOpen, setCartOpen] = useState(false);
 
     const {loading, error, data, refetch} = useQuery(CHECKOUT_BY_TOKEN, {
         variables: {checkoutToken}
@@ -119,6 +121,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
             createCheckout,
             addItemToCheckout,
             removeItemFromCheckout,
+            displayState,
+            setDisplayState,
+            isCartOpen,
+            setCartOpen
         }}>
             {children}
         </CheckoutContext.Provider>
