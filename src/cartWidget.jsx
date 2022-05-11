@@ -21,16 +21,13 @@ const CartWidget = ({props}) => {
     return (
         <Fragment>
             {!isCartOpen && (
-                <div className="bg-opacity-50 flex justify-center items-center absolute top-0 right-0">
-                    <div className="bg-white px-16 py-14 rounded-md text-center">
-                        <h1 className="text-xl mb-4 font-bold text-slate-500">Warenkorb</h1>
-                        <button
-                            className="bg-indigo-500 px-4 py-2 rounded-md text-md text-white"
-                            onClick={() => setCartOpen(true)}
-                        >
-                            Öffnen
-                        </button>
-                    </div>
+                <div className="bg-opacity-50 flex justify-center items-center absolute top-10 right-0">
+                    <button
+                        className="bg-indigo-500 px-4 py-2 text-md text-white"
+                        onClick={() => setCartOpen(true)}
+                    >
+                        Warenkorb Öffnen
+                    </button>
                 </div>
             )}
 
@@ -66,7 +63,13 @@ const CartWidget = ({props}) => {
                                                 <div className="flex items-start justify-between">
                                                     <Dialog.Title className="text-lg font-medium text-gray-900">Shopping cart</Dialog.Title>
                                                     <div className="ml-3 flex h-7 items-center">
-                                                        <CloseButton onClick={() => setCartOpen(false)} />
+                                                        <button
+                                                            type="button"
+                                                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
+                                                            onClick={() => setCartOpen(false)}
+                                                        >
+                                                            X
+                                                        </button>
                                                     </div>
                                                 </div>
 
