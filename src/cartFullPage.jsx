@@ -19,7 +19,7 @@ const CartFullPage = ({props}) => {
 
     return (
         <Transition.Root show={true} as={Fragment}>
-            <Dialog as="div" className="fixed inset-0 overflow-hidden">
+            <Dialog as="div" className="fixed inset-0 overflow-hidden" onClose={() => setMounting(true)}>
                 <div className="absolute inset-0 overflow-hidden">
                     <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
                         <Transition.Child
