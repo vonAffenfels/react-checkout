@@ -3,7 +3,7 @@ import React, {Fragment, useContext} from "react";
 
 import CheckoutContext from "./context/CheckoutContext";
 import CheckoutLine from "./components/checkoutLine.jsx";
-import CloseButton from "./components/closeButton";
+import CloseButton from "./components/closeButton.jsx";
 
 const CartWidget = ({props}) => {
     const {
