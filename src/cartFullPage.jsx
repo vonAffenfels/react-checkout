@@ -1,5 +1,8 @@
 import React, {Fragment, useContext} from "react";
+import {Dialog, Transition} from "@headlessui/react";
+
 import CheckoutContext from "./context/CheckoutContext";
+import CloseButton from "./components/closeButton.jsx";
 
 const CartFullPage = ({props}) => {
     const {
@@ -8,18 +11,25 @@ const CartFullPage = ({props}) => {
     } = useContext(CheckoutContext);
 
     return (
-        <Fragment>
-            <div className="bg-opacity-50 flex justify-center items-center absolute top-0 right-0">
-                <div className="bg-white px-16 py-14 rounded-md text-center">
-                    <button
-                        className="bg-indigo-500 px-4 py-2 rounded-md text-md text-white"
-                        onClick={() => setDisplayState("widget")}
+        <div className="fixed inset-0 overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden">
+                <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                    <Transition.Child
+                        as={Fragment}
+                        enter="transform transition ease-in-out duration-500 sm:duration-700"
+                        enterFrom="translate-x-full"
+                        enterTo="translate-x-0"
+                        leave="transform transition ease-in-out duration-500 sm:duration-700"
+                        leaveFrom="translate-x-0"
+                        leaveTo="translate-x-full"
                     >
-                        X
-                    </button>
+                        <Dialog.Panel className="pointer-events-auto w-screen">
+                            <CloseButton onClick={() => setDisplayState("widget")} />
+                        </Dialog.Panel>
+                    </Transition.Child>
                 </div>
             </div>
-        </Fragment>
+        </div>
     );
 }
 

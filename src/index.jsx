@@ -7,7 +7,7 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import CONST from "./lib/const";
 
 import Cart from "./cart.jsx";
-import CheckoutLine from "./checkoutLine.jsx";
+import CheckoutLine from "./components/checkoutLine.jsx";
 
 Cart.CheckoutLine = CheckoutLine;
 

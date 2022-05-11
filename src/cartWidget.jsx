@@ -2,7 +2,8 @@ import {Dialog, Transition} from "@headlessui/react";
 import React, {Fragment, useContext} from "react";
 
 import CheckoutContext from "./context/CheckoutContext";
-import CheckoutLine from "./checkoutLine.jsx";
+import CheckoutLine from "./components/checkoutLine.jsx";
+import CloseButton from "./components/closeButton";
 
 const CartWidget = ({props}) => {
     const {
@@ -65,14 +66,7 @@ const CartWidget = ({props}) => {
                                                 <div className="flex items-start justify-between">
                                                     <Dialog.Title className="text-lg font-medium text-gray-900">Shopping cart</Dialog.Title>
                                                     <div className="ml-3 flex h-7 items-center">
-                                                        <button
-                                                            type="button"
-                                                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                                                            onClick={() => setCartOpen(false)}
-                                                        >
-                                                            <span className="sr-only">Close panel</span>
-                                                            {/* TODO icon*/}
-                                                        </button>
+                                                        <CloseButton onClick={() => setCartOpen(false)} />
                                                     </div>
                                                 </div>
 

@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 
-import CheckoutContext from "./context/CheckoutContext";
+import CheckoutContext from "../context/CheckoutContext";
 
 const CheckoutLine = ({
     id,
@@ -17,8 +17,6 @@ const CheckoutLine = ({
     const {removeItemFromCheckout} = useContext(CheckoutContext);
 
     const onRemove = async () => {
-        // TODO
-        console.warn("implement onRemove");
         await removeItemFromCheckout(id);
     };
 
