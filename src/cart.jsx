@@ -5,15 +5,16 @@ import CartWidget from "./cartWidget.jsx";
 import CartFullPage from "./cartFullPage.jsx";
 
 const Cart = ({...props}) => {
-    const {displayState} = useContext(CheckoutContext);
+    let {displayState} = useContext(CheckoutContext);
+    let component = null;
 
     if (displayState === "widget") {
-        return <CartWidget />
+        component = <CartWidget />
     } else if (displayState === "cartFullPage") {
-        return <CartFullPage />
+        component = <CartFullPage />
     }
 
-    return null;
+    return <div className="react-ez-checkout-cart-wrapper">{component}</div>;
 };
 
 export default Cart;

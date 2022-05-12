@@ -25,7 +25,7 @@ export default [
                 config: {
                     path: "./postcss.config.js"
                 },
-                extensions: [".css"],
+                extensions: [".css", ".scss"],
                 minimize: true,
                 inject: {
                     insertAt: "top"

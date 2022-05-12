@@ -4,7 +4,7 @@ import {Dialog, Transition} from "@headlessui/react";
 import CheckoutContext from "./context/CheckoutContext";
 import CheckoutLine from "./components/checkoutLine.jsx";
 import SidePanelLayout from "./components/sidePanelLayout.jsx";
-import {TrashIcon} from "@heroicons/react/solid";
+import {XIcon} from "@heroicons/react/solid";
 
 const CartWidget = ({props}) => {
     const {
@@ -55,7 +55,7 @@ const CartWidget = ({props}) => {
                                             onClick={() => setCartOpen(false)}
                                         >
                                             <span className="sr-only">Schließen</span>
-                                            <TrashIcon className="h-5 w-5" aria-hidden="true" />
+                                            <XIcon className="h-5 w-5" aria-hidden="true" />
                                         </button>
                                     </div>
                                 </div>
