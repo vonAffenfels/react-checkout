@@ -152,10 +152,22 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     useEffect(() => {
         console.log("useEffect addressFormData:", addressFormData);
-        const {email, firstName, lastName, streetAddress1, city, country, postalCode} = addressFormData;
+        let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormData;
 
         if (email && firstName && lastName && streetAddress1 && city && country && postalCode) {
-            setCheckoutAddress(addressFormData);
+            let addressInput = {firstName, lastName, city, country, postalCode, streetAddress1};
+
+            if (phone) {
+                addressInput.phone = phone;
+            }
+            if (company) {
+                addressInput.company = company;
+            }
+            if (state) {
+                addressInput.countryArea = state;
+            }
+
+            setCheckoutAddress(addressInput);
         }
     }, [addressFormData]);
 
