@@ -32,7 +32,7 @@ const CartFullPage = ({props}) => {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
             >
-                <Dialog.Panel className="mx-auto max-w-sm rounded bg-white">
+                <Dialog.Panel className="pointer-events-auto w-screen">
                     <CloseButton onClick={() => setDisplayState("widget")} />
 
                     <div className="bg-gray-50">
