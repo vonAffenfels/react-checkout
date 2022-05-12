@@ -1,10 +1,29 @@
 import React, {useContext} from "react";
 import {RadioGroup} from "@headlessui/react";
+import {CheckCircleIcon} from "@heroicons/react/solid";
 
 import CheckoutContext from "../context/CheckoutContext";
+import DeliveryMethodOption from "./deliveryMethodOption.jsx";
+import PaymentMethodOption from "./paymentMethodOption.jsx";
+
+function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+}
 
 const CheckoutForm = ({props}) => {
     const {checkout} = useContext(CheckoutContext);
+    const deliveryMethods = [];
+    const paymentMethods = [];
+
+    const onChangeDeliveryMethod = (e) => {
+        // TODO
+        console.warn("TODO onChangeDeliveryMethod");
+    };
+
+    const onChangePaymentMethod = (e) => {
+        // TODO
+        console.warn("TODO onChangePaymentMethod");
+    };
 
     return (
         <div>
@@ -185,87 +204,27 @@ const CheckoutForm = ({props}) => {
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-                <RadioGroup value={selectedDeliveryMethod} onChange={setSelectedDeliveryMethod}>
-                    <RadioGroup.Label className="text-lg font-medium text-gray-900">Delivery method</RadioGroup.Label>
+                <RadioGroup value={null} onChange={onChangeDeliveryMethod}>
+                    <RadioGroup.Label className="text-lg font-medium text-gray-900">Versandart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        {deliveryMethods.map((deliveryMethod) => (
-                            <RadioGroup.Option
-                                key={deliveryMethod.id}
-                                value={deliveryMethod}
-                                className={({ checked, active }) =>
-                                    classNames(
-                                        checked ? 'border-transparent' : 'border-gray-300',
-                                        active ? 'ring-2 ring-indigo-500' : '',
-                                        'relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none'
-                                    )
-                                }
-                            >
-                                {({ checked, active }) => (
-                                    <>
-                          <span className="flex-1 flex">
-                            <span className="flex flex-col">
-                              <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
-                                {deliveryMethod.title}
-                              </RadioGroup.Label>
-                              <RadioGroup.Description
-                                  as="span"
-                                  className="mt-1 flex items-center text-sm text-gray-500"
-                              >
-                                {deliveryMethod.turnaround}
-                              </RadioGroup.Description>
-                              <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
-                                {deliveryMethod.price}
-                              </RadioGroup.Description>
-                            </span>
-                          </span>
-                                        {checked ? <CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" /> : null}
-                                        <span
-                                            className={classNames(
-                                                active ? 'border' : 'border-2',
-                                                checked ? 'border-indigo-500' : 'border-transparent',
-                                                'absolute -inset-px rounded-lg pointer-events-none'
-                                            )}
-                                            aria-hidden="true"
-                                        />
-                                    </>
-                                )}
-                            </RadioGroup.Option>
-                        ))}
+                        {deliveryMethods.map((deliveryMethod) => <DeliveryMethodOption deliveryMethod={deliveryMethod} key={deliveryMethod.id} />)}
                     </div>
                 </RadioGroup>
             </div>
 
-            {/* Payment */}
             <div className="mt-10 border-t border-gray-200 pt-10">
                 <h2 className="text-lg font-medium text-gray-900">Payment</h2>
 
                 <fieldset className="mt-4">
                     <legend className="sr-only">Payment type</legend>
                     <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
-                        {paymentMethods.map((paymentMethod, paymentMethodIdx) => (
-                            <div key={paymentMethod.id} className="flex items-center">
-                                {paymentMethodIdx === 0 ? (
-                                    <input
-                                        id={paymentMethod.id}
-                                        name="payment-type"
-                                        type="radio"
-                                        defaultChecked
-                                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                                    />
-                                ) : (
-                                    <input
-                                        id={paymentMethod.id}
-                                        name="payment-type"
-                                        type="radio"
-                                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                                    />
-                                )}
-
-                                <label htmlFor={paymentMethod.id} className="ml-3 block text-sm font-medium text-gray-700">
-                                    {paymentMethod.title}
-                                </label>
-                            </div>
+                        {paymentMethods.map((paymentMethod) => (
+                            <PaymentMethodOption
+                                onChange={onChangePaymentMethod}
+                                paymentMethod={paymentMethod}
+                                key={paymentMethod.id}
+                            />
                         ))}
                     </div>
                 </fieldset>

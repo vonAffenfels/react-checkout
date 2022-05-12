@@ -1,4 +1,5 @@
 import React, {useContext} from "react";
+import {TrashIcon} from "@heroicons/react/solid";
 
 import CheckoutContext from "../context/CheckoutContext";
 
@@ -43,7 +44,8 @@ const CheckoutLine = ({
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
                         >
-                            Entfernen
+                            <span className="sr-only">Entfernen</span>
+                            <TrashIcon className="h-5 w-5" aria-hidden="true" />
                         </button>
                     </div>
                 </div>
@@ -97,7 +99,8 @@ const CheckoutLineDetail = ({
                             className="-m-2.5 bg-white p-2.5 flex items-center justify-center text-gray-400 hover:text-gray-500"
                             onClick={onRemove}
                         >
-                            Entfernen
+                            <span className="sr-only">Entfernen</span>
+                            <TrashIcon className="h-5 w-5" aria-hidden="true" />
                         </button>
                     </div>
                 </div>
