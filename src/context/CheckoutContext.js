@@ -6,6 +6,7 @@ import CHECKOUT_BY_TOKEN from "../queries/checkoutByToken";
 import CHECKOUT_CREATE from "../mutations/checkoutCreate";
 import CHECKOUT_ADD_PRODUCT_LINE from "../mutations/checkoutAddProductLine";
 import CHECKOUT_DELETE_PRODUCT_LINE from "../mutations/checkoutLineDelete";
+import CHECKOUT_SHIPPING_ADDRESS_UPDATE from "../mutations/checkoutShippingAddressUpdate";
 
 export const CheckoutContext = createContext({});
 
@@ -15,6 +16,19 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [checkout, setCheckout] = useState(null);
     const [displayState, setDisplayState] = useState("widget");
     const [isCartOpen, setCartOpen] = useState(false);
+    const [addressFormData, setAddressFormData] = useState({
+        email: "",
+        firstName: "",
+        lastName: "",
+        company: "",
+        streetAddress1: "",
+        streetAddress2: "",
+        city: "",
+        state: "",
+        country: "",
+        postalCode: "",
+        phone: ""
+    });
 
     const {loading, error, data, refetch} = useQuery(CHECKOUT_BY_TOKEN, {
         variables: {checkoutToken}
@@ -97,6 +111,32 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
     };
 
+    const setCheckoutAddress = async (address) => {
+        console.log("setCheckoutAddress", {
+            checkoutToken,
+            address
+        });
+        if (!checkout) {
+            return;
+        }
+
+        const {data} = await client.mutate({
+            mutation: CHECKOUT_SHIPPING_ADDRESS_UPDATE,
+            variables: {
+                checkoutToken,
+                address
+            }
+        });
+        console.log("checkoutShippingAddressUpdate, data:", data);
+        if (data?.checkoutShippingAddressUpdate?.errors?.length) {
+            data.checkoutShippingAddressUpdate.errors.forEach(err => console.warn(err));
+        }
+
+        if (data?.checkoutShippingAddressUpdate?.checkout) {
+            setCheckout(data.checkoutShippingAddressUpdate.checkout);
+        }
+    }
+
     const getCheckoutByToken = async () => {
         console.log("getCheckoutByToken", checkoutToken);
         if (checkoutToken) {
@@ -111,6 +151,15 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [checkoutToken, checkout?.lines?.length]);
 
     useEffect(() => {
+        console.log("useEffect addressFormData:", addressFormData);
+        const {email, firstName, lastName, streetAddress1, city, country, postalCode} = addressFormData;
+
+        if (email && firstName && lastName && streetAddress1 && city && country && postalCode) {
+            setCheckoutAddress(addressFormData);
+        }
+    }, [addressFormData]);
+
+    useEffect(() => {
         console.log(loading, data, "setCheckout to:", data?.checkout);
         setCheckout(data?.checkout);
     }, [loading, error, data]);
@@ -121,10 +170,13 @@ export const CheckoutContextProvider = ({children, channel}) => {
             createCheckout,
             addItemToCheckout,
             removeItemFromCheckout,
+            setCheckoutAddress,
             displayState,
             setDisplayState,
             isCartOpen,
-            setCartOpen
+            setCartOpen,
+            addressFormData,
+            setAddressFormData
         }}>
             {children}
         </CheckoutContext.Provider>
