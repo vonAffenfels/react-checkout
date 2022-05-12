@@ -7,6 +7,7 @@ function classNames(...classes) {
 }
 
 const DeliveryMethodOption = ({deliveryMethod}) => {
+    console.log("DeliveryMethodOption", deliveryMethod)
 
     return (
         <RadioGroup.Option

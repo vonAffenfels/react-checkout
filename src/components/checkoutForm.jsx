@@ -12,7 +12,6 @@ function classNames(...classes) {
 
 const CheckoutForm = ({props}) => {
     const {checkout, addressFormData, setAddressFormData} = useContext(CheckoutContext);
-    const deliveryMethods = [];
     const paymentMethods = [];
 
     const onChangeDeliveryMethod = (e) => {
@@ -264,7 +263,7 @@ const CheckoutForm = ({props}) => {
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Versandart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        {deliveryMethods.map((deliveryMethod) => <DeliveryMethodOption deliveryMethod={deliveryMethod} key={deliveryMethod.id} />)}
+                        {checkout?.shippingMethods?.map((deliveryMethod) => <DeliveryMethodOption deliveryMethod={deliveryMethod} key={deliveryMethod.id} />)}
                     </div>
                 </RadioGroup>
             </div>

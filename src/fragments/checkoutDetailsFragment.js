@@ -1,9 +1,11 @@
 import {gql} from "@apollo/client";
 
 import PriceFragment from "../fragments/PriceFragment";
+import ShippingMethodDetailsFragment from "../fragments/shippingMethodDetailsFragment";
 
 export default gql`
     ${PriceFragment}
+    ${ShippingMethodDetailsFragment}
     fragment CheckoutDetailsFragment on Checkout {
         id
         token
@@ -31,20 +33,10 @@ export default gql`
             }
         }
         availableShippingMethods {
-            id
-            name
-            active
-            price {
-                ...PriceFragment
-            }
+            ...ShippingMethodDetailsFragment
         }
         shippingMethods {
-            id
-            name
-            active
-            price {
-                ...PriceFragment
-            }
+            ...ShippingMethodDetailsFragment
         }
         availablePaymentGateways {
             id

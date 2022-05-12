@@ -147,6 +147,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     useEffect(() => {
+        //TODO set addressFormData from checkout
         getCheckoutByToken();
     }, [checkoutToken, checkout?.lines?.length]);
 
