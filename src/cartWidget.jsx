@@ -1,5 +1,5 @@
-import {Dialog, Transition} from "@headlessui/react";
 import React, {Fragment, useContext} from "react";
+import {Dialog, Transition} from "@headlessui/react";
 
 import CheckoutContext from "./context/CheckoutContext";
 import CheckoutLine from "./components/checkoutLine.jsx";
@@ -46,7 +46,7 @@ const CartWidget = ({props}) => {
                         <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                             <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
                                 <div className="flex items-start justify-between">
-                                    <Dialog.Title className="text-lg font-medium text-gray-900">Shopping cart</Dialog.Title>
+                                    <Dialog.Title className="text-lg font-medium text-gray-900">Warenkorb</Dialog.Title>
                                     <div className="ml-3 flex h-7 items-center">
                                         <button
                                             type="button"
@@ -74,10 +74,10 @@ const CartWidget = ({props}) => {
 
                             <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                                 <div className="flex justify-between text-base font-medium text-gray-900">
-                                    <p>Subtotal</p>
+                                    <p>Gesamt</p>
                                     <p>{checkout?.totalPrice?.gross?.amount} {checkout?.totalPrice?.gross?.currency}</p>
                                 </div>
-                                <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                                <p className="mt-0.5 text-sm text-gray-500">Versandkosten werden im Bezahlschritt berechnet.</p>
                                 <div className="mt-6">
                                     <a
                                         onClick={openFullPage}
