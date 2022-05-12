@@ -13,7 +13,8 @@ const CartWidget = ({props}) => {
         setDisplayState
     } = useContext(CheckoutContext);
 
-    const openFullPage = () => {
+    const openFullPage = (e) => {
+        e.preventDefault();
         setCartOpen(false);
         setDisplayState("cartFullPage");
     };
@@ -60,9 +61,12 @@ const CartWidget = ({props}) => {
                                 <div className="mt-8">
                                     <div className="flow-root">
                                         <ul role="list" className="-my-6 divide-y divide-gray-200">
-                                            {checkout?.lines?.map((cartItem) => (
-                                                <CheckoutLine {...cartItem} key={cartItem.id} />
-                                            ))}
+                                            {checkout?.lines?.map((cartItem) => {
+                                                console.log("cartItem", cartItem);
+                                                return (
+                                                    <CheckoutLine {...cartItem} key={cartItem.id} />
+                                                )
+                                            })}
                                         </ul>
                                     </div>
                                 </div>
@@ -76,22 +80,21 @@ const CartWidget = ({props}) => {
                                 <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                                 <div className="mt-6">
                                     <a
-                                        href="javascript:;"
                                         onClick={openFullPage}
                                         className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                                     >
-                                        Checkout
+                                        Kasse
                                     </a>
                                 </div>
                                 <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                                     <p>
-                                        or{' '}
+                                        oder{' '}
                                         <button
                                             type="button"
                                             className="font-medium text-indigo-600 hover:text-indigo-500"
                                             onClick={() => setCartOpen(false)}
                                         >
-                                            Continue Shopping<span aria-hidden="true"> &rarr;</span>
+                                            Weiter einkaufen<span aria-hidden="true"> &rarr;</span>
                                         </button>
                                     </p>
                                 </div>

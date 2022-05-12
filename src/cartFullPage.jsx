@@ -4,6 +4,8 @@ import {Dialog, Transition} from "@headlessui/react";
 import CheckoutContext from "./context/CheckoutContext";
 import FullPageLayout from "./components/fullPageLayout.jsx"
 import CloseButton from "./components/closeButton.jsx";
+import CheckoutForm from "./components/checkoutForm.jsx";
+import CheckoutSummary from "./components/checkoutSummary.jsx";
 
 const CartFullPage = ({props}) => {
     const {checkout, setDisplayState} = useContext(CheckoutContext);
@@ -12,6 +14,10 @@ const CartFullPage = ({props}) => {
     useEffect(() => {
         setMounting(false);
     }, []);
+
+    const onSubmit = (e) => {
+        console.log("onSubmit", e);
+    }
 
     console.log("isMounting", isMounting);
 
@@ -33,13 +39,15 @@ const CartFullPage = ({props}) => {
                         <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                             <h2 className="sr-only">Checkout</h2>
 
-                            <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-                                <div>
-                                    <div>
-                                        <h2 className="text-lg font-medium text-gray-900">Contact information</h2>
-                                    </div>
+                            <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16" onSubmit={onSubmit}>
+                                <CheckoutForm />
+
+                                <div className="mt-10 lg:mt-0">
+                                    <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
+                                    <CheckoutSummary />
                                 </div>
                             </form>
+
                         </div>
                     </div>
 
