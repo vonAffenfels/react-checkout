@@ -167,6 +167,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 addressInput.countryArea = state;
             }
 
+            //TODO debounce
             setCheckoutAddress(addressInput);
         }
     }, [addressFormData]);

@@ -49,9 +49,6 @@ export default [
                 ],
                 runtimeHelpers: true
             }),
-            commonjs({
-                include: /node-modules/
-            }),
             del({targets: ["dist/*"]})
         ],
         external: Object.keys(pkg.peerDependencies || {})

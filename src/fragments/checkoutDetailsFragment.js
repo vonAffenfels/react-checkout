@@ -32,6 +32,19 @@ export default gql`
         }
         availableShippingMethods {
             id
+            name
+            active
+            price {
+                ...PriceFragment
+            }
+        }
+        shippingMethods {
+            id
+            name
+            active
+            price {
+                ...PriceFragment
+            }
         }
         availablePaymentGateways {
             id
