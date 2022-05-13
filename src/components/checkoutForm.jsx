@@ -14,9 +14,9 @@ const CheckoutForm = ({props}) => {
     const {checkout, addressFormData, setAddressFormData} = useContext(CheckoutContext);
     const paymentMethods = [];
 
-    const onChangeDeliveryMethod = (e) => {
+    const onChangeDeliveryMethod = (e, _, __, ___) => {
         // TODO
-        console.warn("TODO onChangeDeliveryMethod");
+        console.warn("TODO onChangeDeliveryMethod", e, _, __, ___);
     };
 
     const onChangePaymentMethod = (e) => {
