@@ -11,7 +11,7 @@ export default gql`
         postalCode
         isDefaultBillingAddress
         isDefaultShippingAddress
-        company
+        companyName
         countryArea
         country {
             code

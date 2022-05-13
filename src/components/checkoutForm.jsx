@@ -23,7 +23,7 @@ const CheckoutForm = ({props}) => {
                 streetAddress1: checkout?.shippingAddress?.streetAddress1,
                 city: checkout?.shippingAddress?.city,
                 country: checkout?.shippingAddress?.country?.code,
-                company: checkout?.shippingAddress?.company,
+                company: checkout?.shippingAddress?.companyName,
                 state: checkout?.shippingAddress?.countryArea,
                 postalCode: checkout?.shippingAddress?.postalCode,
                 phone: checkout?.shippingAddress?.phone

@@ -243,7 +243,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 addressInput.phone = phone;
             }
             if (company) {
-                addressInput.company = company;
+                addressInput.companyName = company;
             }
             if (state) {
                 addressInput.countryArea = state;
