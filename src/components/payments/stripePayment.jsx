@@ -6,7 +6,9 @@ const StripePayment = ({}) => {
     const stripe = useStripe();
 
     return (
-        <PaymentElement />
+        <form>
+            <PaymentElement />
+        </form>
     );
 }
 
