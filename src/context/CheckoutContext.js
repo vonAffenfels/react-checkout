@@ -201,6 +201,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             return;
         }
 
+        //TODO automatically turns into order or need to manually call api?
         const {data} = await client.mutate({
             mutation: CHECKOUT_PAYMENT_CREATE,
             variables: {
