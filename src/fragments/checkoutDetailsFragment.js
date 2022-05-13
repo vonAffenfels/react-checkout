@@ -2,10 +2,12 @@ import {gql} from "@apollo/client";
 
 import PriceFragment from "../fragments/PriceFragment";
 import ShippingMethodDetailsFragment from "../fragments/shippingMethodDetailsFragment";
+import AddressDetailsFragment from "../fragments/addressDetailsFragment";
 
 export default gql`
     ${PriceFragment}
     ${ShippingMethodDetailsFragment}
+    ${AddressDetailsFragment}
     fragment CheckoutDetailsFragment on Checkout {
         id
         token
@@ -38,6 +40,9 @@ export default gql`
         shippingMethods {
             ...ShippingMethodDetailsFragment
         }
+        shippingMethod {
+            ...ShippingMethodDetailsFragment
+        }
         availablePaymentGateways {
             id
         }
@@ -68,6 +73,12 @@ export default gql`
             }
             quantity
             id
+        }
+        billingAddress {
+            ...AddressDetailsFragment
+        }
+        shippingAddress {
+            ...AddressDetailsFragment
         }
     }
 `;

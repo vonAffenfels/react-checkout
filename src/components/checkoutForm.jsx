@@ -1,22 +1,43 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {RadioGroup} from "@headlessui/react";
-import {CheckCircleIcon} from "@heroicons/react/solid";
 
 import CheckoutContext from "../context/CheckoutContext";
 import DeliveryMethodOption from "./deliveryMethodOption.jsx";
 import PaymentMethodOption from "./paymentMethodOption.jsx";
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-}
-
 const CheckoutForm = ({props}) => {
-    const {checkout, addressFormData, setAddressFormData} = useContext(CheckoutContext);
+    const {checkout, addressFormData, setAddressFormData, setCheckoutDeliveryMethod} = useContext(CheckoutContext);
     const paymentMethods = [];
 
-    const onChangeDeliveryMethod = (e, _, __, ___) => {
-        // TODO
-        console.warn("TODO onChangeDeliveryMethod", e, _, __, ___);
+    useEffect(() => {
+        if (checkout.email && checkout.email !== "anonymous@example.com") {
+            setAddressFormData({
+                ...addressFormData,
+                email: checkout.email
+            });
+        }
+        if (checkout?.shippingAddress) {
+            let adressData = {
+                firstName: checkout?.shippingAddress?.firstName,
+                lastName: checkout?.shippingAddress?.lastName,
+                streetAddress1: checkout?.shippingAddress?.streetAddress1,
+                city: checkout?.shippingAddress?.city,
+                country: checkout?.shippingAddress?.country?.code,
+                company: checkout?.shippingAddress?.company,
+                state: checkout?.shippingAddress?.countryArea,
+                postalCode: checkout?.shippingAddress?.postalCode,
+                phone: checkout?.shippingAddress?.phone
+            };
+            setAddressFormData({
+                ...addressFormData,
+                ...adressData
+            });
+        }
+    }, []);
+
+    const onChangeDeliveryMethod = (deliveryMethodId) => {
+        console.warn("onChangeDeliveryMethod", deliveryMethodId);
+        setCheckoutDeliveryMethod(deliveryMethodId);
     };
 
     const onChangePaymentMethod = (e) => {
@@ -259,7 +280,7 @@ const CheckoutForm = ({props}) => {
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-                <RadioGroup value={null} onChange={onChangeDeliveryMethod}>
+                <RadioGroup value={checkout?.deliveryMethod?.id} onChange={onChangeDeliveryMethod}>
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Versandart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">

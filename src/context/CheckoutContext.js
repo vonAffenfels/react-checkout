@@ -1,12 +1,15 @@
 import React, {createContext, useState, useEffect, useContext} from "react";
 import {useQuery, useApolloClient} from "@apollo/client";
 import useLocalStorage from "../hooks/useLocalStorage";
+import useDebounce from "../hooks/useDebounce";
 import CONST from "../lib/const";
 import CHECKOUT_BY_TOKEN from "../queries/checkoutByToken";
 import CHECKOUT_CREATE from "../mutations/checkoutCreate";
 import CHECKOUT_ADD_PRODUCT_LINE from "../mutations/checkoutAddProductLine";
 import CHECKOUT_DELETE_PRODUCT_LINE from "../mutations/checkoutLineDelete";
 import CHECKOUT_SHIPPING_ADDRESS_UPDATE from "../mutations/checkoutShippingAddressUpdate";
+import CHECKOUT_EMAIL_UPDATE from "../mutations/checkoutEmailUpdate";
+import CHECKOUT_DELIVERY_METHOD_UPDATE from "../mutations/checkoutDeliveryMethodUpdate";
 
 export const CheckoutContext = createContext({});
 
@@ -29,6 +32,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         postalCode: "",
         phone: ""
     });
+    const addressFormDataDebounced = useDebounce(addressFormData, 750);
 
     const {loading, error, data, refetch} = useQuery(CHECKOUT_BY_TOKEN, {
         variables: {checkoutToken}
@@ -137,6 +141,58 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
     }
 
+    const setCheckoutEmail = async (email) => {
+        console.log("setCheckoutEmail", {
+            checkoutToken,
+            email
+        });
+        if (!checkout) {
+            return;
+        }
+
+        const {data} = await client.mutate({
+            mutation: CHECKOUT_EMAIL_UPDATE,
+            variables: {
+                checkoutToken,
+                email
+            }
+        });
+        console.log("checkoutEmailUpdate, data:", data);
+        if (data?.checkoutEmailUpdate?.errors?.length) {
+            data.checkoutEmailUpdate.errors.forEach(err => console.warn(err));
+        }
+
+        if (data?.checkoutEmailUpdate?.checkout) {
+            setCheckout(data.checkoutEmailUpdate.checkout);
+        }
+    }
+
+    const setCheckoutDeliveryMethod = async (deliveryMethodId) => {
+        console.log("setCheckoutDeliveryMethod", {
+            checkoutToken,
+            deliveryMethodId
+        });
+        if (!checkout) {
+            return;
+        }
+
+        const {data} = await client.mutate({
+            mutation: CHECKOUT_DELIVERY_METHOD_UPDATE,
+            variables: {
+                checkoutToken,
+                deliveryMethodId
+            }
+        });
+        console.log("checkoutDeliveryMethodUpdate, data:", data);
+        if (data?.checkoutDeliveryMethodUpdate?.errors?.length) {
+            data.checkoutDeliveryMethodUpdate.errors.forEach(err => console.warn(err));
+        }
+
+        if (data?.checkoutDeliveryMethodUpdate?.checkout) {
+            setCheckout(data.checkoutDeliveryMethodUpdate.checkout);
+        }
+    }
+
     const getCheckoutByToken = async () => {
         console.log("getCheckoutByToken", checkoutToken);
         if (checkoutToken) {
@@ -146,16 +202,41 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
     };
 
+    const isInputAddressDifferentFromCheckoutAddress = (inputAddress) => {
+        let foundDiff = false;
+        let checkoutAddress = checkout?.shippingAddress;
+
+        if (!checkoutAddress) {
+            return true;
+        }
+
+        Object.keys(inputAddress).forEach(key => {
+            if (inputAddress[key] !== checkoutAddress[key]) {
+                foundDiff = true;
+            }
+        });
+        Object.keys(checkoutAddress).forEach(key => {
+            if (inputAddress[key] !== checkoutAddress[key]) {
+                foundDiff = true;
+            }
+        });
+
+        return foundDiff;
+    };
+
     useEffect(() => {
-        //TODO set addressFormData from checkout
         getCheckoutByToken();
     }, [checkoutToken, checkout?.lines?.length]);
 
     useEffect(() => {
-        console.log("useEffect addressFormData:", addressFormData);
-        let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormData;
+        console.log("useEffect addressFormDataDebounced:", addressFormDataDebounced);
+        let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
-        if (email && firstName && lastName && streetAddress1 && city && country && postalCode) {
+        if (email && (email !== checkout?.email)) {
+            setCheckoutEmail(email);
+        }
+
+        if (firstName && lastName && streetAddress1 && city && country && postalCode) {
             let addressInput = {firstName, lastName, city, country, postalCode, streetAddress1};
 
             if (phone) {
@@ -168,10 +249,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 addressInput.countryArea = state;
             }
 
-            //TODO debounce
-            setCheckoutAddress(addressInput);
+            if (isInputAddressDifferentFromCheckoutAddress(addressInput)) {
+                setCheckoutAddress(addressInput);
+            }
         }
-    }, [addressFormData]);
+    }, [addressFormDataDebounced]);
 
     useEffect(() => {
         console.log(loading, data, "setCheckout to:", data?.checkout);
@@ -185,6 +267,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
             addItemToCheckout,
             removeItemFromCheckout,
             setCheckoutAddress,
+            setCheckoutEmail,
+            setCheckoutDeliveryMethod,
             displayState,
             setDisplayState,
             isCartOpen,

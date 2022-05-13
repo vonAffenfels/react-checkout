@@ -11,7 +11,7 @@ const DeliveryMethodOption = ({deliveryMethod}) => {
 
     return (
         <RadioGroup.Option
-            value={deliveryMethod}
+            value={deliveryMethod.id}
             className={({checked, active}) =>
                 classNames(
                     checked ? "border-transparent" : "border-gray-300",
@@ -22,6 +22,7 @@ const DeliveryMethodOption = ({deliveryMethod}) => {
         >
             {({checked, active}) => (
                 <Fragment>
+                    {console.log("DeliveryMethodOption", deliveryMethod, checked, active)}
                     <span className="flex-1 flex">
                         <span className="flex flex-col">
                             <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
