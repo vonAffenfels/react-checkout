@@ -10,11 +10,11 @@ const CheckoutForm = ({props}) => {
     const paymentMethods = [];
 
     useEffect(() => {
-        if (checkout.email && checkout.email !== "anonymous@example.com") {
-            setAddressFormData({
-                ...addressFormData,
-                email: checkout.email
-            });
+        let updateAddressFormData = {
+            ...addressFormData
+        };
+        if (checkout.email && (checkout.email !== "anonymous@example.com")) {
+            updateAddressFormData.email = checkout.email;
         }
         if (checkout?.shippingAddress) {
             let adressData = {
@@ -28,11 +28,13 @@ const CheckoutForm = ({props}) => {
                 postalCode: checkout?.shippingAddress?.postalCode,
                 phone: checkout?.shippingAddress?.phone
             };
-            setAddressFormData({
-                ...addressFormData,
+            updateAddressFormData = {
+                ...updateAddressFormData,
                 ...adressData
-            });
+            };
         }
+        console.log("updateAddressFormData", updateAddressFormData);
+        setAddressFormData(updateAddressFormData);
     }, []);
 
     const onChangeDeliveryMethod = (deliveryMethodId) => {

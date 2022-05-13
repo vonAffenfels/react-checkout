@@ -64,7 +64,6 @@ const CartWidget = ({props}) => {
                                     <div className="flow-root">
                                         <ul role="list" className="-my-6 divide-y divide-gray-200">
                                             {checkout?.lines?.map((cartItem) => {
-                                                console.log("cartItem", cartItem);
                                                 return (
                                                     <CheckoutLine {...cartItem} key={cartItem.id} />
                                                 )

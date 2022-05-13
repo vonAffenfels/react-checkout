@@ -255,7 +255,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [addressFormDataDebounced]);
 
     useEffect(() => {
-        console.log(loading, data, "setCheckout to:", data?.checkout);
+        console.log("CHECKOUT:", data?.checkout);
         setCheckout(data?.checkout);
     }, [loading, error, data]);
 
