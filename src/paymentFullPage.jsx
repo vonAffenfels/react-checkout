@@ -1,9 +1,10 @@
 import React, {Fragment, useContext, useEffect, useState} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 
+import CheckoutContext from "./context/CheckoutContext";
 import CloseButton from "./components/closeButton.jsx";
 import FullPageLayout from "./components/fullPageLayout.jsx";
-import CheckoutContext from "./context/CheckoutContext";
+import PaymentForm from "./components/paymentForm.jsx";
 
 const PaymentFullPage = ({}) => {
     const {checkout, setDisplayState, finalizeCheckout} = useContext(CheckoutContext);
@@ -27,6 +28,12 @@ const PaymentFullPage = ({}) => {
                 <Dialog.Panel className="pointer-events-auto w-screen overflow-y-auto">
                     <CloseButton onClick={() => setDisplayState("widget")} />
                 </Dialog.Panel>
+
+                <div className="bg-gray-50">
+                    <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+                        <PaymentForm />
+                    </div>
+                </div>
             </Transition.Child>
         </FullPageLayout>
     );
