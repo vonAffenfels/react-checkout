@@ -6,7 +6,14 @@ import ShippingMethodOption from "./shippingMethodOption.jsx";
 import PaymentMethodOption from "./paymentMethodOption.jsx";
 
 const CheckoutForm = ({props}) => {
-    const {checkout, addressFormData, setAddressFormData, setCheckoutDeliveryMethod} = useContext(CheckoutContext);
+    const {
+        checkout,
+        addressFormData,
+        setAddressFormData,
+        setCheckoutDeliveryMethod,
+        selectedPaymentGatewayId,
+        setSelectedPaymentGatewayId
+    } = useContext(CheckoutContext);
 
     useEffect(() => {
         let updateAddressFormData = {
@@ -42,9 +49,10 @@ const CheckoutForm = ({props}) => {
         }
     };
 
-    const onChangePaymentMethod = (e) => {
-        // TODO
-        console.warn("TODO onChangePaymentMethod");
+    const onChangePaymentMethod = (paymentGatewayId) => {
+        if (selectedPaymentGatewayId !== paymentGatewayId) {
+            setSelectedPaymentGatewayId(paymentGatewayId);
+        }
     };
 
     return (
@@ -297,7 +305,7 @@ const CheckoutForm = ({props}) => {
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-                <RadioGroup value={checkout?.paymentGateway?.id} onChange={onChangePaymentMethod}>
+                <RadioGroup value={selectedPaymentGatewayId} onChange={onChangePaymentMethod}>
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Bezahlart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">

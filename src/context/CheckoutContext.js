@@ -19,6 +19,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [checkout, setCheckout] = useState(null);
     const [displayState, setDisplayState] = useState("widget");
     const [isCartOpen, setCartOpen] = useState(false);
+    const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(null);
     const [addressFormData, setAddressFormData] = useState({
         email: "",
         firstName: "",
@@ -273,7 +274,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
             isCartOpen,
             setCartOpen,
             addressFormData,
-            setAddressFormData
+            setAddressFormData,
+            selectedPaymentGatewayId,
+            setSelectedPaymentGatewayId
         }}>
             {children}
         </CheckoutContext.Provider>

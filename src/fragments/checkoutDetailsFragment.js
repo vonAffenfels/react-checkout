@@ -51,9 +51,6 @@ export default gql`
                 value
             }
         }
-        paymentGateway {
-            id
-        }
         lines {
             totalPrice {
                 gross {
