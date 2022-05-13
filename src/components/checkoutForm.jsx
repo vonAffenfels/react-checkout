@@ -36,8 +36,9 @@ const CheckoutForm = ({props}) => {
     }, []);
 
     const onChangeDeliveryMethod = (deliveryMethodId) => {
-        console.warn("onChangeDeliveryMethod", deliveryMethodId);
-        setCheckoutDeliveryMethod(deliveryMethodId);
+        if (checkout?.shippingMethod?.id !== deliveryMethodId) {
+            setCheckoutDeliveryMethod(deliveryMethodId);
+        }
     };
 
     const onChangePaymentMethod = (e) => {
@@ -284,7 +285,16 @@ const CheckoutForm = ({props}) => {
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Versandart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        {checkout?.shippingMethods?.map((deliveryMethod) => <DeliveryMethodOption deliveryMethod={deliveryMethod} key={deliveryMethod.id} />)}
+                        {checkout?.shippingMethods?.map((deliveryMethod) => {
+                            console.log("deliveryMethod map", checkout?.deliveryMethod?.id, deliveryMethod.id);
+                            return (
+                                <DeliveryMethodOption
+                                    deliveryMethod={deliveryMethod}
+                                    checked={checkout?.deliveryMethod?.id === deliveryMethod.id}
+                                    key={deliveryMethod.id}
+                                />
+                            );
+                        })}
                     </div>
                 </RadioGroup>
             </div>
