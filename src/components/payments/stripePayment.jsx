@@ -5,6 +5,8 @@ const StripePayment = ({}) => {
     const elements = useElements();
     const stripe = useStripe();
 
+    console.log("StripePayment", typeof stripe, stripe);
+
     return (
         <form>
             <PaymentElement />
