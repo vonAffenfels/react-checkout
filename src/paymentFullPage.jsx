@@ -17,7 +17,7 @@ const PaymentFullPage = ({}) => {
     return (
         <FullPageLayout show={true} onClose={() => setMounting(true)}>
             <Transition.Child
-                as={Fragment}
+                as={<div />}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"
                 enterFrom="translate-x-full"
                 enterTo="translate-x-0"
