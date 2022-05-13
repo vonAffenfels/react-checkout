@@ -25,7 +25,7 @@ const DeliveryMethodOption = ({deliveryMethod}) => {
                     <span className="flex-1 flex">
                         <span className="flex flex-col">
                             <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
-                                {deliveryMethod.title}
+                                {deliveryMethod.name}
                             </RadioGroup.Label>
                             <RadioGroup.Description
                                 as="span"
@@ -34,7 +34,7 @@ const DeliveryMethodOption = ({deliveryMethod}) => {
                                 {deliveryMethod.turnaround}
                             </RadioGroup.Description>
                             <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
-                                {deliveryMethod.price}
+                                {deliveryMethod.price?.amount} {deliveryMethod.price?.currency}
                             </RadioGroup.Description>
                         </span>
                     </span>
