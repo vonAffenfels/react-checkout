@@ -6,12 +6,12 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-const DeliveryMethodOption = ({deliveryMethod, checked}) => {
-    console.log("DeliveryMethodOption", deliveryMethod, checked)
+const ShippingMethodOption = ({shippingMethod, checked}) => {
+    console.log("ShippingMethodOption", shippingMethod, checked)
 
     return (
         <RadioGroup.Option
-            value={deliveryMethod.id}
+            value={shippingMethod.id}
             className={({active}) =>
                 classNames(
                     checked ? "border-transparent" : "border-gray-300",
@@ -26,16 +26,16 @@ const DeliveryMethodOption = ({deliveryMethod, checked}) => {
                     <span className="flex-1 flex">
                         <span className="flex flex-col">
                             <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
-                                {deliveryMethod.name}
+                                {shippingMethod.name}
                             </RadioGroup.Label>
                             <RadioGroup.Description
                                 as="span"
                                 className="mt-1 flex items-center text-sm text-gray-500"
                             >
-                                {deliveryMethod.turnaround}
+                                {shippingMethod.minimumDeliveryDays} - {shippingMethod.maximumDeliveryDays} Tage
                             </RadioGroup.Description>
                             <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
-                                {deliveryMethod.price?.amount} {deliveryMethod.price?.currency}
+                                {shippingMethod.price?.amount} {shippingMethod.price?.currency}
                             </RadioGroup.Description>
                         </span>
                     </span>
@@ -54,4 +54,4 @@ const DeliveryMethodOption = ({deliveryMethod, checked}) => {
     );
 }
 
-export default DeliveryMethodOption;
+export default ShippingMethodOption;

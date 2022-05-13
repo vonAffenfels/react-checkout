@@ -2,7 +2,7 @@ import React, {useContext, useEffect} from "react";
 import {RadioGroup} from "@headlessui/react";
 
 import CheckoutContext from "../context/CheckoutContext";
-import DeliveryMethodOption from "./deliveryMethodOption.jsx";
+import ShippingMethodOption from "./shippingMethodOption.jsx";
 import PaymentMethodOption from "./paymentMethodOption.jsx";
 
 const CheckoutForm = ({props}) => {
@@ -281,17 +281,17 @@ const CheckoutForm = ({props}) => {
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-                <RadioGroup value={checkout?.deliveryMethod?.id} onChange={onChangeDeliveryMethod}>
+                <RadioGroup value={checkout?.shippingMethod?.id} onChange={onChangeDeliveryMethod}>
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Versandart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        {checkout?.shippingMethods?.map((deliveryMethod) => {
-                            console.log("deliveryMethod map", checkout?.deliveryMethod?.id, deliveryMethod.id);
+                        {checkout?.shippingMethods?.map((shippingMethod) => {
+                            console.log("shippingMethod map", checkout?.shippingMethod?.id, shippingMethod.id);
                             return (
-                                <DeliveryMethodOption
-                                    deliveryMethod={deliveryMethod}
-                                    checked={checkout?.deliveryMethod?.id === deliveryMethod.id}
-                                    key={deliveryMethod.id}
+                                <ShippingMethodOption
+                                    shippingMethod={shippingMethod}
+                                    checked={checkout?.shippingMethod?.id === shippingMethod.id}
+                                    key={shippingMethod.id}
                                 />
                             );
                         })}

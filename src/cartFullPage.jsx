@@ -19,8 +19,6 @@ const CartFullPage = ({props}) => {
         console.log("onSubmit", e);
     }
 
-    console.log("isMounting", isMounting);
-
     return (
         <FullPageLayout show={true} onClose={() => setMounting(true)}>
             <Transition.Child

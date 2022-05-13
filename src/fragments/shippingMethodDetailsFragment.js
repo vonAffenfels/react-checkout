@@ -9,5 +9,7 @@ export default gql`
             currency
             amount
         }
+        minimumDeliveryDays
+        maximumDeliveryDays
     }
 `;
