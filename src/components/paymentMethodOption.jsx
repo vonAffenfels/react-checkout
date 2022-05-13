@@ -2,6 +2,10 @@ import React, {Fragment} from "react";
 import {RadioGroup} from "@headlessui/react";
 import {CheckCircleIcon} from "@heroicons/react/solid";
 
+function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+}
+
 const PaymentMethodOption = ({paymentMethod}) => {
 
     return (
