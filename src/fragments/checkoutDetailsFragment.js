@@ -45,6 +45,11 @@ export default gql`
         }
         availablePaymentGateways {
             id
+            name
+            config {
+                field
+                value
+            }
         }
         lines {
             totalPrice {

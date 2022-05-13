@@ -7,7 +7,6 @@ import PaymentMethodOption from "./paymentMethodOption.jsx";
 
 const CheckoutForm = ({props}) => {
     const {checkout, addressFormData, setAddressFormData, setCheckoutDeliveryMethod} = useContext(CheckoutContext);
-    const paymentMethods = [];
 
     useEffect(() => {
         let updateAddressFormData = {
@@ -303,7 +302,7 @@ const CheckoutForm = ({props}) => {
                 <fieldset className="mt-4">
                     <legend className="sr-only">Payment type</legend>
                     <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
-                        {paymentMethods.map((paymentMethod) => (
+                        {checkout?.availablePaymentGateways?.map((paymentMethod) => (
                             <PaymentMethodOption
                                 onChange={onChangePaymentMethod}
                                 paymentMethod={paymentMethod}
