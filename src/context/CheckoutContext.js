@@ -10,6 +10,7 @@ import CHECKOUT_DELETE_PRODUCT_LINE from "../mutations/checkoutLineDelete";
 import CHECKOUT_SHIPPING_ADDRESS_UPDATE from "../mutations/checkoutShippingAddressUpdate";
 import CHECKOUT_EMAIL_UPDATE from "../mutations/checkoutEmailUpdate";
 import CHECKOUT_DELIVERY_METHOD_UPDATE from "../mutations/checkoutDeliveryMethodUpdate";
+import CHECKOUT_PAYMENT_CREATE from "../mutations/checkoutPaymentCreate";
 
 export const CheckoutContext = createContext({});
 
@@ -194,6 +195,29 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
     }
 
+    const finalizeCheckout = async () => {
+        console.log("finalizeCheckout");
+        if (!checkout) {
+            return;
+        }
+
+        const {data} = await client.mutate({
+            mutation: CHECKOUT_PAYMENT_CREATE,
+            variables: {
+                checkoutToken,
+                input: {
+                    gateway: selectedPaymentGatewayId,
+                    amount: checkout.totalPrice?.gross.amount,
+                    token: "" /* pR.paymentMethod.id, cardId, ... */
+                }
+            }
+        });
+        console.log("checkoutPaymentCreate, data:", data);
+        if (data?.checkoutPaymentCreate?.errors?.length) {
+            data.checkoutPaymentCreate.errors.forEach(err => console.warn(err));
+        }
+    };
+
     const getCheckoutByToken = async () => {
         if (checkoutToken) {
             refetch({checkoutToken});
@@ -269,6 +293,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setCheckoutAddress,
             setCheckoutEmail,
             setCheckoutDeliveryMethod,
+            finalizeCheckout,
             displayState,
             setDisplayState,
             isCartOpen,

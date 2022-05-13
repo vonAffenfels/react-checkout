@@ -4,7 +4,7 @@ import CheckoutDetailsFragment from "../fragments/checkoutDetailsFragment";
 
 export default gql`
     ${CheckoutDetailsFragment}
-    mutation checkoutEmailUpdate($checkoutToken: UUID!, $email: String!) {
+    mutation CheckoutEmailUpdate($checkoutToken: UUID!, $email: String!) {
         checkoutEmailUpdate(
             token: $checkoutToken
             email: $email

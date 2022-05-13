@@ -1,6 +1,6 @@
 {
     "name": "react-ez-checkout",
-    "version": "1.0.103",
+    "version": "1.0.104",
     "description": "react-component based cart for a shop checkout",
     "main": "dist/index.cjs.js",
     "module": "dist/index.esm.js",
@@ -45,6 +45,8 @@
         "@babel/preset-react": "^7.16.7",
         "@headlessui/react": "^1.6.1",
         "@heroicons/react": "^1.0.6",
+        "@stripe/react-stripe-js": "^1.8.0-0",
+        "@stripe/stripe-js": "^1.29.0",
         "@types/react": "^18.0.8",
         "@types/react-dom": "^18.0.2",
         "autoprefixer": "^9.8.8",
