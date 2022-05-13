@@ -297,20 +297,18 @@ const CheckoutForm = ({props}) => {
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-                <h2 className="text-lg font-medium text-gray-900">Payment</h2>
+                <RadioGroup value={checkout?.paymentGateway?.id} onChange={onChangePaymentMethod}>
+                    <RadioGroup.Label className="text-lg font-medium text-gray-900">Bezahlart</RadioGroup.Label>
 
-                <fieldset className="mt-4">
-                    <legend className="sr-only">Payment type</legend>
-                    <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                    <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                         {checkout?.availablePaymentGateways?.map((paymentMethod) => (
                             <PaymentMethodOption
-                                onChange={onChangePaymentMethod}
                                 paymentMethod={paymentMethod}
                                 key={paymentMethod.id}
                             />
                         ))}
                     </div>
-                </fieldset>
+                </RadioGroup>
 
                 <div className="mt-6 grid grid-cols-4 gap-y-6 gap-x-4">
                     <div className="col-span-4">
