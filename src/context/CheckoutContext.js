@@ -194,7 +194,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }
 
     const getCheckoutByToken = async () => {
-        console.log("getCheckoutByToken", checkoutToken);
         if (checkoutToken) {
             refetch({checkoutToken});
         } else {
@@ -211,12 +210,12 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
 
         Object.keys(inputAddress).forEach(key => {
-            if (inputAddress[key] !== checkoutAddress[key]) {
+            if (inputAddress[key] !== checkoutAddress[key] && key !== "email") {
                 foundDiff = true;
             }
         });
         Object.keys(checkoutAddress).forEach(key => {
-            if (inputAddress[key] !== checkoutAddress[key]) {
+            if (inputAddress[key] !== checkoutAddress[key] && key !== "email") {
                 foundDiff = true;
             }
         });
@@ -229,9 +228,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [checkoutToken, checkout?.lines?.length]);
 
     useEffect(() => {
-        console.log("useEffect addressFormDataDebounced:", addressFormDataDebounced);
         let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
+        console.log("useEffect addressFormDataDebounced:", addressFormDataDebounced, email, checkout?.email);
         if (email && (email !== checkout?.email)) {
             setCheckoutEmail(email);
         }

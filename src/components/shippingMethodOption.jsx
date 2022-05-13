@@ -6,13 +6,12 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-const ShippingMethodOption = ({shippingMethod, checked}) => {
-    console.log("ShippingMethodOption", shippingMethod, checked)
+const ShippingMethodOption = ({shippingMethod}) => {
 
     return (
         <RadioGroup.Option
             value={shippingMethod.id}
-            className={({active}) =>
+            className={({active, checked}) =>
                 classNames(
                     checked ? "border-transparent" : "border-gray-300",
                     active ? "ring-2 ring-indigo-500" : "",
@@ -22,7 +21,6 @@ const ShippingMethodOption = ({shippingMethod, checked}) => {
         >
             {({active, checked}) => (
                 <Fragment>
-                    {console.log("active", active, "checked", checked)}
                     <span className="flex-1 flex">
                         <span className="flex flex-col">
                             <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">

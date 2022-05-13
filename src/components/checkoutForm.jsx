@@ -285,16 +285,12 @@ const CheckoutForm = ({props}) => {
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Versandart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        {checkout?.shippingMethods?.map((shippingMethod) => {
-                            console.log("shippingMethod map", checkout?.shippingMethod?.id, shippingMethod.id);
-                            return (
-                                <ShippingMethodOption
-                                    shippingMethod={shippingMethod}
-                                    checked={checkout?.shippingMethod?.id === shippingMethod.id}
-                                    key={shippingMethod.id}
-                                />
-                            );
-                        })}
+                        {checkout?.shippingMethods?.map((shippingMethod) => (
+                            <ShippingMethodOption
+                                shippingMethod={shippingMethod}
+                                key={shippingMethod.id}
+                            />
+                        ))}
                     </div>
                 </RadioGroup>
             </div>
