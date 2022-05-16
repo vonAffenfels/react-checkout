@@ -19,7 +19,7 @@ const CheckoutForm = ({props}) => {
         let updateAddressFormData = {
             ...addressFormData
         };
-        if (checkout?.email !== "anonymous@example.com") {
+        if (checkout?.email && checkout?.email !== "anonymous@example.com") {
             updateAddressFormData.email = checkout.email;
         }
         if (checkout?.shippingAddress) {

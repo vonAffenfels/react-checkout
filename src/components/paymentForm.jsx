@@ -28,7 +28,8 @@ const PaymentForm = ({}) => {
                     if (!stripePromise) {
                         selectedPaymentGateway.config.forEach(attr => {
                             if (attr.field === "api_key") {
-                                setStripePromise(loadStripe(attr.field));
+                                console.log("LOAD STRIPE WITH", attr)
+                                setStripePromise(loadStripe(attr.value));
                             }
                         });
                     }

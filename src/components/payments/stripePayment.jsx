@@ -43,6 +43,7 @@ const StripePayment = ({stripePromise}) => {
                 },
                 body: new URLSearchParams({
                     "currency": String(checkout?.totalPrice?.gross?.currency).toLowerCase(),
+                    // TODO saleor gibt 90ct bspw. als 0.9 aus => evtl 0 appenden
                     "amount": String(checkout?.totalPrice?.gross?.amount).replace(".", ""),
                     "automatic_payment_methods[enabled]": true
                 }).toString()
