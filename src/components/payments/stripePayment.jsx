@@ -1,8 +1,9 @@
-import React, {Fragment, useEffect} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import {PaymentElement, IbanElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
 
 const StripePayment = ({}) => {
+    const [done, setDone] = useState(false);
     const elements = useElements();
     const stripe = useStripe();
 
@@ -17,10 +18,11 @@ const StripePayment = ({}) => {
             const res = await fetch(url.href, {
                 method: "POST",
                 headers: {
-                    Authorization: "Bearer sk_test_51KyvxoC6ZdKmUgieW1IAyZBFfkxEuBdeTxgvYktBP00NA8zW1gNTmDgnrAYG9wZTelB4OyTk6gwUKYHuVZxrDf4V000yCrGre0"
+                    Authorization: "Bearer sk_test_51KyvxoC6ZdKmUgieW1IAyZBFfkxEuBdeTxgvYktBP00NA8zW1gNTmDgnrAYG9wZTelB4OyTk6gwUKYHuVZxrDf4V000yCrGre0:"
                 }
             }).then(res => res.json());
             console.log(res);
+            setDone(true);
         } catch (e) {
             console.log(e);
         }
@@ -38,7 +40,7 @@ const StripePayment = ({}) => {
 
     return (
         <form>
-            {/*<PaymentElement />*/}
+            {done && <PaymentElement />}
         </form>
     );
 }
