@@ -38,7 +38,7 @@ const StripePayment = ({}) => {
 
     return (
         <form>
-            <PaymentElement />
+            {/*<PaymentElement />*/}
         </form>
     );
 }
