@@ -10,11 +10,14 @@ const StripePaymentForm = () => {
     const elements = useElements();
     const stripe = useStripe();
 
-    console.log("StripePayment", stripe, elements);
+    console.log("StripePaymentForm", stripe, elements);
+    const onSubmit = (e) => {
+        console.log("StripePaymentForm onSubmit",e );
+    }
 
     return (
-        <form>
-            <PaymentElement />
+        <form id="stripe-payment-form" onSubmit={onSubmit}>
+            <PaymentElement id="stripe-payment-element" />
         </form>
     );
 };
@@ -39,8 +42,9 @@ const StripePayment = ({stripePromise}) => {
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
                 body: new URLSearchParams({
-                    currency: String(checkout?.totalPrice?.gross?.currency).toLowerCase(),
-                    amount: String(checkout?.totalPrice?.gross?.amount).replace(".", "")
+                    "currency": String(checkout?.totalPrice?.gross?.currency).toLowerCase(),
+                    "amount": String(checkout?.totalPrice?.gross?.amount).replace(".", ""),
+                    "automatic_payment_methods[enabled]": true
                 }).toString()
             }).then(res => res.json());
             console.log(paymentIntent);
