@@ -6,6 +6,9 @@ import CheckoutContext from "../../context/CheckoutContext";
 
 const StripePaymentForm = () => {
     const elements = useElements();
+    const stripe = useStripe();
+
+    console.log("StripePayment", typeof stripe, stripe, elements);
 
     return (
         <form>
@@ -17,9 +20,6 @@ const StripePaymentForm = () => {
 const StripePayment = ({stripePromise}) => {
     const {checkout} = useContext(CheckoutContext);
     const [clientSecret, setClientSecret] = useState(null);
-    const stripe = useStripe();
-
-    console.log("StripePayment", typeof stripe, stripe);
 
     const createPaymentIntent = async () => {
         try {
