@@ -12,6 +12,7 @@ const CheckoutSummary = ({props}) => {
     const [enabled, setEnabled] = useState(false);
 
     useEffect(() => {
+        console.log("checkoutSummary", [checkout?.email, checkout?.shippingAddress, checkout?.shippingMethod?.id, selectedPaymentGatewayId]);
         if (!enabled && checkout?.email && checkout?.shippingAddress && checkout?.shippingMethod?.id && selectedPaymentGatewayId) {
             setEnabled(true);
         }
@@ -46,6 +47,7 @@ const CheckoutSummary = ({props}) => {
 
             <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                 <button
+                    disabled={!enabled}
                     type="submit"
                     className={
                         classNames(

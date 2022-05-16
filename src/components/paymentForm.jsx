@@ -44,7 +44,9 @@ const PaymentForm = ({}) => {
 
     if (stripePromise) {
         component = (
-            <Elements stripe={stripePromise}><StripePayment /></Elements>
+            <Elements stripe={stripePromise} options={{
+                clientSecret: "sk_test_51KyvxoC6ZdKmUgieW1IAyZBFfkxEuBdeTxgvYktBP00NA8zW1gNTmDgnrAYG9wZTelB4OyTk6gwUKYHuVZxrDf4V000yCrGre0"
+            }}><StripePayment /></Elements>
         );
     }
 

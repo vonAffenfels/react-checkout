@@ -12,7 +12,7 @@ const StripePayment = ({}) => {
         console.log(Object.keys(stripe));
         try {
             const url = new URL("https://api.stripe.com/v1/payment_intents");
-            url.searchParams.append("amount", "16.5");
+            url.searchParams.append("amount", "16");
             url.searchParams.append("currency", "eur");
             const res = await fetch(url.href, {
                 method: "POST",
@@ -38,8 +38,7 @@ const StripePayment = ({}) => {
 
     return (
         <form>
-            <IbanElement supportedCountries={[]} />
-            {/*<PaymentElement />*/}
+            <PaymentElement />
         </form>
     );
 }
