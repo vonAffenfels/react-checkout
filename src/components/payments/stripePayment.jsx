@@ -8,7 +8,7 @@ const StripePaymentForm = () => {
     const elements = useElements();
     const stripe = useStripe();
 
-    console.log("StripePayment", typeof stripe, stripe, elements);
+    console.log("StripePayment", stripe, elements);
 
     return (
         <form>
@@ -46,6 +46,7 @@ const StripePayment = ({stripePromise}) => {
         createPaymentIntent();
     }, []);
 
+    console.log(stripePromise, clientSecret)
     if (!clientSecret) {
         return null;
     }
