@@ -4,16 +4,19 @@ import {loadStripe} from "@stripe/stripe-js";
 
 import CheckoutContext from "../../context/CheckoutContext";
 
-const StripePaymentForm = () => (
-    <form>
-        <PaymentElement />
-    </form>
-);
+const StripePaymentForm = () => {
+    const elements = useElements();
+
+    return (
+        <form>
+            <PaymentElement />
+        </form>
+    );
+};
 
 const StripePayment = ({stripePromise}) => {
     const {checkout} = useContext(CheckoutContext);
     const [clientSecret, setClientSecret] = useState(null);
-    const elements = useElements();
     const stripe = useStripe();
 
     console.log("StripePayment", typeof stripe, stripe);
