@@ -1,47 +1,56 @@
-import React, {Fragment, useEffect, useState} from "react";
-import {PaymentElement, IbanElement, useElements, useStripe} from "@stripe/react-stripe-js";
+import React, {Fragment, useContext, useEffect, useState} from "react";
+import {PaymentElement, Elements, useElements, useStripe} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
 
-const StripePayment = ({}) => {
-    const [done, setDone] = useState(false);
+import CheckoutContext from "../../context/CheckoutContext";
+
+const StripePaymentForm = () => (
+    <form>
+        <PaymentElement />
+    </form>
+);
+
+const StripePayment = ({stripePromise}) => {
+    const {checkout} = useContext(CheckoutContext);
+    const [clientSecret, setClientSecret] = useState(null);
     const elements = useElements();
     const stripe = useStripe();
 
     console.log("StripePayment", typeof stripe, stripe);
 
     const createPaymentIntent = async () => {
-        console.log(Object.keys(stripe));
         try {
-            const url = new URL("https://api.stripe.com/v1/payment_intents");
-            url.searchParams.append("amount", "16");
-            url.searchParams.append("currency", "eur");
-            const res = await fetch(url.href, {
+            //TODO create the paymentIntent on the server side for given checkout!
+            const paymentIntent = await fetch("https://api.stripe.com/v1/payment_intents", {
                 method: "POST",
                 headers: {
-                    Authorization: "Bearer sk_test_51KyvxoC6ZdKmUgieW1IAyZBFfkxEuBdeTxgvYktBP00NA8zW1gNTmDgnrAYG9wZTelB4OyTk6gwUKYHuVZxrDf4V000yCrGre0:"
-                }
+                    Authorization: "Bearer sk_test_51KyvxoC6ZdKmUgieW1IAyZBFfkxEuBdeTxgvYktBP00NA8zW1gNTmDgnrAYG9wZTelB4OyTk6gwUKYHuVZxrDf4V000yCrGre0",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams({
+                    currency: String(checkout?.totalPrice?.gross?.currency).toLowerCase(),
+                    amount: String(checkout?.totalPrice?.gross?.amount).replace(".", "")
+                }).toString()
             }).then(res => res.json());
-            console.log(res);
-            setDone(true);
+            console.log(paymentIntent);
+            setClientSecret(paymentIntent.client_secret);
         } catch (e) {
             console.log(e);
         }
     };
 
     useEffect(() => {
-
+        createPaymentIntent();
     }, []);
 
-    useEffect(() => {
-        if (stripe) {
-            createPaymentIntent();
-        }
-    }, [stripe]);
+    if (!clientSecret) {
+        return null;
+    }
 
     return (
-        <form>
-            {done && <PaymentElement />}
-        </form>
+        <Elements stripe={stripePromise} options={{clientSecret}}>
+            <StripePaymentForm />
+        </Elements>
     );
 }
 

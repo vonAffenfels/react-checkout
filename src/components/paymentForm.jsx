@@ -1,5 +1,4 @@
 import React, {Fragment, useContext, useState, useEffect} from "react";
-import {Elements} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
 
 import CheckoutContext from "../context/CheckoutContext";
@@ -29,7 +28,7 @@ const PaymentForm = ({}) => {
                     if (!stripePromise) {
                         selectedPaymentGateway.config.forEach(attr => {
                             if (attr.field === "api_key") {
-                                setStripePromise(loadStripe(attr.value));
+                                setStripePromise(loadStripe(attr.field));
                             }
                         });
                     }
@@ -44,9 +43,7 @@ const PaymentForm = ({}) => {
 
     if (stripePromise) {
         component = (
-            <Elements stripe={stripePromise} options={{
-                // clientSecret: "sk_test_51KyvxoC6ZdKmUgieW1IAyZBFfkxEuBdeTxgvYktBP00NA8zW1gNTmDgnrAYG9wZTelB4OyTk6gwUKYHuVZxrDf4V000yCrGre0:"
-            }}><StripePayment /></Elements>
+            <StripePayment stripePromise={stripePromise} />
         );
     }
 
