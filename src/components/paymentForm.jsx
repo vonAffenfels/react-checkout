@@ -9,7 +9,6 @@ const PaymentForm = ({}) => {
     const {checkout, selectedPaymentGatewayId, finalizeCheckout} = useContext(CheckoutContext);
     const [selectedPaymentGateway, setSelectedPaymentGateway] = useState(null);
     const [stripePromise, setStripePromise] = useState(null);
-    const [stripeApiKey, setStripeApiKey] = useState(null);
 
     //TODO call after payment?
     //finalizeCheckout();
@@ -30,7 +29,6 @@ const PaymentForm = ({}) => {
                     if (!stripePromise) {
                         selectedPaymentGateway.config.forEach(attr => {
                             if (attr.field === "api_key") {
-                                setStripeApiKey(attr.value);
                                 setStripePromise(loadStripe(attr.value));
                             }
                         });
@@ -46,7 +44,7 @@ const PaymentForm = ({}) => {
 
     if (stripePromise) {
         component = (
-            <Elements stripe={stripePromise}><StripePayment apiKey={stripeApiKey} /></Elements>
+            <Elements stripe={stripePromise}><StripePayment /></Elements>
         );
     }
 

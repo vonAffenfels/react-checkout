@@ -2,7 +2,7 @@ import React, {Fragment, useEffect} from "react";
 import {PaymentElement, IbanElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
 
-const StripePayment = ({apiKey}) => {
+const StripePayment = ({}) => {
     const elements = useElements();
     const stripe = useStripe();
 
@@ -10,18 +10,20 @@ const StripePayment = ({apiKey}) => {
 
     const createPaymentIntent = async () => {
         console.log(Object.keys(stripe));
-        const res = await fetch({
-            method: "POST",
-            url: "https://api.stripe.com/v1/payment_intents",
-            data: JSON.stringify({
-                amount: 16.5,
-                currency: "eur",
-            }),
-            headers: {
-                Authorization: "Basic " + btoa(apiKey)
-            }
-        }).then(res => res.json());
-        console.log(res);
+        try {
+            const url = new URL("https://api.stripe.com/v1/payment_intents");
+            url.searchParams.append("amount", "16.5");
+            url.searchParams.append("currency", "eur");
+            const res = await fetch(url.href, {
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer sk_test_51KyvxoC6ZdKmUgieW1IAyZBFfkxEuBdeTxgvYktBP00NA8zW1gNTmDgnrAYG9wZTelB4OyTk6gwUKYHuVZxrDf4V000yCrGre0"
+                }
+            }).then(res => res.json());
+            console.log(res);
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     useEffect(() => {
@@ -36,7 +38,7 @@ const StripePayment = ({apiKey}) => {
 
     return (
         <form>
-            <IbanElement />
+            <IbanElement supportedCountries={[]} />
             {/*<PaymentElement />*/}
         </form>
     );
