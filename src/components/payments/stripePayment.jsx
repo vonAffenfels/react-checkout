@@ -21,8 +21,10 @@ const StripePayment = ({stripePromise}) => {
     const {checkout} = useContext(CheckoutContext);
     const [clientSecret, setClientSecret] = useState(null);
 
+    console.log("stripePayment", clientSecret)
     const createPaymentIntent = async () => {
         try {
+            console.log("createPaymentIntent", clientSecret);
             if (clientSecret) {
                 return;
             }
@@ -46,6 +48,7 @@ const StripePayment = ({stripePromise}) => {
     };
 
     useEffect(() => {
+        console.log("useEffect");
         createPaymentIntent();
     }, []);
 
