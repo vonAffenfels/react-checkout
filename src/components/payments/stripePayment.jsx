@@ -23,6 +23,9 @@ const StripePayment = ({stripePromise}) => {
 
     const createPaymentIntent = async () => {
         try {
+            if (clientSecret) {
+                return;
+            }
             //TODO create the paymentIntent on the server side for given checkout!
             const paymentIntent = await fetch("https://api.stripe.com/v1/payment_intents", {
                 method: "POST",
