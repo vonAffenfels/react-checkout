@@ -4,6 +4,8 @@ import {loadStripe} from "@stripe/stripe-js";
 
 import CheckoutContext from "../../context/CheckoutContext";
 
+let GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
+
 const StripePaymentForm = () => {
     const elements = useElements();
     const stripe = useStripe();
@@ -25,9 +27,10 @@ const StripePayment = ({stripePromise}) => {
     const createPaymentIntent = async () => {
         try {
             console.log("createPaymentIntent", clientSecret);
-            if (clientSecret) {
+            if (GLOBAL_PAYMENT_INTENT_HANDLED_FLAG) {
                 return;
             }
+            GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = true;
             //TODO create the paymentIntent on the server side for given checkout!
             const paymentIntent = await fetch("https://api.stripe.com/v1/payment_intents", {
                 method: "POST",
