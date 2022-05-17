@@ -19,4 +19,7 @@ Cart.BuyContext = BuyContext;
 Cart.useLocalStorage = useLocalStorage;
 Cart.CHECKOUT_KEY = CONST.CHECKOUT_KEY;
 
-export default ({...props}) => <BuyContextProvider {...props} />;
+const ReactCheckout = ({...props}) => <BuyContextProvider {...props} />;
+ReactCheckout.API = CheckoutContext;
+
+export default ReactCheckout;
