@@ -4,10 +4,13 @@ import {ApolloContextProvider} from "./ApolloContext";
 import {CheckoutContextProvider} from "./CheckoutContext";
 
 import Cart from "../cart.jsx";
+import Banner from "../components/banner.jsx";
 
 export const BuyContext = createContext({});
 
 export const BuyContextProvider = ({children, uri, channel, shop, paymentProviders}) => {
+    const [bannerMessage, setBannerMessage] = useState("");
+
     if (!uri || !shop || typeof window === "undefined") {
         return children;
     }
@@ -42,7 +45,10 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
             //     currency: String(checkout?.totalPrice?.gross?.currency).toLowerCase(),
             //     amount: String(checkout?.totalPrice?.gross?.amount).replace(".", "")
             // }).toString()
-            console.log("PAYMENT STATE::::", result)
+            console.log("PAYMENT STATE::::", result);
+            //TODO correct message
+            setBannerMessage(result.status);
+            setTimeout(() => setBannerMessage(""));
         }
     }
 
@@ -63,6 +69,7 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
                 <CheckoutContextProvider channel={channel}>
                     {children}
                     <Cart />
+                    {bannerMessage && <Banner />}
                 </CheckoutContextProvider>
             </ApolloContextProvider>
         </BuyContext.Provider>
