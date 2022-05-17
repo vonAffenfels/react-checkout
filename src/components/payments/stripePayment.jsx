@@ -36,7 +36,6 @@ const StripePaymentForm = ({clientSecret}) => {
     };
 
     useEffect(() => {
-        console.warn("useEffect stripePaymentForm.jsx", stripe, clientSecret);
         if (!stripe || !clientSecret) {
             return;
         }
@@ -68,9 +67,7 @@ const StripePaymentForm = ({clientSecret}) => {
 const StripePayment = ({stripePromise}) => {
     const {shop, paymentProviders, uri} = useContext(BuyContext);
     const {checkout, checkoutToken} = useContext(CheckoutContext);
-    const [clientSecret, setClientSecret] = useState(new URLSearchParams(window?.location?.search)?.get(
-        "payment_intent_client_secret"
-    ) || null);
+    const [clientSecret, setClientSecret] = useState(null);
 
     let apiUri = "";
     paymentProviders.forEach(provider => {
@@ -81,7 +78,7 @@ const StripePayment = ({stripePromise}) => {
 
     const createPaymentIntent = async () => {
         try {
-            if (GLOBAL_PAYMENT_INTENT_HANDLED_FLAG || clientSecret) {
+            if (GLOBAL_PAYMENT_INTENT_HANDLED_FLAG) {
                 return;
             }
             GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = true;
