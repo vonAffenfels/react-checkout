@@ -19,18 +19,12 @@ const StripePaymentForm = ({clientSecret}) => {
     const onSubmit = async (e) => {
         e.preventDefault?.();
         e.stopPropagation?.();
-        console.log("StripePaymentForm onSubmit", e);
-        console.log(elements);
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        await retrievePaymentIntent();
-
-        await new Promise(resolve => setTimeout(resolve, 2000));
         const result = await stripe.confirmPayment({
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                return_url: "http://localhost:3000",
+                return_url: window.location.href,
             },
         });
         console.log("confirmPayment", result);
@@ -42,6 +36,7 @@ const StripePaymentForm = ({clientSecret}) => {
     };
 
     useEffect(() => {
+        console.warn("useEffect stripePaymentForm.jsx", stripe, clientSecret);
         if (!stripe || !clientSecret) {
             return;
         }
@@ -73,7 +68,9 @@ const StripePaymentForm = ({clientSecret}) => {
 const StripePayment = ({stripePromise}) => {
     const {shop, paymentProviders, uri} = useContext(BuyContext);
     const {checkout, checkoutToken} = useContext(CheckoutContext);
-    const [clientSecret, setClientSecret] = useState(null);
+    const [clientSecret, setClientSecret] = useState(new URLSearchParams(window?.location?.search)?.get(
+        "payment_intent_client_secret"
+    ) || null);
 
     let apiUri = "";
     paymentProviders.forEach(provider => {
@@ -84,7 +81,7 @@ const StripePayment = ({stripePromise}) => {
 
     const createPaymentIntent = async () => {
         try {
-            if (GLOBAL_PAYMENT_INTENT_HANDLED_FLAG) {
+            if (GLOBAL_PAYMENT_INTENT_HANDLED_FLAG || clientSecret) {
                 return;
             }
             GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = true;
