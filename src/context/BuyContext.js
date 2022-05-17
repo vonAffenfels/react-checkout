@@ -3,6 +3,8 @@ import CONST from "../lib/const";
 import {ApolloContextProvider} from "./ApolloContext";
 import {CheckoutContextProvider} from "./CheckoutContext";
 
+import Cart from "../cart.jsx";
+
 export const BuyContext = createContext({});
 
 export const BuyContextProvider = ({children, uri, channel, shop, paymentProviders}) => {
@@ -23,6 +25,7 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
             <ApolloContextProvider uri={uri}>
                 <CheckoutContextProvider channel={channel}>
                     {children}
+                    <Cart />
                 </CheckoutContextProvider>
             </ApolloContextProvider>
         </BuyContext.Provider>

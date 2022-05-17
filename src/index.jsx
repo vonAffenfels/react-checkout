@@ -19,4 +19,4 @@ Cart.BuyContext = BuyContext;
 Cart.useLocalStorage = useLocalStorage;
 Cart.CHECKOUT_KEY = CONST.CHECKOUT_KEY;
 
-export default Cart;
+export default ({...props}) => <BuyContextProvider {...props} />;
