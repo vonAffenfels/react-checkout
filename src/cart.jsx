@@ -6,7 +6,7 @@ import CartFullPage from "./cartFullPage.jsx";
 import PaymentFullPage from "./PaymentFullPage.jsx";
 
 const Cart = ({...props}) => {
-    let {displayState, setDisplayState} = useContext(CheckoutContext);
+    let {displayState, setDisplayState, setSelectedPaymentGateway} = useContext(CheckoutContext);
     let component = null;
 
     useEffect(() => {
@@ -14,6 +14,7 @@ const Cart = ({...props}) => {
             "payment_intent_client_secret"
         )) {
             setDisplayState("payment");
+            setSelectedPaymentGateway("saleor.payments.stripe");
         }
     }, []);
 
