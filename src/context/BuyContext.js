@@ -31,12 +31,13 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
                 is_stripe_sdk: false,
                 client_secret: clientSecret
             }).toString();
-            let result = await fetch("https://api.stripe.com/v1/payment_intents/" + paymentIntent + "?" + queryString, {
+            let result = await fetch("https://api.stripe.com/v1/payment_intents/" + paymentIntent, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
-                }
-            }).then(res => res.json);
+                },
+                body: queryString
+            }).then(res => res.json());
 
             // body: new URLSearchParams({
             //     currency: String(checkout?.totalPrice?.gross?.currency).toLowerCase(),
