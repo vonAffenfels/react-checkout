@@ -12,7 +12,6 @@ const CheckoutSummary = ({props}) => {
     const [enabled, setEnabled] = useState(false);
 
     useEffect(() => {
-        console.log("checkoutSummary", [checkout?.email, checkout?.shippingAddress, checkout?.shippingMethod?.id, selectedPaymentGatewayId]);
         if (!enabled && checkout?.email && checkout?.shippingAddress && checkout?.shippingMethod?.id && selectedPaymentGatewayId) {
             setEnabled(true);
         }
