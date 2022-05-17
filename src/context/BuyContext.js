@@ -48,7 +48,7 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
             console.log("PAYMENT STATE::::", result);
             //TODO correct message
             setBannerMessage(result.status);
-            setTimeout(() => setBannerMessage(""));
+            setTimeout(() => setBannerMessage(""), 10000);
         }
     }
 
