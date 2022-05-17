@@ -7,12 +7,18 @@ import BuyContext from "../../context/BuyContext";
 
 let GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
 
+function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+}
+
 const StripePaymentForm = () => {
     const elements = useElements();
     const stripe = useStripe();
 
     console.log("StripePaymentForm", stripe, elements);
     const onSubmit = (e) => {
+        e.preventDefault?.();
+        e.stopPropagation?.();
         console.log("StripePaymentForm onSubmit", e);
         console.log(elements);
     }
@@ -20,7 +26,18 @@ const StripePaymentForm = () => {
     return (
         <form id="stripe-payment-form" onSubmit={onSubmit}>
             <PaymentElement id="stripe-payment-element" />
-            <button type="submit" disabled={!elements || !stripe}>Jetzt bezahlen</button>
+            <button
+                disabled={!elements || !stripe}
+                type="submit"
+                className={
+                    classNames(
+                        elements && stripe ? "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
+                        "w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white"
+                    )
+                }
+            >
+                Jetzt bezahlen
+            </button>
         </form>
     );
 };
@@ -37,10 +54,8 @@ const StripePayment = ({stripePromise}) => {
         }
     });
 
-    console.log("stripePayment", clientSecret)
     const createPaymentIntent = async () => {
         try {
-            console.log("createPaymentIntent", clientSecret);
             if (GLOBAL_PAYMENT_INTENT_HANDLED_FLAG) {
                 return;
             }
@@ -58,7 +73,7 @@ const StripePayment = ({stripePromise}) => {
                     shopUri: uri
                 })
             }).then(res => res.json());
-            console.log(paymentIntent);
+
             setClientSecret(paymentIntent.client_secret);
         } catch (e) {
             console.log(e);
@@ -66,7 +81,6 @@ const StripePayment = ({stripePromise}) => {
     };
 
     useEffect(() => {
-        console.log("useEffect");
         createPaymentIntent();
 
         return () => {
@@ -74,7 +88,6 @@ const StripePayment = ({stripePromise}) => {
         };
     }, []);
 
-    console.log(stripePromise, clientSecret)
     if (!clientSecret || !apiUri) {
         return null;
     }
