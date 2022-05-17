@@ -22,6 +22,10 @@ const StripePaymentForm = ({clientSecret}) => {
         console.log("StripePaymentForm onSubmit", e);
         console.log(elements);
 
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await retrievePaymentIntent();
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
         const result = await stripe.confirmPayment({
             elements,
             confirmParams: {
