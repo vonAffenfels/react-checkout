@@ -49,10 +49,10 @@ const StripePayment = ({stripePromise}) => {
             const paymentIntent = await fetch(apiUri, {
                 method: "POST",
                 headers: {
-                    "x-type": "stripe.create_payment_intent",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    type: "stripe.create_payment_intent",
                     checkoutToken: checkoutToken,
                     shop: shop,
                     shopUri: uri
