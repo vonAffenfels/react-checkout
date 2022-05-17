@@ -4,6 +4,7 @@ import "./styles/styles.scss";
 
 import ApolloContext, {ApolloContextProvider} from "./context/ApolloContext";
 import CheckoutContext, {CheckoutContextProvider} from "./context/CheckoutContext";
+import BuyContext, {BuyContextProvider} from "./context/BuyContext";
 import useLocalStorage from "./hooks/useLocalStorage";
 import CONST from "./lib/const";
 
@@ -14,19 +15,7 @@ Cart.CheckoutLine = CheckoutLine;
 
 Cart.ApolloContext = ApolloContext;
 Cart.CheckoutContext = CheckoutContext;
-Cart.BuyContext = ({children, uri, channel}) => {
-    if (!uri || typeof window === "undefined") {
-        return children;
-    }
-
-    return (
-        <ApolloContextProvider uri={uri}>
-            <CheckoutContextProvider channel={channel}>
-                {children}
-            </CheckoutContextProvider>
-        </ApolloContextProvider>
-    );
-};
+Cart.BuyContext = BuyContext;
 Cart.useLocalStorage = useLocalStorage;
 Cart.CHECKOUT_KEY = CONST.CHECKOUT_KEY;
 

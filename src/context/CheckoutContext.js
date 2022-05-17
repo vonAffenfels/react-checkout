@@ -302,7 +302,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             addressFormData,
             setAddressFormData,
             selectedPaymentGatewayId,
-            setSelectedPaymentGatewayId
+            setSelectedPaymentGatewayId,
         }}>
             {children}
         </CheckoutContext.Provider>

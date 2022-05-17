@@ -3,6 +3,7 @@ import {PaymentElement, Elements, useElements, useStripe} from "@stripe/react-st
 import {loadStripe} from "@stripe/stripe-js";
 
 import CheckoutContext from "../../context/CheckoutContext";
+import BuyContext from "../../context/BuyContext";
 
 let GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
 
@@ -12,19 +13,29 @@ const StripePaymentForm = () => {
 
     console.log("StripePaymentForm", stripe, elements);
     const onSubmit = (e) => {
-        console.log("StripePaymentForm onSubmit",e );
+        console.log("StripePaymentForm onSubmit", e);
+        console.log(elements);
     }
 
     return (
         <form id="stripe-payment-form" onSubmit={onSubmit}>
             <PaymentElement id="stripe-payment-element" />
+            <button type="submit" disabled={!elements || !stripe}>Jetzt bezahlen</button>
         </form>
     );
 };
 
 const StripePayment = ({stripePromise}) => {
-    const {checkout} = useContext(CheckoutContext);
+    const {shop, paymentProviders, uri} = useContext(BuyContext);
+    const {checkout, checkoutToken} = useContext(CheckoutContext);
     const [clientSecret, setClientSecret] = useState(null);
+
+    let apiUri = "";
+    paymentProviders.forEach(provider => {
+        if (provider.name === "stripe") {
+            apiUri = provider.config.apiUri;
+        }
+    });
 
     console.log("stripePayment", clientSecret)
     const createPaymentIntent = async () => {
@@ -34,19 +45,18 @@ const StripePayment = ({stripePromise}) => {
                 return;
             }
             GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = true;
-            //TODO create the paymentIntent on the server side for given checkout!
-            const paymentIntent = await fetch("https://api.stripe.com/v1/payment_intents", {
+
+            const paymentIntent = await fetch(apiUri, {
                 method: "POST",
                 headers: {
-                    Authorization: "Bearer sk_test_51KyvxoC6ZdKmUgieW1IAyZBFfkxEuBdeTxgvYktBP00NA8zW1gNTmDgnrAYG9wZTelB4OyTk6gwUKYHuVZxrDf4V000yCrGre0",
-                    "Content-Type": "application/x-www-form-urlencoded"
+                    "x-type": "stripe.create_payment_intent",
+                    "Content-Type": "application/json"
                 },
-                body: new URLSearchParams({
-                    "currency": String(checkout?.totalPrice?.gross?.currency).toLowerCase(),
-                    // TODO saleor gibt 90ct bspw. als 0.9 aus => evtl 0 appenden
-                    "amount": String(checkout?.totalPrice?.gross?.amount).replace(".", ""),
-                    "automatic_payment_methods[enabled]": true
-                }).toString()
+                body: JSON.stringify({
+                    checkoutToken: checkoutToken,
+                    shop: shop,
+                    shopUri: uri
+                })
             }).then(res => res.json());
             console.log(paymentIntent);
             setClientSecret(paymentIntent.client_secret);
@@ -58,10 +68,14 @@ const StripePayment = ({stripePromise}) => {
     useEffect(() => {
         console.log("useEffect");
         createPaymentIntent();
+
+        return () => {
+            GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
+        };
     }, []);
 
     console.log(stripePromise, clientSecret)
-    if (!clientSecret) {
+    if (!clientSecret || !apiUri) {
         return null;
     }
 
