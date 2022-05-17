@@ -29,10 +29,8 @@ const PaymentFullPage = ({}) => {
                     <CloseButton onClick={() => setDisplayState("widget")} />
                 </Dialog.Panel>
 
-                <div className="bg-gray-50">
-                    <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-                        <PaymentForm />
-                    </div>
+                <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+                    <PaymentForm />
                 </div>
             </Transition.Child>
         </FullPageLayout>
