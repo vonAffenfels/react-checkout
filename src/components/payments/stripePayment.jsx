@@ -53,7 +53,7 @@ const StripePayment = ({stripePromise}) => {
                 },
                 body: JSON.stringify({
                     type: "stripe.create_payment_intent",
-                    checkoutToken: checkoutToken,
+                    checkoutToken: checkout?.token,
                     shop: shop,
                     shopUri: uri
                 })
