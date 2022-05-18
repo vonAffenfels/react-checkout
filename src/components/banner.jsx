@@ -1,7 +1,11 @@
 import React, {useState, useEffect} from "react";
 import {SpeakerphoneIcon, XIcon} from "@heroicons/react/outline";
 
-export default function Banner({}) {
+function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+}
+
+export default function Banner({msg, isError}) {
     const [show, setShow] = useState(true);
 
     const hide = () => setShow(false);
@@ -13,15 +17,25 @@ export default function Banner({}) {
     return (
         <div className="fixed top-10 inset-x-0 pb-2 sm:pb-5">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-                <div className="p-2 rounded-lg bg-indigo-600 shadow-lg sm:p-3">
+                <div className={
+                    classNames(
+                        isError ? "bg-red-600" : "bg-indigo-600",
+                        "p-2 rounded-lg shadow-lg sm:p-3"
+                    )
+                }>
                     <div className="flex items-center justify-between flex-wrap">
                         <div className="w-0 flex-1 flex items-center">
-                            <span className="flex p-2 rounded-lg bg-indigo-800">
+                            <span className={
+                                classNames(
+                                    isError ? "bg-red-800" : "bg-indigo-800",
+                                    "flex p-2 rounded-lg"
+                                )
+                            }>
                                 <SpeakerphoneIcon className="h-6 w-6 text-white" aria-hidden="true"/>
                             </span>
                             <p className="ml-3 font-medium text-white truncate">
-                                <span className="md:hidden">Die Bestellung war erfolgreich!</span>
-                                <span className="hidden md:inline">Die Bestellung war erfolgreich!</span>
+                                <span className="md:hidden">{msg}</span>
+                                <span className="hidden md:inline">{msg}</span>
                             </p>
                         </div>
                         <div className="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">

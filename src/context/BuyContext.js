@@ -9,7 +9,7 @@ import Banner from "../components/banner.jsx";
 export const BuyContext = createContext({});
 
 export const BuyContextProvider = ({children, uri, channel, shop, paymentProviders}) => {
-    const [bannerMessage, setBannerMessage] = useState("");
+    const [bannerMessage, setBannerMessage] = useState(null);
 
     if (!uri || !shop || typeof window === "undefined") {
         return children;
@@ -36,19 +36,14 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
             }).toString();
             let result = await fetch("https://api.stripe.com/v1/payment_intents/" + paymentIntent + "?" + queryString, {
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                }
+                headers: {"Content-Type": "application/x-www-form-urlencoded"}
             }).then(res => res.json());
 
-            // body: new URLSearchParams({
-            //     currency: String(checkout?.totalPrice?.gross?.currency).toLowerCase(),
-            //     amount: String(checkout?.totalPrice?.gross?.amount).replace(".", "")
-            // }).toString()
-            console.log("PAYMENT STATE::::", result);
-            //TODO correct message
-            setBannerMessage(result.status);
-            setTimeout(() => setBannerMessage(""), 10000);
+            console.log("PAYMENT STATE:", result);
+            let isError = result.status === "succeeded";
+            let msg = !isError ? "Die Bestellung war erfolgreich!" : "Bei der Bestellung ist etwas schiefgegangen."
+            setBannerMessage({msg, isError});
+            setTimeout(() => setBannerMessage(null), 10000);
         }
     }
 
@@ -69,7 +64,7 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
                 <CheckoutContextProvider channel={channel}>
                     {children}
                     <Cart />
-                    {bannerMessage && <Banner />}
+                    {bannerMessage && <Banner {...bannerMessage} />}
                 </CheckoutContextProvider>
             </ApolloContextProvider>
         </BuyContext.Provider>
