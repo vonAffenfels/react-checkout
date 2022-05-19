@@ -8,9 +8,9 @@ import CHECKOUT_CREATE from "../mutations/checkoutCreate";
 import CHECKOUT_ADD_PRODUCT_LINE from "../mutations/checkoutAddProductLine";
 import CHECKOUT_DELETE_PRODUCT_LINE from "../mutations/checkoutLineDelete";
 import CHECKOUT_SHIPPING_ADDRESS_UPDATE from "../mutations/checkoutShippingAddressUpdate";
+import CHECKOUT_BILLING_ADDRESS_UPDATE from "../mutations/checkoutBillingAddressUpdate";
 import CHECKOUT_EMAIL_UPDATE from "../mutations/checkoutEmailUpdate";
 import CHECKOUT_DELIVERY_METHOD_UPDATE from "../mutations/checkoutDeliveryMethodUpdate";
-import CHECKOUT_PAYMENT_CREATE from "../mutations/checkoutPaymentCreate";
 
 export const CheckoutContext = createContext({});
 
@@ -126,13 +126,23 @@ export const CheckoutContextProvider = ({children, channel}) => {
             return;
         }
 
-        const {data} = await client.mutate({
-            mutation: CHECKOUT_SHIPPING_ADDRESS_UPDATE,
-            variables: {
-                checkoutToken,
-                address
-            }
-        });
+        const [{data}, _] = await Promise.all([
+            client.mutate({
+                mutation: CHECKOUT_SHIPPING_ADDRESS_UPDATE,
+                variables: {
+                    checkoutToken,
+                    address
+                }
+            }),
+            client.mutate({
+                mutation: CHECKOUT_BILLING_ADDRESS_UPDATE,
+                variables: {
+                    checkoutToken,
+                    address
+                }
+            })
+        ]);
+
         console.log("checkoutShippingAddressUpdate, data:", data);
         if (data?.checkoutShippingAddressUpdate?.errors?.length) {
             data.checkoutShippingAddressUpdate.errors.forEach(err => console.warn(err));
