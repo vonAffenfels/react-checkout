@@ -25,8 +25,10 @@ const StripePaymentForm = ({clientSecret}) => {
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                // return_url: window.location.href,
-                redirect: "if_required"
+                return_url: window.location.href,
+                payment_method_data: {
+                    foobar: "imwonderland"
+                }
             },
         });
         console.log("confirmPayment", result);
