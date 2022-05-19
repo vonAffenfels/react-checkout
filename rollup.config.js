@@ -43,7 +43,7 @@ export default [
                     ["@babel/preset-react", {runtime: "automatic"}]
                 ],
                 plugins: [
-                    ["@babel/plugin-transform-runtime", {regenerator: true, helpers: false, corejs: 3}],
+                    ["@babel/plugin-transform-runtime", {regenerator: true, helpers: false, /*corejs: 3*/}],
                     "@babel/plugin-transform-async-to-generator",
                     "@babel/plugin-transform-react-jsx"
                 ],
