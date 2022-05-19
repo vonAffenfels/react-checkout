@@ -38,12 +38,14 @@ const PaymentForm = ({}) => {
 
     let component = null;
 
+    console.log("stripePromise", stripePromise);
     if (stripePromise) {
         component = (
             <StripePayment stripePromise={stripePromise} />
         );
     }
 
+    console.log("paymentForm returning", component);
     return component;
 }
 
