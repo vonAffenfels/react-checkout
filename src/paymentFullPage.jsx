@@ -7,7 +7,7 @@ import FullPageLayout from "./components/fullPageLayout.jsx";
 import PaymentForm from "./components/paymentForm.jsx";
 
 const PaymentFullPage = ({}) => {
-    const {checkout, setDisplayState, finalizeCheckout} = useContext(CheckoutContext);
+    const {checkout, setDisplayState} = useContext(CheckoutContext);
     const [isMounting, setMounting] = useState(true);
 
     useEffect(() => {

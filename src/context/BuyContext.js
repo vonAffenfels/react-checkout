@@ -40,8 +40,8 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
             }).then(res => res.json());
 
             console.log("PAYMENT STATE:", result);
-            let isError = result.status === "succeeded";
-            let msg = !isError ? "Die Bestellung war erfolgreich!" : "Bei der Bestellung ist etwas schiefgegangen."
+            let isError = result.status !== "succeeded";
+            let msg = isError ? "Bei der Bestellung ist etwas schiefgegangen." : "Die Bestellung war erfolgreich!";
             setBannerMessage({msg, isError});
             setTimeout(() => setBannerMessage(null), 10000);
         }
@@ -58,7 +58,8 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
         <BuyContext.Provider value={{
             shop,
             paymentProviders,
-            uri
+            uri,
+            setBannerMessage
         }}>
             <ApolloContextProvider uri={uri}>
                 <CheckoutContextProvider channel={channel}>

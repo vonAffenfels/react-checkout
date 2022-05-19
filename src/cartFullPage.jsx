@@ -8,7 +8,7 @@ import CheckoutForm from "./components/checkoutForm.jsx";
 import CheckoutSummary from "./components/checkoutSummary.jsx";
 
 const CartFullPage = ({props}) => {
-    const {checkout, setDisplayState, finalizeCheckout} = useContext(CheckoutContext);
+    const {checkout, setDisplayState} = useContext(CheckoutContext);
     const [isMounting, setMounting] = useState(true);
 
     useEffect(() => {

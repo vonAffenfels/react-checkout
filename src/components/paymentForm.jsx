@@ -5,12 +5,9 @@ import CheckoutContext from "../context/CheckoutContext";
 import StripePayment from "./payments/stripePayment.jsx";
 
 const PaymentForm = ({}) => {
-    const {checkout, selectedPaymentGatewayId, finalizeCheckout} = useContext(CheckoutContext);
+    const {checkout, selectedPaymentGatewayId} = useContext(CheckoutContext);
     const [selectedPaymentGateway, setSelectedPaymentGateway] = useState(null);
     const [stripePromise, setStripePromise] = useState(null);
-
-    //TODO call after payment?
-    //finalizeCheckout();
 
     useEffect(() => {
         checkout?.availablePaymentGateways?.forEach(paymentGateway => {

@@ -195,30 +195,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
     }
 
-    const finalizeCheckout = async () => {
-        console.log("finalizeCheckout");
-        if (!checkout) {
-            return;
-        }
-
-        //TODO automatically turns into order or need to manually call api?
-        const {data} = await client.mutate({
-            mutation: CHECKOUT_PAYMENT_CREATE,
-            variables: {
-                checkoutToken,
-                input: {
-                    gateway: selectedPaymentGatewayId,
-                    amount: checkout.totalPrice?.gross.amount,
-                    token: "" /* pR.paymentMethod.id, cardId, ... */
-                }
-            }
-        });
-        console.log("checkoutPaymentCreate, data:", data);
-        if (data?.checkoutPaymentCreate?.errors?.length) {
-            data.checkoutPaymentCreate.errors.forEach(err => console.warn(err));
-        }
-    };
-
     const getCheckoutByToken = async () => {
         if (checkoutToken) {
             refetch({checkoutToken});
@@ -274,6 +250,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 addressInput.countryArea = state;
             }
 
+            console.log("isInputAddressDifferentFromCheckoutAddress(addressInput)", isInputAddressDifferentFromCheckoutAddress(addressInput));
             if (isInputAddressDifferentFromCheckoutAddress(addressInput)) {
                 setCheckoutAddress(addressInput);
             }
@@ -294,7 +271,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setCheckoutAddress,
             setCheckoutEmail,
             setCheckoutDeliveryMethod,
-            finalizeCheckout,
             displayState,
             setDisplayState,
             isCartOpen,
