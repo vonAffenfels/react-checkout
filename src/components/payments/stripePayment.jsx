@@ -20,11 +20,12 @@ const StripePaymentForm = ({clientSecret}) => {
         e.preventDefault?.();
         e.stopPropagation?.();
 
+        //TODO CheckoutPaymentCreate with open status and query in webhook by metadata?
         const result = await stripe.confirmPayment({
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                return_url: window.location.href,
+                // return_url: window.location.href,
             },
         });
         console.log("confirmPayment", result);
