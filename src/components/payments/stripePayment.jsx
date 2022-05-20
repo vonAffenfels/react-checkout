@@ -66,8 +66,8 @@ const StripePaymentForm = ({clientSecret}) => {
 };
 
 const StripePayment = ({stripePromise}) => {
-    const {shop, paymentProviders, uri} = useContext(BuyContext);
-    const {checkout, checkoutToken, selectedPaymentGatewayId} = useContext(CheckoutContext);
+    const {shop, paymentProviders} = useContext(BuyContext);
+    const {checkout, selectedPaymentGatewayId} = useContext(CheckoutContext);
     const [clientSecret, setClientSecret] = useState(null);
 
     let apiUri = "";
@@ -95,8 +95,8 @@ const StripePayment = ({stripePromise}) => {
                     type: "stripe.create_payment_intent",
                     checkoutToken: checkout?.token,
                     shop: shop,
-                    shopUri: uri,
-                    selectedPaymentGatewayId: selectedPaymentGatewayId
+                    selectedPaymentGatewayId: selectedPaymentGatewayId,
+                    amount: checkout?.totalPrice?.gross?.amount
                 })
             }).then(res => res.json());
 
