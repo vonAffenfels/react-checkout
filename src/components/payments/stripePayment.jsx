@@ -96,7 +96,7 @@ const StripePayment = ({stripePromise}) => {
                     checkoutToken: checkout?.token,
                     shop: shop,
                     selectedPaymentGatewayId: selectedPaymentGatewayId,
-                    amount: checkout?.totalPrice?.gross?.amount
+                    amount: String(checkout?.checkoutComplete?.confirmationData)
                 })
             }).then(res => res.json());
 
