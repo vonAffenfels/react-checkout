@@ -114,6 +114,8 @@ const StripePayment = ({stripePromise}) => {
         };
     }, []);
 
+    console.log("render StripWrapper, clientSecret:", clientSecret, "apiUri:", apiUri)
+
     if (!clientSecret || !apiUri) {
         return null;
     }
