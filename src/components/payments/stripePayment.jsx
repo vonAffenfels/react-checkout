@@ -20,6 +20,7 @@ const StripePaymentForm = ({clientSecret}) => {
         e.preventDefault?.();
         e.stopPropagation?.();
 
+        console.log("CONFIRMING", elements._commonOptions.clientSecret.clientSecret);
         const result = await stripe.confirmPayment({
             elements,
             confirmParams: {
