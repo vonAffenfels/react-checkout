@@ -100,6 +100,7 @@ const StripePayment = ({stripePromise}) => {
                 })
             }).then(res => res.json());
 
+            console.log("set to", paymentIntent);
             setClientSecret(paymentIntent.client_secret);
         } catch (e) {
             console.log(e);
@@ -114,7 +115,7 @@ const StripePayment = ({stripePromise}) => {
         };
     }, []);
 
-    console.log("render StripWrapper, clientSecret:", clientSecret, "apiUri:", apiUri)
+    console.log("render StripeWrapper, clientSecret:", clientSecret, "apiUri:", apiUri, "GLOBAL_PAYMENT_INTENT_HANDLED_FLAG:", GLOBAL_PAYMENT_INTENT_HANDLED_FLAG);
 
     if (!clientSecret || !apiUri) {
         return null;
