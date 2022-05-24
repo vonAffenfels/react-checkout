@@ -100,6 +100,10 @@ const StripePayment = ({stripePromise}) => {
                 })
             }).then(res => res.json());
 
+            if (!paymentIntent || !paymentIntent.client_secret) {
+                return;
+            }
+
             console.log("set to", paymentIntent);
             setClientSecret(paymentIntent.client_secret);
         } catch (e) {
