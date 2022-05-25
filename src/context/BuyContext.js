@@ -1,4 +1,5 @@
 import React, {createContext, useState, useEffect} from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 import CONST from "../lib/const";
 import {ApolloContextProvider} from "./ApolloContext";
 import {CheckoutContextProvider} from "./CheckoutContext";
@@ -9,6 +10,7 @@ import Banner from "../components/banner.jsx";
 export const BuyContext = createContext({});
 
 export const BuyContextProvider = ({children, uri, channel, shop, paymentProviders}) => {
+    const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [bannerMessage, setBannerMessage] = useState(null);
 
     if (!uri || !shop || typeof window === "undefined") {
@@ -50,6 +52,7 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
     useEffect(() => {
         const stripePaymentParam = new URLSearchParams(window?.location?.search)?.get("payment_intent_client_secret");
         if (stripePaymentParam) {
+            removeCheckoutToken();
             fetchStripePaymentIntent(stripePaymentParam);
         }
     }, []);
