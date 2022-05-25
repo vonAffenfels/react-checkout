@@ -28,6 +28,8 @@ const StripePaymentForm = ({clientSecret}) => {
                 return_url: window.location.href,
             },
         });
+
+        //TODO global flag reset?!?
         console.log("confirmPayment", result);
     }
 
@@ -99,12 +101,12 @@ const StripePayment = ({stripePromise}) => {
                     amount: String(checkout?.totalPrice?.gross?.amount)
                 })
             }).then(res => res.json());
+            console.log("set to", paymentIntent);
 
             if (!paymentIntent || !paymentIntent.client_secret) {
                 return;
             }
 
-            console.log("set to", paymentIntent);
             setClientSecret(paymentIntent.client_secret);
         } catch (e) {
             console.log(e);
@@ -115,21 +117,24 @@ const StripePayment = ({stripePromise}) => {
         createPaymentIntent();
 
         return () => {
-            console.log("UNMOUNTING STRIPEPAYMENT");
-            GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
+            // console.log("UNMOUNTING STRIPEPAYMENT");
+            // GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
         };
     }, []);
 
     console.log("stripePromise:", stripePromise, "render StripeWrapper, clientSecret:", clientSecret, "apiUri:", apiUri, "GLOBAL_PAYMENT_INTENT_HANDLED_FLAG:", GLOBAL_PAYMENT_INTENT_HANDLED_FLAG);
 
-    if (!clientSecret || !apiUri) {
-        return null;
+    let component = null
+    if (clientSecret && apiUri) {
+        component = (
+            <Elements stripe={stripePromise} options={{clientSecret}}>
+                <StripePaymentForm clientSecret={clientSecret} />
+            </Elements>
+        )
     }
 
     return (
-        <Elements stripe={stripePromise} options={{clientSecret}}>
-            <StripePaymentForm clientSecret={clientSecret} />
-        </Elements>
+        <Fragment key="stripe-payment-form">{component}</Fragment>
     );
 }
 
