@@ -15,12 +15,10 @@ const StripePaymentForm = ({clientSecret}) => {
     const elements = useElements();
     const stripe = useStripe();
 
-    console.log("StripePaymentForm", stripe, elements);
     const onSubmit = async (e) => {
         e.preventDefault?.();
         e.stopPropagation?.();
 
-        console.log("CONFIRMING", elements._commonOptions.clientSecret.clientSecret);
         const result = await stripe.confirmPayment({
             elements,
             confirmParams: {
@@ -29,7 +27,7 @@ const StripePaymentForm = ({clientSecret}) => {
             },
         });
 
-        //TODO global flag reset?!?
+        GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
         console.log("confirmPayment", result);
     }
 
@@ -80,14 +78,12 @@ const StripePayment = ({stripePromise}) => {
     });
 
     const createPaymentIntent = async () => {
-        console.log("create_payment_intent", GLOBAL_PAYMENT_INTENT_HANDLED_FLAG, clientSecret)
         try {
             if (GLOBAL_PAYMENT_INTENT_HANDLED_FLAG || clientSecret) {
                 return;
             }
             GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = true;
 
-            console.log("request at", new Date().getTime());
             const paymentIntent = await fetch(apiUri, {
                 method: "POST",
                 headers: {
@@ -101,7 +97,6 @@ const StripePayment = ({stripePromise}) => {
                     amount: String(checkout?.totalPrice?.gross?.amount)
                 })
             }).then(res => res.json());
-            console.log("set to", paymentIntent);
 
             if (!paymentIntent || !paymentIntent.client_secret) {
                 return;
@@ -117,12 +112,10 @@ const StripePayment = ({stripePromise}) => {
         createPaymentIntent();
 
         return () => {
-            // console.log("UNMOUNTING STRIPEPAYMENT");
+            console.log("UNMOUNTING STRIPEPAYMENT");
             // GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
         };
     }, []);
-
-    console.log("stripePromise:", stripePromise, "render StripeWrapper, clientSecret:", clientSecret, "apiUri:", apiUri, "GLOBAL_PAYMENT_INTENT_HANDLED_FLAG:", GLOBAL_PAYMENT_INTENT_HANDLED_FLAG);
 
     let component = null
     if (clientSecret && apiUri) {
