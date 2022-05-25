@@ -39,6 +39,7 @@ const PaymentForm = ({}) => {
     let component = null;
 
     if (stripePromise) {
+        console.log("mounting the StripePayment Component", stripePromise);
         component = (
             <StripePayment key="stripe-payment" stripePromise={stripePromise} />
         );

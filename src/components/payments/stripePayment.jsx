@@ -68,7 +68,7 @@ const StripePaymentForm = ({clientSecret}) => {
 const StripePayment = ({stripePromise}) => {
     const {shop, paymentProviders} = useContext(BuyContext);
     const {checkout, checkoutToken, selectedPaymentGatewayId} = useContext(CheckoutContext);
-    const [clientSecret, setClientSecret] = useState("pi_3L2wyRC6ZdKmUgie0SjOd5Vh_secret_a1DJ52v5JY2bspgAPO0lLZY7l");
+    const [clientSecret, setClientSecret] = useState(null);
 
     let apiUri = "";
     paymentProviders.forEach(provider => {
@@ -115,11 +115,12 @@ const StripePayment = ({stripePromise}) => {
         createPaymentIntent();
 
         return () => {
+            console.log("UNMOUNTING STRIPEPAYMENT");
             GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
         };
     }, []);
 
-    console.log("render StripeWrapper, clientSecret:", clientSecret, "apiUri:", apiUri, "GLOBAL_PAYMENT_INTENT_HANDLED_FLAG:", GLOBAL_PAYMENT_INTENT_HANDLED_FLAG);
+    console.log("stripePromise:", stripePromise, "render StripeWrapper, clientSecret:", clientSecret, "apiUri:", apiUri, "GLOBAL_PAYMENT_INTENT_HANDLED_FLAG:", GLOBAL_PAYMENT_INTENT_HANDLED_FLAG);
 
     if (!clientSecret || !apiUri) {
         return null;
