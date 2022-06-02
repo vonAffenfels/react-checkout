@@ -1,4 +1,4 @@
-import React, {Fragment, useContext, useEffect, useState} from "react";
+import React, {Fragment, useContext, useEffect, useState, useRef} from "react";
 import {PaymentElement, Elements, useElements, useStripe} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
 
@@ -66,6 +66,7 @@ const StripePaymentForm = ({clientSecret}) => {
 };
 
 const StripePayment = ({stripePromise}) => {
+    const executedRef = useRef(false);
     const {shop, paymentProviders} = useContext(BuyContext);
     const {checkout, checkoutToken, selectedPaymentGatewayId} = useContext(CheckoutContext);
     const [clientSecret, setClientSecret] = useState(null);
@@ -109,11 +110,15 @@ const StripePayment = ({stripePromise}) => {
     };
 
     useEffect(() => {
+        if (executedRef?.current) {
+            return;
+        }
+
+        executedRef.current = true;
         createPaymentIntent();
 
         return () => {
-            console.log("UNMOUNTING STRIPEPAYMENT");
-            // GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
+            GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
         };
     }, []);
 
