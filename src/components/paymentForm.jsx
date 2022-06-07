@@ -3,11 +3,14 @@ import {loadStripe} from "@stripe/stripe-js";
 
 import CheckoutContext from "../context/CheckoutContext";
 import StripePayment from "./payments/stripePayment.jsx";
+import ManualPayment from "./payments/manualPayment.jsx";
 
 const PaymentForm = ({}) => {
     const {checkout, selectedPaymentGatewayId} = useContext(CheckoutContext);
     const [selectedPaymentGateway, setSelectedPaymentGateway] = useState(null);
     const [stripePromise, setStripePromise] = useState(null);
+
+    let component = null;
 
     useEffect(() => {
         checkout?.availablePaymentGateways?.forEach(paymentGateway => {
@@ -30,13 +33,13 @@ const PaymentForm = ({}) => {
                         });
                     }
                     break;
+                case "manual":
+                    component = <ManualPayment key="manual-payment" />
                 default:
                     break;
             }
         }
     }, [selectedPaymentGateway]);
-
-    let component = null;
 
     if (stripePromise) {
         component = (
