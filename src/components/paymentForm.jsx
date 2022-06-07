@@ -26,6 +26,9 @@ const PaymentForm = ({}) => {
     useEffect(() => {
         if (selectedPaymentGateway) {
             const name = String(selectedPaymentGateway.name).toLowerCase();
+            console.log("NAME:::", name);
+            console.log("NAME:::", name);
+            console.log("NAME:::", name);
             switch (name) {
                 case "stripe":
                     if (!stripePromise) {
