@@ -9,11 +9,15 @@ const PaymentForm = ({}) => {
     const {checkout, selectedPaymentGatewayId} = useContext(CheckoutContext);
     const [selectedPaymentGateway, setSelectedPaymentGateway] = useState(null);
     const [stripePromise, setStripePromise] = useState(null);
+    console.log("selectedPaymentGatewayId", selectedPaymentGatewayId);
+    console.log("selectedPaymentGateway", selectedPaymentGateway);
 
     let component = null;
 
     useEffect(() => {
+        console.log("checkout?.availablePaymentGateways", checkout?.availablePaymentGateways);
         checkout?.availablePaymentGateways?.forEach(paymentGateway => {
+            console.log("paymentGateway.id", paymentGateway.id);
             if (paymentGateway.id === selectedPaymentGatewayId) {
                 setSelectedPaymentGateway(paymentGateway);
             }

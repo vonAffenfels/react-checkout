@@ -60,6 +60,7 @@ const ManualPaymentMethodOption = ({id, name, description}) => (
 );
 
 const ManualPayment = ({}) => {
+    console.log("ManualPayment.jsx");
     const [manualPaymentMethod, setManualPaymentMethod] = useState(null);
 
     const onChangePaymentMethod = (paymentMethod) => setManualPaymentMethod(paymentMethod);
