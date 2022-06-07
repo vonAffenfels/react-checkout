@@ -37,18 +37,20 @@ const PaymentForm = ({}) => {
                     }
                     break;
                 case "manual":
-                    setComponent(<ManualPayment key="manual-payment" />);
+                    const renderOutput = <ManualPayment key="manual-payment" />;
+                    console.log("CASE MANUAL", renderOutput);
+                    setComponent(renderOutput);
                 default:
                     break;
             }
         }
     }, [selectedPaymentGateway]);
 
+    console.log("component", component);
+
     if (stripePromise) {
         setComponent(<StripePayment key="stripe-payment" stripePromise={stripePromise} />);
     }
-
-    console.log("component", component);
 
     return component;
 }
