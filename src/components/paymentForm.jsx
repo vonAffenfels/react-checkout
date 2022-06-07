@@ -48,6 +48,8 @@ const PaymentForm = ({}) => {
         setComponent(<StripePayment key="stripe-payment" stripePromise={stripePromise} />);
     }
 
+    console.log("component", component);
+
     return component;
 }
 
