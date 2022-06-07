@@ -9,10 +9,9 @@ const PaymentForm = ({}) => {
     const {checkout, selectedPaymentGatewayId} = useContext(CheckoutContext);
     const [selectedPaymentGateway, setSelectedPaymentGateway] = useState(null);
     const [stripePromise, setStripePromise] = useState(null);
+    const [component, setComponent] = useState(null);
     console.log("selectedPaymentGatewayId", selectedPaymentGatewayId);
     console.log("selectedPaymentGateway", selectedPaymentGateway);
-
-    let component = null;
 
     useEffect(() => {
         console.log("checkout?.availablePaymentGateways", checkout?.availablePaymentGateways);
@@ -38,7 +37,7 @@ const PaymentForm = ({}) => {
                     }
                     break;
                 case "manual":
-                    component = <ManualPayment key="manual-payment" />
+                    setComponent(<ManualPayment key="manual-payment" />);
                 default:
                     break;
             }
@@ -46,9 +45,7 @@ const PaymentForm = ({}) => {
     }, [selectedPaymentGateway]);
 
     if (stripePromise) {
-        component = (
-            <StripePayment key="stripe-payment" stripePromise={stripePromise} />
-        );
+        setComponent(<StripePayment key="stripe-payment" stripePromise={stripePromise} />);
     }
 
     return component;
