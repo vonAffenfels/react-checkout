@@ -62,12 +62,13 @@ const ManualPaymentMethodOption = ({id, name, description}) => (
 const ManualPayment = ({}) => {
     console.log("ManualPayment.jsx");
     const [manualPaymentMethod, setManualPaymentMethod] = useState(null);
+    const [directDebitData, setDirectDebitData] = useState({});
 
     const onChangePaymentMethod = (paymentMethod) => setManualPaymentMethod(paymentMethod);
 
     return (
         <Fragment key="manuel-payment-form">
-            <div className="mt-10 border-t border-gray-200 pt-10">
+            <div>
                 <RadioGroup value={manualPaymentMethod} onChange={onChangePaymentMethod}>
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Zahlungsart</RadioGroup.Label>
 
@@ -78,6 +79,46 @@ const ManualPayment = ({}) => {
                     </div>
                 </RadioGroup>
             </div>
+            {(manualPaymentMethod === "direct_debit") && (
+                <div className="mt-10 border-t border-gray-200 pt-10">
+                    <div className="sm:col-span-2">
+                        <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
+                            Name Kontoinhaber
+                        </label>
+                        <div className="mt-1">
+                            <input
+                                type="text"
+                                name="apartment"
+                                id="apartment"
+                                className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                value={directDebitData.accountHolder}
+                                onChange={(e) => setDirectDebitData({
+                                    ...directDebitData,
+                                    accountHolder: e.target.value
+                                })}
+                            />
+                        </div>
+                    </div>
+                    <div className="sm:col-span-2">
+                        <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
+                            IBAN
+                        </label>
+                        <div className="mt-1">
+                            <input
+                                type="text"
+                                name="apartment"
+                                id="apartment"
+                                className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                value={directDebitData.iban}
+                                onChange={(e) => setDirectDebitData({
+                                    ...directDebitData,
+                                    iban: e.target.value
+                                })}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
         </Fragment>
     );
 }
