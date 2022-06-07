@@ -60,11 +60,20 @@ const ManualPaymentMethodOption = ({id, name, description}) => (
 );
 
 const ManualPayment = ({}) => {
-    console.log("ManualPayment.jsx");
     const [manualPaymentMethod, setManualPaymentMethod] = useState(null);
     const [directDebitData, setDirectDebitData] = useState({});
 
     const onChangePaymentMethod = (paymentMethod) => setManualPaymentMethod(paymentMethod);
+
+    const isValidPayment = () => {
+        return manualPaymentMethod === "invoice" || (
+            manualPaymentMethod === "direct_debit" && directDebitData.iban && directDebitData.accountHolder
+        );
+    }
+
+    const onFinalize = async () => {
+        console.log("onFinalize");
+    };
 
     return (
         <Fragment key="manuel-payment-form">
@@ -116,6 +125,24 @@ const ManualPayment = ({}) => {
                                 })}
                             />
                         </div>
+                    </div>
+                </div>
+            )}
+            {isValidPayment() && (
+                <div className="mt-10 border-t border-gray-200 pt-10">
+                    <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                        <button
+                            type="button"
+                            className={
+                                classNames(
+                                    "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500",
+                                    "w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white"
+                                )
+                            }
+                            onClick={onFinalize}
+                        >
+                            Jetzt kostenpflichtig bestellen
+                        </button>
                     </div>
                 </div>
             )}
