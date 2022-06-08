@@ -60,8 +60,17 @@ const ManualPaymentMethodOption = ({id, name, description}) => (
 );
 
 const ManualPayment = ({}) => {
+    const {checkout, selectedPaymentGatewayId} = useContext(CheckoutContext);
+    const {paymentProviders} = useContext(BuyContext);
     const [manualPaymentMethod, setManualPaymentMethod] = useState(null);
     const [directDebitData, setDirectDebitData] = useState({});
+
+    let apiUri = "";
+    paymentProviders.forEach(provider => {
+        if (provider.name === "manual") {
+            apiUri = provider.config.apiUri;
+        }
+    });
 
     const onChangePaymentMethod = (paymentMethod) => setManualPaymentMethod(paymentMethod);
 
@@ -73,6 +82,19 @@ const ManualPayment = ({}) => {
 
     const onFinalize = async () => {
         console.log("onFinalize");
+        const paymentIntent = await fetch(apiUri, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                type: "manuel.create_payment_intent",
+                checkoutToken: checkout?.token,
+                selectedPaymentGatewayId: selectedPaymentGatewayId,
+                amount: String(checkout?.totalPrice?.gross?.amount),
+                additionalData: JSON.stringify({})
+            })
+        }).then(res => res.json());
     };
 
     return (
