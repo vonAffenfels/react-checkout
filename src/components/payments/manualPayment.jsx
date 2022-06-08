@@ -91,7 +91,7 @@ const ManualPayment = ({}) => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                type: "manuel.create_payment_intent",
+                type: "manual.create_payment_intent",
                 checkoutToken: checkout?.token,
                 selectedPaymentGatewayId: selectedPaymentGatewayId,
                 amount: String(checkout?.totalPrice?.gross?.amount),
