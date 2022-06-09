@@ -95,7 +95,10 @@ const ManualPayment = ({}) => {
                 checkoutToken: checkout?.token,
                 selectedPaymentGatewayId: selectedPaymentGatewayId,
                 amount: String(checkout?.totalPrice?.gross?.amount),
-                additionalData: JSON.stringify({})
+                additionalData: JSON.stringify({
+                    manualPaymentMethod,
+                    directDebitData
+                })
             })
         }).then(res => res.json());
 
