@@ -4,8 +4,9 @@ import {Dialog, Transition} from "@headlessui/react";
 const SidePanelLayout = ({show, onClose, children}) => (
     <Transition.Root
         show={show}
-        beforeLeave={() => console.log("beforeLeave")}
-        afterLeave={() => console.log("afterLeave")}
+        as={"div"}
+        beforeLeave={() => console.log("beforeLeave1")}
+        afterLeave={() => console.log("afterLeave1")}
         enter="ease-in-out duration-500"
         enterFrom="opacity-0"
         enterTo="opacity-100"
