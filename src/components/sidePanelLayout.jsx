@@ -1,18 +1,23 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 
 const SidePanelLayout = ({show, onClose, children}) => {
-    const [startLeaving, setStartLeaving] = useState(false);
+    useEffect(() => {
+        return () => {
+            console.log("UNMOUNTING!", show);
+        }
+    }, []);
 
     return (
         <Transition.Root
             show={show}
             as={"div"}
-            beforeLeave={() => console.log("beforeLeave1")}
-            afterLeave={() => console.log("afterLeave1")}
+            beforeLeave={() => console.log("beforeLeave")}
+            afterLeave={() => console.log("afterLeave")}
             enter="ease-in-out duration-500"
             enterFrom="opacity-0"
             enterTo="opacity-100"
+            entered="block"
             leave="ease-in-out duration-500"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
