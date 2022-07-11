@@ -37,13 +37,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     });
     const addressFormDataDebounced = useDebounce(addressFormData, 750);
 
-    if (!client.requestInterceptor) {
-        client.setRequestInterceptor(() => setIsLoading(true));
-    }
-    if (!client.responseInterceptor) {
-        client.setResponseInterceptor(() => setIsLoading(false));
-    }
-
     const {loading, error, data, refetch} = useQuery(CHECKOUT_BY_TOKEN, {
         variables: {checkoutToken}
     });
