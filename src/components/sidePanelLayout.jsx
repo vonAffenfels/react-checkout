@@ -2,11 +2,6 @@ import React, {Fragment, useEffect} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 
 const SidePanelLayout = ({show, onClose, children}) => {
-    useEffect(() => {
-        return () => {
-            console.log("UNMOUNTING!", show);
-        }
-    }, []);
 
     return (
         <Transition
@@ -16,17 +11,17 @@ const SidePanelLayout = ({show, onClose, children}) => {
             afterLeave={() => console.log("afterLeave")}
         >
             <Dialog className="relative z-10" onClose={onClose}>
-                <Transition.Child
-                    as={Fragment}
-                    enter="ease-in-out duration-500"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="ease-in-out duration-500"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                >
-                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-                </Transition.Child>
+                {/*<Transition.Child*/}
+                {/*    as={Fragment}*/}
+                {/*    enter="ease-in-out duration-500"*/}
+                {/*    enterFrom="opacity-0"*/}
+                {/*    enterTo="opacity-100"*/}
+                {/*    leave="ease-in-out duration-500"*/}
+                {/*    leaveFrom="opacity-100"*/}
+                {/*    leaveTo="opacity-0"*/}
+                {/*>*/}
+                {/*    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />*/}
+                {/*</Transition.Child>*/}
 
                 <Transition.Child
                     as={Fragment}

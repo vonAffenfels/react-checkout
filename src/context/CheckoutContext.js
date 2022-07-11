@@ -19,7 +19,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
     const [displayState, setDisplayState] = useState("widget");
-    const [isLoading, setIsLoading] = useState(false);
+    const [checkoutDisabled, setCheckoutDisabled] = useState(false);
     const [isCartOpen, setCartOpen] = useState(false);
     const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(null);
     const [addressFormData, setAddressFormData] = useState({
@@ -170,6 +170,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 email
             }
         });
+
         console.log("checkoutEmailUpdate, data:", data);
         if (data?.checkoutEmailUpdate?.errors?.length) {
             data.checkoutEmailUpdate.errors.forEach(err => console.warn(err));
@@ -243,7 +244,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     useEffect(() => {
         let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
-        console.log("useEffect addressFormDataDebounced:", addressFormDataDebounced, email, checkout?.email);
         if (email && (email !== checkout?.email)) {
             setCheckoutEmail(email);
         }
