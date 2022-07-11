@@ -20,6 +20,8 @@ const CartWidget = ({props}) => {
         setDisplayState("cartFullPage");
     };
 
+    console.log("isCartOpen", isCartOpen);
+
     return (
         <Fragment>
             {!isCartOpen && (

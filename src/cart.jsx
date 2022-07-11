@@ -18,6 +18,7 @@ const Cart = ({...props}) => {
         component = <PaymentFullPage />;
     }
 
+    console.log("displayState", displayState);
     return <div className="react-ez-checkout-cart-wrapper">{component}</div>;
 };
 
