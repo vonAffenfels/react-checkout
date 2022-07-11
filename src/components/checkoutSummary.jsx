@@ -8,8 +8,10 @@ function classNames(...classes) {
 }
 
 const CheckoutSummary = ({props}) => {
-    const {checkout, selectedPaymentGatewayId} = useContext(CheckoutContext);
+    const {checkout, selectedPaymentGatewayId, isLoading} = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
+
+    console.log("CheckoutSummary", isLoading)
 
     useEffect(() => {
         if (!enabled && checkout?.email && checkout?.shippingAddress && checkout?.shippingMethod?.id && selectedPaymentGatewayId) {

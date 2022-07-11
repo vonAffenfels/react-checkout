@@ -19,6 +19,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
     const [displayState, setDisplayState] = useState("widget");
+    const [isLoading, setIsLoading] = useState(false);
     const [isCartOpen, setCartOpen] = useState(false);
     const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(null);
     const [addressFormData, setAddressFormData] = useState({
@@ -35,8 +36,13 @@ export const CheckoutContextProvider = ({children, channel}) => {
         phone: ""
     });
     const addressFormDataDebounced = useDebounce(addressFormData, 750);
-    client.setRequestInterceptors([() => console.log("request intercepted!")]);
-    client.setResponseInterceptors([() => console.log("response intercepted!")]);
+
+    if (!client.requestInterceptor) {
+        client.setRequestInterceptor(() => setIsLoading(true));
+    }
+    if (!client.responseInterceptor) {
+        client.setResponseInterceptor(() => setIsLoading(false));
+    }
 
     const {loading, error, data, refetch} = useQuery(CHECKOUT_BY_TOKEN, {
         variables: {checkoutToken}
@@ -287,6 +293,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setDisplayState,
             isCartOpen,
             setCartOpen,
+            isLoading,
             addressFormData,
             setAddressFormData,
             selectedPaymentGatewayId,

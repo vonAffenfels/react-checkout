@@ -5,32 +5,34 @@ import {
     InMemoryCache,
     HttpLink,
     ApolloLink,
-    concat
+    from
 } from "@apollo/client";
 
 export const ApolloContext = createContext({});
 
 export const ApolloContextProvider = ({children, uri}) => {
-    const [requestInterceptors, setRequestInterceptors] = useState([]);
-    const [responseInterceptors, setResponseInterceptors] = useState([]);
+    const [requestInterceptor, setRequestInterceptor] = useState(null);
+    const [responseInterceptor, setResponseInterceptor] = useState(null);
 
     const httpLink = new HttpLink({uri: uri});
     const middleware = new ApolloLink((operation, forward) => {
-        console.log("requestInterceptors", requestInterceptors);
+        console.log("requestInterceptor", requestInterceptor);
+        requestInterceptor?.();
         return forward(operation);
     });
     const responseModifier = new ApolloLink((operation, forward) => {
-        console.log("responseInterceptors", responseInterceptors);
+        console.log("responseInterceptor", responseInterceptor);
+        responseInterceptor?.();
         return forward(operation);
     });
     const client = new ApolloClient({
         cache: new InMemoryCache(),
-        link: concat(middleware, httpLink, responseModifier)
+        link: from([middleware, httpLink, responseModifier])
     });
-    client.setRequestInterceptors = setRequestInterceptors;
-    client.requestInterceptors = requestInterceptors;
-    client.setResponseInterceptors = setResponseInterceptors;
-    client.responseInterceptors = responseInterceptors;
+    client.setRequestInterceptor = setRequestInterceptor;
+    client.requestInterceptor = requestInterceptor;
+    client.setResponseInterceptor = setResponseInterceptor;
+    client.responseInterceptor = responseInterceptor;
 
     return (
         <ApolloProvider client={client}>
