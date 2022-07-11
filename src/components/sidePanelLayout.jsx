@@ -8,7 +8,7 @@ const SidePanelLayout = ({show, onClose, children}) => (
         beforeLeave={() => console.log("beforeLeave")}
         afterLeave={() => console.log("afterLeave")}
     >
-        <Dialog className="relative z-10" onClose={onClose} static={true}>
+
             <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-500"
@@ -21,6 +21,7 @@ const SidePanelLayout = ({show, onClose, children}) => (
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
             </Transition.Child>
 
+        <Dialog className="relative z-10" onClose={onClose} static={true}>
             <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"
