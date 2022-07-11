@@ -9,18 +9,11 @@ const SidePanelLayout = ({show, onClose, children}) => {
     }, []);
 
     return (
-        <Transition.Root
+        <Transition
             show={show}
             as={"div"}
             beforeLeave={() => console.log("beforeLeave")}
             afterLeave={() => console.log("afterLeave")}
-            enter="ease-in-out duration-500"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            entered="block"
-            leave="ease-in-out duration-500"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
         >
             <Dialog className="relative z-10" onClose={onClose}>
                 <Transition.Child
@@ -37,10 +30,10 @@ const SidePanelLayout = ({show, onClose, children}) => {
 
                 <Transition.Child
                     as={Fragment}
-                    enter="transform transition ease-in-out duration-500 sm:duration-700"
+                    enter="transform transition ease-in-out duration-250 sm:duration-700"
                     enterFrom="translate-x-full"
                     enterTo="translate-x-0"
-                    leave="transform transition ease-in-out duration-500 sm:duration-700"
+                    leave="transform transition ease-in-out duration-250 sm:duration-700"
                     leaveFrom="translate-x-0"
                     leaveTo="translate-x-full"
                 >
@@ -53,7 +46,7 @@ const SidePanelLayout = ({show, onClose, children}) => {
                     </div>
                 </Transition.Child>
             </Dialog>
-        </Transition.Root>
+        </Transition>
     );
 }
 
