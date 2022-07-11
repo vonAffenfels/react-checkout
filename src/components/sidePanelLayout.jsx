@@ -7,14 +7,6 @@ const SidePanelLayout = ({show, onClose, children}) => {
         <Transition
             show={show}
             as={"div"}
-            beforeLeave={() => console.log("beforeLeave")}
-            afterLeave={() => console.log("afterLeave")}
-            enter="ease-in-out duration-500"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in-out duration-500"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
         >
             <Dialog className="relative z-10" onClose={onClose} open={show}>
                 <Transition.Child
@@ -36,7 +28,7 @@ const SidePanelLayout = ({show, onClose, children}) => {
                     enterTo="translate-x-0"
                     leave="transform transition ease-in-out duration-500 sm:duration-500"
                     leaveFrom="translate-x-0"
-                    leaveTo="translate-x-full"
+                    leaveTo="translate-x-full hidden"
                 >
                     <div className="fixed inset-0 overflow-hidden">
                         <div className="absolute inset-0 overflow-hidden">
