@@ -8,7 +8,7 @@ function classNames(...classes) {
 }
 
 const CheckoutSummary = ({props}) => {
-    const {checkout, selectedPaymentGatewayId, isLoading} = useContext(CheckoutContext);
+    const {checkout, selectedPaymentGatewayId} = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
 
     console.log("CheckoutSummary", isLoading)

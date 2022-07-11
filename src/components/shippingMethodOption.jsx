@@ -1,16 +1,17 @@
 import React, {Fragment} from "react";
 import {RadioGroup} from "@headlessui/react";
-import {CheckCircleIcon} from "@heroicons/react/solid";
+import {CheckCircleIcon, RefreshIcon} from "@heroicons/react/solid";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-const ShippingMethodOption = ({shippingMethod}) => {
+const ShippingMethodOption = ({shippingMethod, loading}) => {
 
     return (
         <RadioGroup.Option
             value={shippingMethod.id}
+            disabled={loading}
             className={({active, checked}) =>
                 classNames(
                     checked ? "border-transparent" : "border-gray-300",
@@ -37,6 +38,7 @@ const ShippingMethodOption = ({shippingMethod}) => {
                             </RadioGroup.Description>
                         </span>
                     </span>
+                    {loading ? <RefreshIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" /> : null}
                     {checked ? <CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true"/> : null}
                     <span
                         className={classNames(

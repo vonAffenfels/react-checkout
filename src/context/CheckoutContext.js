@@ -181,10 +181,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }
 
     const setCheckoutDeliveryMethod = async (deliveryMethodId) => {
-        console.log("setCheckoutDeliveryMethod", {
-            checkoutToken,
-            deliveryMethodId
-        });
         if (!checkout) {
             return;
         }
@@ -196,7 +192,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 deliveryMethodId
             }
         });
-        console.log("checkoutDeliveryMethodUpdate, data:", data);
+
         if (data?.checkoutDeliveryMethodUpdate?.errors?.length) {
             data.checkoutDeliveryMethodUpdate.errors.forEach(err => console.warn(err));
         }
@@ -204,6 +200,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
         if (data?.checkoutDeliveryMethodUpdate?.checkout) {
             setCheckout(data.checkoutDeliveryMethodUpdate.checkout);
         }
+
+        return;
     }
 
     const getCheckoutByToken = async () => {

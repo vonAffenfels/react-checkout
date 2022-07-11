@@ -14,6 +14,7 @@ const CheckoutForm = ({props}) => {
         selectedPaymentGatewayId,
         setSelectedPaymentGatewayId
     } = useContext(CheckoutContext);
+    const [shippingMethodLoading, setShippingMethodLoading] = useState(false);
 
     useEffect(() => {
         let updateAddressFormData = {
@@ -42,9 +43,11 @@ const CheckoutForm = ({props}) => {
         setAddressFormData(updateAddressFormData);
     }, []);
 
-    const onChangeDeliveryMethod = (deliveryMethodId) => {
+    const onChangeDeliveryMethod = async (deliveryMethodId) => {
+        setShippingMethodLoading(true);
         if (checkout?.shippingMethod?.id !== deliveryMethodId) {
-            setCheckoutDeliveryMethod(deliveryMethodId);
+            await setCheckoutDeliveryMethod(deliveryMethodId);
+            setShippingMethodLoading(false);
         }
     };
 
@@ -297,6 +300,7 @@ const CheckoutForm = ({props}) => {
                             <ShippingMethodOption
                                 shippingMethod={shippingMethod}
                                 key={shippingMethod.id}
+                                loading={shippingMethodLoading}
                             />
                         ))}
                     </div>
