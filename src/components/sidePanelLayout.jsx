@@ -3,7 +3,7 @@ import {Dialog, Transition} from "@headlessui/react";
 
 const SidePanelLayout = ({show, onClose, children}) => (
     <Transition.Root show={show} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={onClose}>
+        <Dialog as={Fragment} className="relative z-10" onClose={onClose}>
             <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-500"
