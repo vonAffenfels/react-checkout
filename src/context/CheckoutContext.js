@@ -19,7 +19,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
     const [displayState, setDisplayState] = useState("widget");
-    const [checkoutDisabled, setCheckoutDisabled] = useState(false);
     const [isCartOpen, setCartOpen] = useState(false);
     const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(null);
     const [addressFormData, setAddressFormData] = useState({
@@ -286,7 +285,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setDisplayState,
             isCartOpen,
             setCartOpen,
-            isLoading,
             addressFormData,
             setAddressFormData,
             selectedPaymentGatewayId,
