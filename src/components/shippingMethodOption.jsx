@@ -2,6 +2,8 @@ import React, {Fragment} from "react";
 import {RadioGroup} from "@headlessui/react";
 import {CheckCircleIcon, RefreshIcon} from "@heroicons/react/solid";
 
+import {Spin} from "./atoms/animate.jsx";
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
@@ -38,7 +40,7 @@ const ShippingMethodOption = ({shippingMethod, loading}) => {
                             </RadioGroup.Description>
                         </span>
                     </span>
-                    {loading ? <RefreshIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" /> : null}
+                    {loading ? <Spin /> : null}
                     {checked ? <CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true"/> : null}
                     <span
                         className={classNames(
