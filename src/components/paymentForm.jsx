@@ -10,13 +10,9 @@ const PaymentForm = ({}) => {
     const [selectedPaymentGateway, setSelectedPaymentGateway] = useState(null);
     const [stripePromise, setStripePromise] = useState(null);
     const [component, setComponent] = useState(null);
-    console.log("selectedPaymentGatewayId", selectedPaymentGatewayId);
-    console.log("selectedPaymentGateway", selectedPaymentGateway);
 
     useEffect(() => {
-        console.log("checkout?.availablePaymentGateways", checkout?.availablePaymentGateways);
         checkout?.availablePaymentGateways?.forEach(paymentGateway => {
-            console.log("paymentGateway.id", paymentGateway.id);
             if (paymentGateway.id === selectedPaymentGatewayId) {
                 setSelectedPaymentGateway(paymentGateway);
             }
@@ -26,9 +22,6 @@ const PaymentForm = ({}) => {
     useEffect(() => {
         if (selectedPaymentGateway) {
             const name = String(selectedPaymentGateway.name).toLowerCase();
-            console.log("NAME:::", name);
-            console.log("NAME:::", name);
-            console.log("NAME:::", name);
             switch (name) {
                 case "stripe":
                     if (!stripePromise) {
@@ -41,15 +34,12 @@ const PaymentForm = ({}) => {
                     break;
                 case "manual":
                     const renderOutput = <ManualPayment key="manual-payment" />;
-                    console.log("CASE MANUAL", renderOutput);
                     setComponent(renderOutput);
                 default:
                     break;
             }
         }
     }, [selectedPaymentGateway]);
-
-    console.log("component", component);
 
     if (stripePromise) {
         setComponent(<StripePayment key="stripe-payment" stripePromise={stripePromise} />);
