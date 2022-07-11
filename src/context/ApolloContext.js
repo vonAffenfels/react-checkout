@@ -28,7 +28,9 @@ export const ApolloContextProvider = ({children, uri}) => {
         link: concat(middleware, httpLink, responseModifier)
     });
     client.setRequestInterceptors = setRequestInterceptors;
+    client.requestInterceptors = requestInterceptors;
     client.setResponseInterceptors = setResponseInterceptors;
+    client.responseInterceptors = responseInterceptors;
 
     return (
         <ApolloProvider client={client}>

@@ -35,8 +35,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
         phone: ""
     });
     const addressFormDataDebounced = useDebounce(addressFormData, 750);
-
-    console.log("CheckoutContextProvider", client.setRequestInterceptors);
+    client.setRequestInterceptors([() => console.log("request intercepted!")]);
+    client.setResponseInterceptors([() => console.log("response intercepted!")]);
 
     const {loading, error, data, refetch} = useQuery(CHECKOUT_BY_TOKEN, {
         variables: {checkoutToken}
