@@ -9,6 +9,12 @@ const SidePanelLayout = ({show, onClose, children}) => {
             as={"div"}
             beforeLeave={() => console.log("beforeLeave")}
             afterLeave={() => console.log("afterLeave")}
+            enter="ease-in-out duration-500"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in-out duration-500"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
         >
             <Dialog className="relative z-10" onClose={onClose} open={show}>
                 <Transition.Child
