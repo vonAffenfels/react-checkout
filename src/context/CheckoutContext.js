@@ -20,6 +20,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [checkout, setCheckout] = useState(null);
     const [displayState, setDisplayState] = useState("widget");
     const [isCartOpen, setCartOpen] = useState(false);
+    const [isLoadingLineItems, setLoadingLineItems] = useState(false);
+    const [isLoadingShippingMethods, setLoadingShippingMethods] = useState(false);
+    const [isSettingShippingMethod, setSettingShippingMethod] = useState(false);
     const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(null);
     const [addressFormData, setAddressFormData] = useState({
         email: "",
@@ -41,6 +44,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     });
 
     const createCheckout = async (variantId) => {
+        setLoadingLineItems(true);
         const {data} = await client.mutate({
             mutation: CHECKOUT_CREATE,
             variables: {
@@ -54,7 +58,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 ]
             }
         });
-        console.log("createCheckout, data:", data);
+        setLoadingLineItems(false);
+
         if (data?.checkoutCreate?.errors?.length) {
             data.checkoutCreate.errors.forEach(err => console.warn(err));
         }
@@ -68,7 +73,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
         if (!checkout) {
             return createCheckout(variantId);
         }
-        console.log("addItemToCheckout", variantId);
+
+        setLoadingLineItems(true);
         const {data} = await client.mutate({
             mutation: CHECKOUT_ADD_PRODUCT_LINE,
             variables: {
@@ -81,7 +87,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 ]
             }
         });
-        console.log("CHECKOUT_ADD_PRODUCT_LINE, data:", data);
+        setLoadingLineItems(false);
+
         if (data?.checkoutLinesAdd?.errors?.length) {
             data.checkoutLinesAdd.errors.forEach(err => console.warn(err));
         }
@@ -118,14 +125,12 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const setCheckoutAddress = async (address) => {
-        console.log("setCheckoutAddress", {
-            checkoutToken,
-            address
-        });
         if (!checkout) {
             return;
         }
 
+        //TODO billing address different from shipping address;
+        setLoadingShippingMethods(true);
         const [{data}, _] = await Promise.all([
             client.mutate({
                 mutation: CHECKOUT_SHIPPING_ADDRESS_UPDATE,
@@ -142,8 +147,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 }
             })
         ]);
+        setLoadingShippingMethods(false);
 
-        console.log("checkoutShippingAddressUpdate, data:", data);
         if (data?.checkoutShippingAddressUpdate?.errors?.length) {
             data.checkoutShippingAddressUpdate.errors.forEach(err => console.warn(err));
         }
@@ -154,10 +159,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }
 
     const setCheckoutEmail = async (email) => {
-        console.log("setCheckoutEmail", {
-            checkoutToken,
-            email
-        });
         if (!checkout) {
             return;
         }
@@ -170,7 +171,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
             }
         });
 
-        console.log("checkoutEmailUpdate, data:", data);
         if (data?.checkoutEmailUpdate?.errors?.length) {
             data.checkoutEmailUpdate.errors.forEach(err => console.warn(err));
         }
@@ -185,6 +185,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             return;
         }
 
+        setSettingShippingMethod(true);
         const {data} = await client.mutate({
             mutation: CHECKOUT_DELIVERY_METHOD_UPDATE,
             variables: {
@@ -192,6 +193,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 deliveryMethodId
             }
         });
+        setSettingShippingMethod(false);
 
         if (data?.checkoutDeliveryMethodUpdate?.errors?.length) {
             data.checkoutDeliveryMethodUpdate.errors.forEach(err => console.warn(err));
@@ -283,6 +285,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setDisplayState,
             isCartOpen,
             setCartOpen,
+            isLoadingLineItems,
+            isLoadingShippingMethods,
+            isSettingShippingMethod,
             addressFormData,
             setAddressFormData,
             selectedPaymentGatewayId,

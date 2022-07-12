@@ -2,19 +2,23 @@ import React, {useContext, useEffect, useState} from "react";
 import {RadioGroup} from "@headlessui/react";
 
 import CheckoutContext from "../context/CheckoutContext";
+import BuyContext from "../context/BuyContext";
 import ShippingMethodOption from "./shippingMethodOption.jsx";
 import PaymentMethodOption from "./paymentMethodOption.jsx";
+import {Spin} from "./atoms/animate.jsx";
 
 const CheckoutForm = ({props}) => {
+    const {isDebug} = useContext(BuyContext);
     const {
         checkout,
         addressFormData,
         setAddressFormData,
         setCheckoutDeliveryMethod,
         selectedPaymentGatewayId,
-        setSelectedPaymentGatewayId
+        setSelectedPaymentGatewayId,
+        isSettingShippingMethod,
+        isLoadingShippingMethods,
     } = useContext(CheckoutContext);
-    const [shippingMethodLoading, setShippingMethodLoading] = useState(false);
 
     useEffect(() => {
         let updateAddressFormData = {
@@ -44,10 +48,8 @@ const CheckoutForm = ({props}) => {
     }, []);
 
     const onChangeDeliveryMethod = async (deliveryMethodId) => {
-        setShippingMethodLoading(true);
         if (checkout?.shippingMethod?.id !== deliveryMethodId) {
             await setCheckoutDeliveryMethod(deliveryMethodId);
-            setShippingMethodLoading(false);
         }
     };
 
@@ -300,9 +302,10 @@ const CheckoutForm = ({props}) => {
                             <ShippingMethodOption
                                 shippingMethod={shippingMethod}
                                 key={shippingMethod.id}
-                                loading={shippingMethodLoading}
+                                loading={isSettingShippingMethod || isDebug}
                             />
                         ))}
+                        {(isLoadingShippingMethods || isDebug) && <Spin/>}
                     </div>
                 </RadioGroup>
             </div>

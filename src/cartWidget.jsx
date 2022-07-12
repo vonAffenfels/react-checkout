@@ -1,17 +1,21 @@
 import React, {Fragment, useContext} from "react";
 import {Dialog, Transition} from "@headlessui/react";
+import {XIcon} from "@heroicons/react/solid";
 
+import BuyContext from "./context/BuyContext";
 import CheckoutContext from "./context/CheckoutContext";
 import CheckoutLine from "./components/checkoutLine.jsx";
 import SidePanelLayout from "./components/sidePanelLayout.jsx";
-import {XIcon} from "@heroicons/react/solid";
+import {Item} from "./components/atoms/animate.jsx";
 
 const CartWidget = ({props}) => {
+    const {isDebug} = useContext(BuyContext);
     const {
         checkout,
         isCartOpen,
         setCartOpen,
-        setDisplayState
+        setDisplayState,
+        isLoadingLineItems
     } = useContext(CheckoutContext);
 
     const openFullPage = (e) => {
@@ -61,6 +65,7 @@ const CartWidget = ({props}) => {
                                                 <CheckoutLine {...cartItem} key={cartItem.id} />
                                             )
                                         })}
+                                        {(isLoadingLineItems || isDebug) && <Item/>}
                                     </ul>
                                 </div>
                             </div>

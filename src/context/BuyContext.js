@@ -62,7 +62,8 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
             shop,
             paymentProviders,
             uri,
-            setBannerMessage
+            setBannerMessage,
+            isDebug: window?.location?.search?.indexOf?.("isDebug") !== -1
         }}>
             <ApolloContextProvider uri={uri}>
                 <CheckoutContextProvider channel={channel}>
