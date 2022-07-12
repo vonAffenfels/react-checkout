@@ -16,21 +16,19 @@ const Spin = () => (
 const Item = () => (
     <li className="flex py-6 animate-pulse">
         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-            <img className="h-full w-full object-cover object-center"/>
+            <img className="h-full w-full object-cover object-center rounded-md bg-gray-300"/>
         </div>
 
         <div className="ml-4 flex flex-1 flex-col">
             <div>
-                <div className="flex justify-between text-base font-medium text-gray-900">
-                    <h3>
-                        <a onClick={e => e.preventDefault()}>...</a>
-                    </h3>
-                    <p className="ml-4">... EUR</p>
+                <div className="flex justify-between text-base font-medium text-gray-900 rounded-md bg-gray-300">
+                    <h3/>
+                    <p className="ml-4"/>
                 </div>
-                <p className="mt-1 text-sm text-gray-500">...</p>
+                <p className="mt-1 text-sm text-gray-500 rounded-md bg-gray-300"/>
             </div>
             <div className="flex flex-1 items-end justify-between text-sm">
-                <p className="text-gray-500">Menge ...</p>
+                <p className="text-gray-500 rounded-md bg-gray-300"/>
             </div>
         </div>
     </li>
@@ -39,22 +37,16 @@ const Item = () => (
 const LoadingOption = () => (
     <RadioGroup.Option
         disabled={true}
-        className="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
+        className="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none animate-pulse"
     >
         <span className="flex-1 flex">
             <span className="flex flex-col">
-                <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
-                    ...
-                </RadioGroup.Label>
+                <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900 rounded-md bg-gray-300" />
                 <RadioGroup.Description
                     as="span"
-                    className="mt-1 flex items-center text-sm text-gray-500"
-                >
-                    ... - ... Tage
-                </RadioGroup.Description>
-                <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
-                    ... EUR
-                </RadioGroup.Description>
+                    className="mt-1 flex items-center text-sm text-gray-500 rounded-md bg-gray-300"
+                />
+                <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900 rounded-md bg-gray-300" />
             </span>
         </span>
         <span

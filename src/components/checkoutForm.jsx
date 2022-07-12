@@ -305,10 +305,13 @@ const CheckoutForm = ({props}) => {
                             <ShippingMethodOption
                                 shippingMethod={shippingMethod}
                                 key={shippingMethod.id}
-                                loading={(isSettingShippingMethod || isDebug) && (shippingMethod.id === tempSelectedShippingMethodId)}
+                                loading={(isSettingShippingMethod && (shippingMethod.id === tempSelectedShippingMethodId)) || isDebug}
                             />
                         ))}
-                        {(isLoadingShippingMethods || isDebug) && <LoadingOption/>}
+                        {((isLoadingShippingMethods && !checkout?.shippingMethods?.length) || isDebug) && <LoadingOption/>}
+                        {!isLoadingShippingMethods && !checkout?.shippingMethods?.length && (
+                            <p>Nach Eingabe der Adresse werden die verfügbaren Versandarten angezeigt</p>
+                        )}
                     </div>
                 </RadioGroup>
             </div>
