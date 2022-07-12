@@ -9,7 +9,6 @@ const Cart = ({...props}) => {
     let {displayState} = useContext(CheckoutContext);
     let component = null;
 
-    //TODO how to transition between states? must be prettier
     if (displayState === "widget") {
         component = <CartWidget />
     } else if (displayState === "cartFullPage") {
@@ -18,7 +17,6 @@ const Cart = ({...props}) => {
         component = <PaymentFullPage />;
     }
 
-    console.log("displayState", displayState);
     return <div className="react-ez-checkout-cart-wrapper">{component}</div>;
 };
 
