@@ -21,14 +21,14 @@ const Item = () => (
 
         <div className="ml-4 flex flex-1 flex-col">
             <div>
-                <div className="flex justify-between text-base font-medium text-gray-900 rounded-md bg-gray-300">
-                    <h3/>
-                    <p className="ml-4"/>
+                <div className="flex justify-between text-base font-medium text-gray-900 rounded-md bg-gray-300 px-2">
+                    <h3><a>...</a></h3>
+                    <p className="ml-4">...</p>
                 </div>
-                <p className="mt-1 text-sm text-gray-500 rounded-md bg-gray-300"/>
+                <p className="mt-1 text-sm text-gray-500 rounded-md bg-gray-300 px-2">...</p>
             </div>
             <div className="flex flex-1 items-end justify-between text-sm">
-                <p className="text-gray-500 rounded-md bg-gray-300"/>
+                <p className="text-gray-500 rounded-md bg-gray-300 px-2">...</p>
             </div>
         </div>
     </li>
@@ -41,12 +41,18 @@ const LoadingOption = () => (
     >
         <span className="flex-1 flex">
             <span className="flex flex-col">
-                <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900 rounded-md bg-gray-300" />
+                <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900 rounded-md bg-gray-300 px-2">
+                    ...
+                </RadioGroup.Label>
                 <RadioGroup.Description
                     as="span"
-                    className="mt-1 flex items-center text-sm text-gray-500 rounded-md bg-gray-300"
-                />
-                <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900 rounded-md bg-gray-300" />
+                    className="mt-1 flex items-center text-sm text-gray-500 rounded-md bg-gray-300 px-2"
+                >
+                    ...
+                </RadioGroup.Description>
+                <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900 rounded-md bg-gray-300 px-2">
+                    ...
+                </RadioGroup.Description>
             </span>
         </span>
         <span
