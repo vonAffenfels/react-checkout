@@ -5,7 +5,7 @@ import CheckoutContext from "../context/CheckoutContext";
 import BuyContext from "../context/BuyContext";
 import ShippingMethodOption from "./shippingMethodOption.jsx";
 import PaymentMethodOption from "./paymentMethodOption.jsx";
-import {Spin} from "./atoms/animate.jsx";
+import {LoadingOption} from "./atoms/animate.jsx";
 
 const CheckoutForm = ({props}) => {
     const {isDebug} = useContext(BuyContext);
@@ -308,7 +308,7 @@ const CheckoutForm = ({props}) => {
                                 loading={(isSettingShippingMethod || isDebug) && (shippingMethod.id === tempSelectedShippingMethodId)}
                             />
                         ))}
-                        {(isLoadingShippingMethods || isDebug) && <Spin/>}
+                        {(isLoadingShippingMethods || isDebug) && <LoadingOption/>}
                     </div>
                 </RadioGroup>
             </div>
