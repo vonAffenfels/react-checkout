@@ -70,6 +70,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const addItemToCheckout = async (variantId) => {
+        if (!isCartOpen) {
+            setCartOpen(true);
+        }
+
         if (!checkout) {
             return createCheckout(variantId);
         }
@@ -99,10 +103,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const removeItemFromCheckout = async (lineId) => {
-        console.log("removeItemFromCheckout", lineId, {
-            checkoutToken,
-            lineId
-        });
         if (!checkout) {
             return;
         }
@@ -114,7 +114,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 lineId
             }
         });
-        console.log("CHECKOUT_DELETE_PRODUCT_LINE, data:", data);
+
         if (data?.checkoutLineDelete?.errors?.length) {
             data.checkoutLineDelete.errors.forEach(err => console.warn(err));
         }

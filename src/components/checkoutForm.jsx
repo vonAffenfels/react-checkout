@@ -19,6 +19,7 @@ const CheckoutForm = ({props}) => {
         isSettingShippingMethod,
         isLoadingShippingMethods,
     } = useContext(CheckoutContext);
+    const [tempSelectedShippingMethodId, setTempSelectedShippingMethodId] = useState("");
 
     useEffect(() => {
         let updateAddressFormData = {
@@ -49,7 +50,9 @@ const CheckoutForm = ({props}) => {
 
     const onChangeDeliveryMethod = async (deliveryMethodId) => {
         if (checkout?.shippingMethod?.id !== deliveryMethodId) {
+            setTempSelectedShippingMethodId(deliveryMethodId);
             await setCheckoutDeliveryMethod(deliveryMethodId);
+            setTempSelectedShippingMethodId("");
         }
     };
 
@@ -302,7 +305,7 @@ const CheckoutForm = ({props}) => {
                             <ShippingMethodOption
                                 shippingMethod={shippingMethod}
                                 key={shippingMethod.id}
-                                loading={isSettingShippingMethod || isDebug}
+                                loading={(isSettingShippingMethod || isDebug) && (shippingMethod.id === tempSelectedShippingMethodId)}
                             />
                         ))}
                         {(isLoadingShippingMethods || isDebug) && <Spin/>}

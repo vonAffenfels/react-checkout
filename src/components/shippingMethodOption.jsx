@@ -16,6 +16,7 @@ const ShippingMethodOption = ({shippingMethod, loading}) => {
             disabled={loading}
             className={({active, checked}) =>
                 classNames(
+                    loading ? "animate-pulse" : "",
                     checked ? "border-transparent" : "border-gray-300",
                     active ? "ring-2 ring-indigo-500" : "",
                     "relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"

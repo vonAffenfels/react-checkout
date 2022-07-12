@@ -1,7 +1,7 @@
 import React from "react";
 
 const Spin = () => (
-    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none"
          viewBox="0 0 24 24">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
         <path
@@ -13,21 +13,25 @@ const Spin = () => (
 );
 
 const Item = () => (
-    <div className="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
-        <div className="animate-pulse flex space-x-4">
-            <div className="rounded-full bg-slate-700 h-10 w-10"/>
-            <div className="flex-1 space-y-6 py-1">
-                <div className="h-2 bg-slate-700 rounded"/>
-                <div className="space-y-3">
-                    <div className="grid grid-cols-3 gap-4">
-                        <div className="h-2 bg-slate-700 rounded col-span-2"/>
-                        <div className="h-2 bg-slate-700 rounded col-span-1"/>
-                    </div>
-                    <div className="h-2 bg-slate-700 rounded"/>
+    <li className="animate-pulse flex py-6 px-4 sm:px-6">
+        <div className="flex-shrink-0">
+            <img className="w-20 rounded-md"/>
+        </div>
+
+        <div className="ml-6 flex-1 flex flex-col">
+            <div className="flex">
+                <div className="min-w-0 flex-1">
+                    <h4 className="text-sm">
+                        <a onClick={(e) => e.preventDefault()} className="font-medium text-gray-700 hover:text-gray-800">
+                            ...
+                        </a>
+                    </h4>
+                    <p className="mt-1 text-sm text-gray-500">...</p>
+                    <p className="mt-1 text-sm text-gray-500">...</p>
                 </div>
             </div>
         </div>
-    </div>
+    </li>
 );
 
 const ButtonBlue = ({text}) => (
