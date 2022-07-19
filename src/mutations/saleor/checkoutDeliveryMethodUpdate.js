@@ -1,13 +1,13 @@
 import {gql} from "@apollo/client";
 
-import CheckoutDetailsFragment from "../fragments/checkoutDetailsFragment";
+import CheckoutDetailsFragment from "../../fragments/saleor/checkoutDetailsFragment";
 
 export default gql`
     ${CheckoutDetailsFragment}
-    mutation CheckoutShippingAddressUpdate($checkoutToken: UUID!, $address: AddressInput!) {
-        checkoutShippingAddressUpdate(
+    mutation CheckoutDeliveryMethodUpdate($checkoutToken: UUID!, $deliveryMethodId: ID!) {
+        checkoutDeliveryMethodUpdate(
             token: $checkoutToken
-            shippingAddress: $address
+            deliveryMethodId: $deliveryMethodId
         ) {
             checkout {
                 ...CheckoutDetailsFragment
@@ -15,7 +15,6 @@ export default gql`
             errors {
                 field
                 message
-                code
             }
         }
     }

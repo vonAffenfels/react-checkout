@@ -1,38 +1,28 @@
-import React, {createContext, useState} from "react";
+import React, {createContext, useState, useContext} from "react";
 import {
     ApolloClient,
     ApolloProvider,
     InMemoryCache,
     HttpLink,
-    ApolloLink,
+    // ApolloLink,
     from
 } from "@apollo/client";
+import BuyContext from "./BuyContext";
 
 export const ApolloContext = createContext({});
 
 export const ApolloContextProvider = ({children, uri}) => {
-    const [requestInterceptor, setRequestInterceptor] = useState(null);
-    const [responseInterceptor, setResponseInterceptor] = useState(null);
+    const {storefrontApiKey} = useContext(BuyContext);
 
     const httpLink = new HttpLink({uri: uri});
-    const middleware = new ApolloLink((operation, forward) => {
-        console.log("requestInterceptor", requestInterceptor);
-        requestInterceptor?.();
-        return forward(operation);
-    });
-    const responseModifier = new ApolloLink((operation, forward) => {
-        console.log("responseInterceptor", responseInterceptor);
-        responseInterceptor?.();
-        return forward(operation);
-    });
+
     const client = new ApolloClient({
         cache: new InMemoryCache(),
-        link: from([middleware, httpLink, responseModifier])
+        link: from([httpLink]),
+        headers: {
+            "X-Shopify-Storefront-Access-Token": storefrontApiKey || ""
+        }
     });
-    client.setRequestInterceptor = setRequestInterceptor;
-    client.requestInterceptor = requestInterceptor;
-    client.setResponseInterceptor = setResponseInterceptor;
-    client.responseInterceptor = responseInterceptor;
 
     return (
         <ApolloProvider client={client}>

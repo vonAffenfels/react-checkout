@@ -9,7 +9,7 @@ import Banner from "../components/banner.jsx";
 
 export const BuyContext = createContext({});
 
-export const BuyContextProvider = ({children, uri, channel, shop, paymentProviders}) => {
+export const BuyContextProvider = ({children, uri, channel, shop, paymentProviders, storefrontApiKey}) => {
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [bannerMessage, setBannerMessage] = useState(null);
 
@@ -52,7 +52,7 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
     useEffect(() => {
         const stripePaymentParam = new URLSearchParams(window?.location?.search)?.get("payment_intent_client_secret");
         if (stripePaymentParam) {
-            removeCheckoutToken();
+            removeCheckoutToken?.();
             fetchStripePaymentIntent(stripePaymentParam);
         }
     }, []);
@@ -64,6 +64,7 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
             paymentProviders,
             uri,
             setBannerMessage,
+            storefrontApiKey: storefrontApiKey,
             isDebug: window?.location?.search?.indexOf?.("isDebug") !== -1
         }}>
             <ApolloContextProvider uri={uri}>

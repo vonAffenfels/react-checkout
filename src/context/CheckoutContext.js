@@ -2,20 +2,27 @@ import React, {createContext, useState, useEffect, useContext} from "react";
 import {useQuery, useApolloClient} from "@apollo/client";
 import useLocalStorage from "../hooks/useLocalStorage";
 import useDebounce from "../hooks/useDebounce";
+import useAPIQueries from "../hooks/useAPIQueries";
+import BuyContext from "./BuyContext";
 import CONST from "../lib/const";
-import CHECKOUT_BY_TOKEN from "../queries/checkoutByToken";
-import CHECKOUT_CREATE from "../mutations/checkoutCreate";
-import CHECKOUT_ADD_PRODUCT_LINE from "../mutations/checkoutAddProductLine";
-import CHECKOUT_DELETE_PRODUCT_LINE from "../mutations/checkoutLineDelete";
-import CHECKOUT_SHIPPING_ADDRESS_UPDATE from "../mutations/checkoutShippingAddressUpdate";
-import CHECKOUT_BILLING_ADDRESS_UPDATE from "../mutations/checkoutBillingAddressUpdate";
-import CHECKOUT_EMAIL_UPDATE from "../mutations/checkoutEmailUpdate";
-import CHECKOUT_DELIVERY_METHOD_UPDATE from "../mutations/checkoutDeliveryMethodUpdate";
 
 export const CheckoutContext = createContext({});
 
 export const CheckoutContextProvider = ({children, channel}) => {
+    const buyContext = useContext(BuyContext);
     const client = useApolloClient();
+    const {
+        CHECKOUT_BY_TOKEN,
+        CHECKOUT_CREATE,
+        getCheckoutCreateVariables,
+        CHECKOUT_ADD_PRODUCT_LINE,
+        CHECKOUT_DELETE_PRODUCT_LINE,
+        CHECKOUT_SHIPPING_ADDRESS_UPDATE,
+        CHECKOUT_BILLING_ADDRESS_UPDATE,
+        CHECKOUT_EMAIL_UPDATE,
+        CHECKOUT_DELIVERY_METHOD_UPDATE,
+    } = useAPIQueries(buyContext.shop);
+
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
     const [displayState, setDisplayState] = useState("widget");
@@ -47,7 +54,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         setLoadingLineItems(true);
         const {data} = await client.mutate({
             mutation: CHECKOUT_CREATE,
-            variables: {
+            variables: getCheckoutCreateVariables({
                 email: "anonymous@example.com",
                 channel: channel,
                 lines: [
@@ -56,15 +63,22 @@ export const CheckoutContextProvider = ({children, channel}) => {
                         variantId: variantId
                     }
                 ]
-            }
+            })
         });
         setLoadingLineItems(false);
+        console.log("CHECKOUT_CREATE", data);
 
         if (data?.checkoutCreate?.errors?.length) {
             data.checkoutCreate.errors.forEach(err => console.warn(err));
         }
 
+        //saleor
         if (data?.checkoutCreate?.checkout?.token) {
+            setCheckoutToken(data.checkoutCreate.checkout.token);
+        }
+
+        //shopify
+        if (data?.checkoutCreate?.checkout?.id) {
             setCheckoutToken(data.checkoutCreate.checkout.token);
         }
     };

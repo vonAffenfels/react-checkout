@@ -1,20 +1,20 @@
 import {gql} from "@apollo/client";
 
-import CheckoutDetailsFragment from "../fragments/checkoutDetailsFragment";
+import CheckoutDetailsFragment from "../../fragments/saleor/checkoutDetailsFragment";
 
 export default gql`
     ${CheckoutDetailsFragment}
-    mutation CheckoutAddProductLine($checkoutToken: UUID!, $lines: [CheckoutLineInput!]!) {
-        checkoutLinesAdd(
+    mutation CheckoutEmailUpdate($checkoutToken: UUID!, $email: String!) {
+        checkoutEmailUpdate(
             token: $checkoutToken
-            lines: $lines
+            email: $email
         ) {
             checkout {
                 ...CheckoutDetailsFragment
             }
             errors {
+                field
                 message
-                code
             }
         }
     }
