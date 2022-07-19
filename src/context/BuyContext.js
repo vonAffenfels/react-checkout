@@ -57,6 +57,7 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
         }
     }, []);
 
+    console.log("Starting react-checkout for shop type", shop, "..");
     return (
         <BuyContext.Provider value={{
             shop,

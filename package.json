@@ -1,6 +1,6 @@
 {
     "name": "react-ez-checkout",
-    "version": "1.0.216",
+    "version": "1.0.217",
     "description": "react-component based cart for a shop checkout",
     "main": "dist/index.cjs.js",
     "module": "dist/index.esm.js",
@@ -13,7 +13,10 @@
     "scripts": {
         "build": "NODE_ENV=production rollup -c",
         "build-windows": "set NODE_ENV=production && rollup -c",
-        "build-watch": "rollup -c -w"
+        "build-watch": "rollup -c -w",
+        "dev": "npm-run-all --parallel build-watch start-playground",
+        "dev-playground": "cd playground && npm run start",
+        "i-all": "npm i && cd playground && npm i"
     },
     "repository": {
         "type": "git",

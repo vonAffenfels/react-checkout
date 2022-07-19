@@ -73,10 +73,17 @@ const CartWidget = ({props}) => {
 
                         <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                             <div className="flex justify-between text-base font-medium text-gray-900">
-                                <p>Gesamt</p>
-                                <p>{checkout?.totalPrice?.gross?.amount} {checkout?.totalPrice?.gross?.currency}</p>
+                                <p>Warenkorb</p>
+                                <p>{checkout?.subtotalPrice?.gross?.amount} {checkout?.subtotalPrice?.gross?.currency}</p>
                             </div>
-                            <p className="mt-0.5 text-sm text-gray-500">Versandkosten werden im Bezahlschritt berechnet.</p>
+                            {!!checkout?.shippingPrice?.gross?.amount ? (
+                                <div className="flex justify-between text-base font-small text-gray-500">
+                                    <p>Versand</p>
+                                    <p>{checkout?.shippingPrice?.gross?.amount} {checkout?.shippingPrice?.gross?.currency}</p>
+                                </div>
+                            ) : (
+                                <p className="mt-0.5 text-sm text-gray-500">Versandkosten werden an der Kasse berechnet.</p>
+                            )}
                             <div className="mt-6">
                                 <a
                                     onClick={openFullPage}

@@ -106,7 +106,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         if (!checkout) {
             return;
         }
-
+v
         const {data} = await client.mutate({
             mutation: CHECKOUT_DELETE_PRODUCT_LINE,
             variables: {
@@ -260,7 +260,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 addressInput.countryArea = state;
             }
 
-            console.log("isInputAddressDifferentFromCheckoutAddress(addressInput)", isInputAddressDifferentFromCheckoutAddress(addressInput));
             if (isInputAddressDifferentFromCheckoutAddress(addressInput)) {
                 setCheckoutAddress(addressInput);
             }
@@ -268,7 +267,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [addressFormDataDebounced]);
 
     useEffect(() => {
-        console.log("CHECKOUT:", data?.checkout);
         setCheckout(data?.checkout);
     }, [loading, error, data]);
 
