@@ -10,6 +10,7 @@ function classNames(...classes) {
 }
 
 const ShippingMethodOption = ({shippingMethod, loading}) => {
+    const isFree = parseFloat(shippingMethod.price?.amount) === 0;
 
     return (
         <RadioGroup.Option
@@ -38,7 +39,11 @@ const ShippingMethodOption = ({shippingMethod, loading}) => {
                                 {shippingMethod.minimumDeliveryDays && shippingMethod.maximumDeliveryDays && `${shippingMethod.minimumDeliveryDays} - ${shippingMethod.maximumDeliveryDays} Tage`}
                             </RadioGroup.Description>
                             <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
-                                <Price price={shippingMethod.price?.amount}/> {shippingMethod.price?.currency}
+                                Preis: {isFree ? "kostenlos" : (
+                                    <>
+                                        <Price price={shippingMethod.price?.amount}/> {shippingMethod.price?.currency}
+                                    </>
+                                )}
                             </RadioGroup.Description>
                         </span>
                     </span>

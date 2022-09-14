@@ -17,7 +17,7 @@ const useProductBySku = (shop, client) => {
         };
     } else if (shop === "shopify") {
         return async ({sku}) => {
-            //TODO filter for specific variant enable
+            //TODO filter for specific variant enable, need to iterate variants and find specific variant
             console.log("useProductBySku, query:", `tag:"${sku}"`);
             const {data} = await client.query({
                 query: SHOPIFY_PRODUCT_BY_SKU,

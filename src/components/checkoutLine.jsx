@@ -22,7 +22,7 @@ const CheckoutLine = ({
                 <img
                     src={variant.product.thumbnail?.url}
                     alt={variant.product.thumbnail?.alt}
-                    className="h-full w-full object-cover object-center"
+                    className="h-full object-cover object-center"
                 />
             </div>
 
