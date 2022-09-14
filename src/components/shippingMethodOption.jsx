@@ -3,6 +3,7 @@ import {RadioGroup} from "@headlessui/react";
 import {CheckCircleIcon, RefreshIcon} from "@heroicons/react/solid";
 
 import {Spin} from "./atoms/animate.jsx";
+import Price from "./atoms/price.jsx";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -34,10 +35,10 @@ const ShippingMethodOption = ({shippingMethod, loading}) => {
                                 as="span"
                                 className="mt-1 flex items-center text-sm text-gray-500"
                             >
-                                {shippingMethod.minimumDeliveryDays} - {shippingMethod.maximumDeliveryDays} Tage
+                                {shippingMethod.minimumDeliveryDays && shippingMethod.maximumDeliveryDays && `${shippingMethod.minimumDeliveryDays} - ${shippingMethod.maximumDeliveryDays} Tage`}
                             </RadioGroup.Description>
                             <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
-                                {shippingMethod.price?.amount} {shippingMethod.price?.currency}
+                                <Price price={shippingMethod.price?.amount}/> {shippingMethod.price?.currency}
                             </RadioGroup.Description>
                         </span>
                     </span>

@@ -5,9 +5,9 @@ export default gql`
         checkoutCreate(input: $input) {
             checkout {
                 id
-                token
+                webUrl
             }
-            errors {
+            checkoutUserErrors {
                 field
                 message
                 code

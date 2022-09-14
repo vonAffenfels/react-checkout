@@ -18,7 +18,8 @@ export const ApolloContextProvider = ({children, uri}) => {
 
     const client = new ApolloClient({
         cache: new InMemoryCache(),
-        link: from([httpLink]),
+        // link: from([httpLink]),
+        uri: uri,
         headers: {
             "X-Shopify-Storefront-Access-Token": storefrontApiKey || ""
         }

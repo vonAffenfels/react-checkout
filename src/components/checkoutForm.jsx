@@ -245,7 +245,7 @@ const CheckoutForm = ({props}) => {
                                 id="region"
                                 autoComplete="address-level1"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={addressFormData.state}
+                                value={addressFormData.state || ""}
                                 onChange={(e) => setAddressFormData({
                                     ...addressFormData,
                                     state: e.target.value
@@ -297,7 +297,8 @@ const CheckoutForm = ({props}) => {
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-                <RadioGroup value={checkout?.shippingMethod?.id} onChange={onChangeDeliveryMethod}>
+                {/*TODO check if shipping is required*/}
+                <RadioGroup value={checkout?.shippingMethod?.id || ""} onChange={onChangeDeliveryMethod}>
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Versandart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
@@ -317,7 +318,7 @@ const CheckoutForm = ({props}) => {
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-                <RadioGroup value={selectedPaymentGatewayId} onChange={onChangePaymentMethod}>
+                <RadioGroup value={selectedPaymentGatewayId || ""} onChange={onChangePaymentMethod}>
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Bezahlart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">

@@ -2,6 +2,7 @@ import React, {useContext, useState, useEffect} from "react";
 
 import CheckoutContext from "../context/CheckoutContext";
 import CheckoutLine from "./checkoutLine.jsx";
+import Price from "./atoms/price.jsx";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -28,19 +29,27 @@ const CheckoutSummary = ({props}) => {
             <dl className="border-t border-gray-200 py-6 px-4 space-y-6 sm:px-6">
                 <div className="flex items-center justify-between">
                     <dt className="text-sm">Preis</dt>
-                    <dd className="text-sm font-medium text-gray-900">{checkout?.subtotalPrice?.net?.amount} {checkout?.subtotalPrice?.net?.currency}</dd>
+                    <dd className="text-sm font-medium text-gray-900">
+                        <Price price={checkout?.subtotalPrice?.net?.amount}/> {checkout?.subtotalPrice?.net?.currency}
+                    </dd>
                 </div>
                 <div className="flex items-center justify-between">
                     <dt className="text-sm">Versand</dt>
-                    <dd className="text-sm font-medium text-gray-900">{checkout?.shippingPrice?.gross?.amount} {checkout?.shippingPrice?.gross?.currency}</dd>
+                    <dd className="text-sm font-medium text-gray-900">
+                        <Price price={checkout?.shippingPrice?.gross?.amount}/> {checkout?.shippingPrice?.gross?.currency}
+                    </dd>
                 </div>
                 <div className="flex items-center justify-between">
                     <dt className="text-sm">Steuern</dt>
-                    <dd className="text-sm font-medium text-gray-900">{checkout?.subtotalPrice?.tax?.amount} {checkout?.subtotalPrice?.tax?.currency}</dd>
+                    <dd className="text-sm font-medium text-gray-900">
+                        <Price price={checkout?.subtotalPrice?.tax?.amount}/> {checkout?.subtotalPrice?.tax?.currency}
+                    </dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                     <dt className="text-base font-medium">Summe</dt>
-                    <dd className="text-base font-medium text-gray-900">{checkout?.totalPrice?.gross?.amount} {checkout?.totalPrice?.gross?.currency}</dd>
+                    <dd className="text-base font-medium text-gray-900">
+                        <Price price={checkout?.totalPrice?.gross?.amount}/> {checkout?.totalPrice?.gross?.currency}
+                    </dd>
                 </div>
             </dl>
 

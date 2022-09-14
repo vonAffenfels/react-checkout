@@ -9,7 +9,8 @@ import Banner from "../components/banner.jsx";
 
 export const BuyContext = createContext({});
 
-export const BuyContextProvider = ({children, uri, channel, shop, paymentProviders, storefrontApiKey}) => {
+export const BuyContextProvider = (props) => {
+    const {uri, shop, children, paymentProviders, channel} = props;
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [bannerMessage, setBannerMessage] = useState(null);
 
@@ -60,11 +61,8 @@ export const BuyContextProvider = ({children, uri, channel, shop, paymentProvide
     console.log("Starting react-checkout for shop type", shop, "..");
     return (
         <BuyContext.Provider value={{
-            shop,
-            paymentProviders,
-            uri,
+            ...props,
             setBannerMessage,
-            storefrontApiKey: storefrontApiKey,
             isDebug: window?.location?.search?.indexOf?.("isDebug") !== -1
         }}>
             <ApolloContextProvider uri={uri}>

@@ -7,6 +7,7 @@ export default gql`
         firstName
         lastName
         streetAddress1
+        streetAddress2
         city
         postalCode
         isDefaultBillingAddress

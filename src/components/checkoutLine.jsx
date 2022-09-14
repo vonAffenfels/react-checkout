@@ -2,6 +2,7 @@ import React, {useContext} from "react";
 import {TrashIcon} from "@heroicons/react/solid";
 
 import CheckoutContext from "../context/CheckoutContext";
+import Price from "./atoms/price.jsx";
 
 const CheckoutLine = ({
     id,
@@ -31,7 +32,7 @@ const CheckoutLine = ({
                         <h3>
                             <a href={variant.product.href}> {variant.product.name} {variant.name} </a>
                         </h3>
-                        <p className="ml-4">{totalPrice.gross.amount} {totalPrice.gross.currency}</p>
+                        <p className="ml-4"><Price price={totalPrice.gross.amount}/> {totalPrice.gross.currency}</p>
                     </div>
                     <p className="mt-1 text-sm text-gray-500">...</p>
                 </div>
@@ -71,6 +72,11 @@ const CheckoutLineDetail = ({
         console.warn("TODO onChangeQuantity");
     }
 
+    let variantTitle = variant.product.name;
+    if (String(variant.name).toLowerCase() !== "default title") {
+        variantTitle += " " + variant.name;
+    }
+
     return (
         <li className="flex py-6 px-4 sm:px-6">
             <div className="flex-shrink-0">
@@ -86,7 +92,7 @@ const CheckoutLineDetail = ({
                     <div className="min-w-0 flex-1">
                         <h4 className="text-sm">
                             <a href={variant.product.href} className="font-medium text-gray-700 hover:text-gray-800">
-                                {variant.product.name} {variant.name}
+                                {variantTitle}
                             </a>
                         </h4>
                         <p className="mt-1 text-sm text-gray-500">...</p>
@@ -106,7 +112,7 @@ const CheckoutLineDetail = ({
                 </div>
 
                 <div className="flex-1 pt-2 flex items-end justify-between">
-                    <p className="mt-1 text-sm font-medium text-gray-900">{totalPrice.gross.amount} {totalPrice.gross.currency}</p>
+                    <p className="mt-1 text-sm font-medium text-gray-900"><Price price={totalPrice.gross.amount}/> {totalPrice.gross.currency}</p>
 
                     <div className="ml-4">
                         <label htmlFor="quantity" className="sr-only">

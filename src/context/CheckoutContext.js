@@ -1,8 +1,20 @@
 import React, {createContext, useState, useEffect, useContext} from "react";
 import {useQuery, useApolloClient} from "@apollo/client";
+
 import useLocalStorage from "../hooks/useLocalStorage";
 import useDebounce from "../hooks/useDebounce";
-import useAPIQueries from "../hooks/useAPIQueries";
+import useProductBySku from "../hooks/useProductBySku";
+import useProductList from "../hooks/useProductList";
+import useCheckoutCreate from "../hooks/useCheckoutCreate";
+import useAddBonusProductLine from "../hooks/useAddBonusProductLine";
+import useAddProductLine from "../hooks/useAddProductLine";
+import useDeleteProductLine from "../hooks/useDeleteProductLine";
+import useShippingAddressUpdate from "../hooks/useShippingAddressUpdate";
+import useBillingAddressUpdate from "../hooks/useBillingAddressUpdate";
+import useEmailUpdate from "../hooks/useEmailUpdate";
+import useDeliveryMethodUpdate from "../hooks/useDeliveryMethodUpdate";
+import useCheckout from "../hooks/useCheckout";
+
 import BuyContext from "./BuyContext";
 import CONST from "../lib/const";
 
@@ -11,17 +23,18 @@ export const CheckoutContext = createContext({});
 export const CheckoutContextProvider = ({children, channel}) => {
     const buyContext = useContext(BuyContext);
     const client = useApolloClient();
-    const {
-        CHECKOUT_BY_TOKEN,
-        CHECKOUT_CREATE,
-        getCheckoutCreateVariables,
-        CHECKOUT_ADD_PRODUCT_LINE,
-        CHECKOUT_DELETE_PRODUCT_LINE,
-        CHECKOUT_SHIPPING_ADDRESS_UPDATE,
-        CHECKOUT_BILLING_ADDRESS_UPDATE,
-        CHECKOUT_EMAIL_UPDATE,
-        CHECKOUT_DELIVERY_METHOD_UPDATE,
-    } = useAPIQueries(buyContext.shop);
+
+    const getProductBySku = useProductBySku(buyContext.shop, client);
+    const getProductList = useProductList(buyContext.shop, client);
+    const checkoutByToken = useCheckout(buyContext.shop, client);
+    const checkoutCreate = useCheckoutCreate(buyContext.shop, client);
+    const addBonusProductLine = useAddBonusProductLine(buyContext.shop, client);
+    const addProductLine = useAddProductLine(buyContext.shop, client);
+    const deleteProductLine = useDeleteProductLine(buyContext.shop, client);
+    const shippingAddressUpdate = useShippingAddressUpdate(buyContext.shop, client);
+    const billingAddressUpdate = useBillingAddressUpdate(buyContext.shop, client);
+    const emailUpdate = useEmailUpdate(buyContext.shop, client);
+    const deliveryMethodUpdate = useDeliveryMethodUpdate(buyContext.shop, client);
 
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
@@ -46,44 +59,15 @@ export const CheckoutContextProvider = ({children, channel}) => {
     });
     const addressFormDataDebounced = useDebounce(addressFormData, 750);
 
-    const {loading, error, data, refetch} = useQuery(CHECKOUT_BY_TOKEN, {
-        variables: {checkoutToken}
-    });
-
     const createCheckout = async (variantId) => {
         setLoadingLineItems(true);
-        const {data} = await client.mutate({
-            mutation: CHECKOUT_CREATE,
-            variables: getCheckoutCreateVariables({
-                email: "anonymous@example.com",
-                channel: channel,
-                lines: [
-                    {
-                        quantity: 1,
-                        variantId: variantId
-                    }
-                ]
-            })
-        });
+        const checkoutToken = await checkoutCreate({channel, variantId});
         setLoadingLineItems(false);
-        console.log("CHECKOUT_CREATE", data);
-
-        if (data?.checkoutCreate?.errors?.length) {
-            data.checkoutCreate.errors.forEach(err => console.warn(err));
-        }
-
-        //saleor
-        if (data?.checkoutCreate?.checkout?.token) {
-            setCheckoutToken(data.checkoutCreate.checkout.token);
-        }
-
-        //shopify
-        if (data?.checkoutCreate?.checkout?.id) {
-            setCheckoutToken(data.checkoutCreate.checkout.token);
-        }
+        setCheckoutToken(checkoutToken);
     };
 
-    const addItemToCheckout = async (variantId) => {
+    const addItemToCheckout = async (variantId, quantity = 1) => {
+        console.log("addItemToCheckout", variantId, quantity, checkout)
         if (!isCartOpen) {
             setCartOpen(true);
         }
@@ -92,50 +76,38 @@ export const CheckoutContextProvider = ({children, channel}) => {
             return createCheckout(variantId);
         }
 
-        setLoadingLineItems(true);
-        const {data} = await client.mutate({
-            mutation: CHECKOUT_ADD_PRODUCT_LINE,
-            variables: {
-                checkoutToken,
-                lines: [
-                    {
-                        quantity: 1,
-                        variantId: variantId
-                    }
-                ]
+        const lines = [
+            {
+                quantity: quantity,
+                variantId: variantId
             }
+        ];
+
+        setLoadingLineItems(true);
+        console.log("addProductLine", addProductLine);
+        const checkoutData = await addProductLine({
+            checkoutToken,
+            lines: lines
+        });
+        console.log("checkoutData", checkoutData)
+        setCheckout({
+            ...(checkout || {}),
+            ...checkoutData
         });
         setLoadingLineItems(false);
-
-        if (data?.checkoutLinesAdd?.errors?.length) {
-            data.checkoutLinesAdd.errors.forEach(err => console.warn(err));
-        }
-
-        if (data?.checkoutLinesAdd?.checkout) {
-            setCheckout(data.checkoutLinesAdd.checkout);
-        }
     };
 
     const removeItemFromCheckout = async (lineId) => {
         if (!checkout) {
             return;
         }
-v
-        const {data} = await client.mutate({
-            mutation: CHECKOUT_DELETE_PRODUCT_LINE,
-            variables: {
-                checkoutToken,
-                lineId
-            }
+
+        //TODO check if its abo and there is a bonus product to remove
+        const checkoutData = await deleteProductLine({checkoutToken, lineId});
+        setCheckout({
+            ...(checkout || {}),
+            ...checkoutData
         });
-
-        if (data?.checkoutLineDelete?.errors?.length) {
-            data.checkoutLineDelete.errors.forEach(err => console.warn(err));
-        }
-
-        if (data?.checkoutLineDelete?.checkout) {
-            setCheckout(data.checkoutLineDelete.checkout);
-        }
     };
 
     const setCheckoutAddress = async (address) => {
@@ -145,31 +117,16 @@ v
 
         //TODO billing address different from shipping address;
         setLoadingShippingMethods(true);
-        const [{data}, _] = await Promise.all([
-            client.mutate({
-                mutation: CHECKOUT_SHIPPING_ADDRESS_UPDATE,
-                variables: {
-                    checkoutToken,
-                    address
-                }
-            }),
-            client.mutate({
-                mutation: CHECKOUT_BILLING_ADDRESS_UPDATE,
-                variables: {
-                    checkoutToken,
-                    address
-                }
-            })
+        const [shippingAddressCheckout, billingAddressCheckout] = await Promise.all([
+            shippingAddressUpdate({checkoutToken, address}),
+            billingAddressUpdate({checkoutToken, address})
         ]);
+        console.log("setCheckoutAddress", checkout, shippingAddressCheckout)
+        setCheckout({
+            ...(checkout || {}),
+            ...shippingAddressCheckout
+        });
         setLoadingShippingMethods(false);
-
-        if (data?.checkoutShippingAddressUpdate?.errors?.length) {
-            data.checkoutShippingAddressUpdate.errors.forEach(err => console.warn(err));
-        }
-
-        if (data?.checkoutShippingAddressUpdate?.checkout) {
-            setCheckout(data.checkoutShippingAddressUpdate.checkout);
-        }
     }
 
     const setCheckoutEmail = async (email) => {
@@ -177,21 +134,11 @@ v
             return;
         }
 
-        const {data} = await client.mutate({
-            mutation: CHECKOUT_EMAIL_UPDATE,
-            variables: {
-                checkoutToken,
-                email
-            }
+        const checkoutData = await emailUpdate({checkoutToken, email});
+        setCheckout({
+            ...(checkout || {}),
+            ...checkoutData
         });
-
-        if (data?.checkoutEmailUpdate?.errors?.length) {
-            data.checkoutEmailUpdate.errors.forEach(err => console.warn(err));
-        }
-
-        if (data?.checkoutEmailUpdate?.checkout) {
-            setCheckout(data.checkoutEmailUpdate.checkout);
-        }
     }
 
     const setCheckoutDeliveryMethod = async (deliveryMethodId) => {
@@ -200,29 +147,25 @@ v
         }
 
         setSettingShippingMethod(true);
-        const {data} = await client.mutate({
-            mutation: CHECKOUT_DELIVERY_METHOD_UPDATE,
-            variables: {
-                checkoutToken,
-                deliveryMethodId
-            }
+        const checkoutData = await deliveryMethodUpdate({
+            checkoutToken,
+            deliveryMethodId,
+            checkout,
+            webhookUri: buyContext.webhookUri
+        });
+        setCheckout({
+            ...(checkout || {}),
+            ...checkoutData
         });
         setSettingShippingMethod(false);
-
-        if (data?.checkoutDeliveryMethodUpdate?.errors?.length) {
-            data.checkoutDeliveryMethodUpdate.errors.forEach(err => console.warn(err));
-        }
-
-        if (data?.checkoutDeliveryMethodUpdate?.checkout) {
-            setCheckout(data.checkoutDeliveryMethodUpdate.checkout);
-        }
-
-        return;
     }
 
     const getCheckoutByToken = async () => {
+        console.log("getCheckoutByToken", checkoutToken);
         if (checkoutToken) {
-            refetch({checkoutToken});
+            const data = await checkoutByToken(checkoutToken);
+            console.log("getCheckoutByToken, data", data);
+            setCheckout(data);
         } else {
             setCheckout(null);
         }
@@ -252,7 +195,7 @@ v
 
     useEffect(() => {
         getCheckoutByToken();
-    }, [checkoutToken, checkout?.lines?.length]);
+    }, [checkoutToken]);
 
     useEffect(() => {
         let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
@@ -280,19 +223,18 @@ v
         }
     }, [addressFormDataDebounced]);
 
-    useEffect(() => {
-        setCheckout(data?.checkout);
-    }, [loading, error, data]);
-
     return (
         <CheckoutContext.Provider value={{
             checkout,
             createCheckout,
             addItemToCheckout,
+            addBonusProductLine,
             removeItemFromCheckout,
             setCheckoutAddress,
             setCheckoutEmail,
             setCheckoutDeliveryMethod,
+            getProductList,
+            getProductBySku,
             displayState,
             setDisplayState,
             isCartOpen,

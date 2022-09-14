@@ -8,7 +8,16 @@ export default gql`
         node(id:$checkoutToken) {
             id
             ... on Checkout {
-                ...CheckoutDetailsFragment
+                availableShippingRates {
+                    ready
+                    shippingRates {
+                        handle
+                        priceV2 {
+                            amount
+                        }
+                        title
+                    }
+                }
             }
         }
     }

@@ -7,6 +7,7 @@ import CheckoutContext from "./context/CheckoutContext";
 import CheckoutLine from "./components/checkoutLine.jsx";
 import SidePanelLayout from "./components/sidePanelLayout.jsx";
 import {Item} from "./components/atoms/animate.jsx";
+import Price from "./components/atoms/price.jsx";
 
 const CartWidget = ({props}) => {
     const {isDebug} = useContext(BuyContext);
@@ -24,12 +25,10 @@ const CartWidget = ({props}) => {
         setDisplayState("cartFullPage");
     };
 
-    console.log("isCartOpen", isCartOpen);
-
     return (
         <Fragment>
             {!isCartOpen && (
-                <div className="bg-opacity-50 flex justify-center items-center absolute top-10 right-0">
+                <div className="bg-opacity-50 flex justify-center items-center absolute top-10 right-0 z-50">
                     <button
                         className="bg-indigo-500 px-4 py-2 text-md text-white"
                         onClick={() => setCartOpen(true)}
@@ -74,12 +73,12 @@ const CartWidget = ({props}) => {
                         <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                             <div className="flex justify-between text-base font-medium text-gray-900">
                                 <p>Warenkorb</p>
-                                <p>{checkout?.subtotalPrice?.gross?.amount} {checkout?.subtotalPrice?.gross?.currency}</p>
+                                <p><Price price={checkout?.subtotalPrice?.net?.amount}/> {checkout?.subtotalPrice?.net?.currency}</p>
                             </div>
                             {!!checkout?.shippingPrice?.gross?.amount ? (
                                 <div className="flex justify-between text-base font-small text-gray-500">
                                     <p>Versand</p>
-                                    <p>{checkout?.shippingPrice?.gross?.amount} {checkout?.shippingPrice?.gross?.currency}</p>
+                                    <p><Price price={checkout?.shippingPrice?.gross?.amount}/> {checkout?.shippingPrice?.gross?.currency}</p>
                                 </div>
                             ) : (
                                 <p className="mt-0.5 text-sm text-gray-500">Versandkosten werden an der Kasse berechnet.</p>
