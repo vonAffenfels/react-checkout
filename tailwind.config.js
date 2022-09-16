@@ -8,4 +8,5 @@ module.exports = {
         enabled: process.env.NODE_ENV === "publish",
         content: ["./src/**/*.{js,jsx}"]
     },
+    important: true,
 }

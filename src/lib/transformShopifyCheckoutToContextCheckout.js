@@ -32,6 +32,11 @@ function transformCheckout(node) {
         webUrl: node.webUrl,
         lines: (node.lineItems?.edges || []).map(edge => {
             const {quantity, variant, id} = edge.node;
+
+            if (!variant) {
+                return null;
+            }
+
             const {amount, currencyCode} = variant.priceV2;
             return {
                 quantity: quantity,
@@ -63,7 +68,7 @@ function transformCheckout(node) {
                     }
                 }
             }
-        }),
+        }).filter(Boolean),
         email: node.email,
         subtotalPrice: {
             net: {
