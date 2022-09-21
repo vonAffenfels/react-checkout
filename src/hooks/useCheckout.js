@@ -32,7 +32,6 @@ const useCheckout = (shop, client) => {
                 return null;
             }
 
-            console.log("useCheckout, shopify, data", data);
             return transformCheckout(data.node);
         };
     }

@@ -1,17 +1,18 @@
 import {gql} from "@apollo/client";
 
 export default gql`
-    query ProductBySku($query: String!) {
+    query ProductBySku($query: String!, $variantLimit: Int!, $variantCursor: String) {
         products(first: 1, query: $query) {
             nodes {
                 id
-                title
-                variants(first: 1) {
+                variants(first: $variantLimit, after: $variantCursor) {
                     nodes {
                         id
-                        price
                         sku
-                        title
+                    }
+                    pageInfo {
+                        endCursor
+                        hasNextPage
                     }
                 }
             }

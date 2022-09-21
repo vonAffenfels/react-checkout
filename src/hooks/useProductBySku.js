@@ -16,18 +16,61 @@ const useProductBySku = (shop, client) => {
             return null;
         };
     } else if (shop === "shopify") {
-        return async ({sku}) => {
-            //TODO filter for specific variant enable, need to iterate variants and find specific variant
+        return async ({sku, onlyMatchingVariant}) => {
             console.log("useProductBySku, query:", `tag:"${sku}"`);
-            const {data} = await client.query({
-                query: SHOPIFY_PRODUCT_BY_SKU,
-                variables: {
-                    query: `tag:${sku}`
-                }
-            });
-            console.log("useProductBySku, data:", data);
+            let fetchData = async (variantCursor) => {
+                let {data} = await client.query({
+                    query: SHOPIFY_PRODUCT_BY_SKU,
+                    variables: {
+                        query: `tag:${sku}`,
+                        variantLimit: 3,
+                        variantCursor: variantCursor,
+                    }
+                });
+                return data;
+            };
+            let data = await fetchData();
+            let {endCursor, hasNextPage} = data.products.nodes?.[0]?.variants?.pageInfo;
 
-            return data?.products?.nodes?.[0];
+            if (onlyMatchingVariant) {
+                let foundNode;
+                if (data?.products?.nodes?.length) {
+                    data.products.nodes?.[0]?.variants?.nodes?.forEach(node => {
+                        if (String(node.sku).toLowerCase() === String(sku).toLowerCase()) {
+                            foundNode = {
+                                ...data.products.nodes[0],
+                                variants: {
+                                    nodes: [node]
+                                }
+                            };
+                        }
+                    });
+                }
+
+                if (foundNode) {
+                    return foundNode;
+                } else if (hasNextPage) {
+                    return fetchData(endCursor);
+                } else {
+                    return null;
+                }
+            } else {
+                let productNode = {...data?.products?.nodes?.[0]};
+                let variantNodes = [...productNode.variants.nodes];
+
+                while (hasNextPage) {
+                    data = await fetchData(endCursor);
+                    ({endCursor, hasNextPage} = data.products.nodes?.[0]?.variants?.pageInfo);
+                    variantNodes = variantNodes.concat(data.products.nodes[0].variants.nodes);
+                }
+
+                return {
+                    ...productNode,
+                    variants: {
+                        nodes: variantNodes
+                    }
+                };
+            }
         };
     }
 }

@@ -161,10 +161,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }
 
     const getCheckoutByToken = async () => {
-        console.log("getCheckoutByToken", checkoutToken);
         if (checkoutToken) {
             const data = await checkoutByToken(checkoutToken);
-            console.log("getCheckoutByToken, data", data);
             setCheckout(data);
         } else {
             setCheckout(null);
