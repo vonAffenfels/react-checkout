@@ -30,7 +30,8 @@ const useProductBySku = (shop, client) => {
                 return data;
             };
             let data = await fetchData();
-            let {endCursor, hasNextPage} = data.products.nodes?.[0]?.variants?.pageInfo;
+            let endCursor = data.products.nodes?.[0]?.variants?.pageInfo?.endCursor;
+            let hasNextPage = data.products.nodes?.[0]?.variants?.pageInfo?.hasNextPage;
 
             if (onlyMatchingVariant) {
                 let foundNode;
@@ -57,7 +58,7 @@ const useProductBySku = (shop, client) => {
                 }
             } else {
                 let productNode = {...data?.products?.nodes?.[0]};
-                let variantNodes = [...productNode.variants.nodes];
+                let variantNodes = [...(productNode?.variants?.nodes || [])];
 
                 while (hasNextPage) {
                     data = await fetchData(endCursor);

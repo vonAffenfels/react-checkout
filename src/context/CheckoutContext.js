@@ -195,6 +195,19 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [checkoutToken]);
 
     useEffect(() => {
+        if (displayState === "widget") {
+            const html = document.querySelector("html");
+            if (isCartOpen) {
+                html.style["overflow"] = "hidden";
+                html.style["padding-right"] = "0px";
+            } else {
+                html.style["overflow"] = null;
+                html.style["padding-right"] = null;
+            }
+        }
+    }, [isCartOpen, displayState]);
+
+    useEffect(() => {
         let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
         if (email && (email !== checkout?.email)) {

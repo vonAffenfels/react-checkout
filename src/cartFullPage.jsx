@@ -16,7 +16,6 @@ const CartFullPage = ({props}) => {
     }, []);
 
     const onSubmit = (e) => {
-        console.log("onSubmit", e);
         setDisplayState("payment");
     }
 
