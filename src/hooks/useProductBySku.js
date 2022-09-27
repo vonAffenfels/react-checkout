@@ -47,6 +47,7 @@ const useProductBySku = (shop, client) => {
                     });
                 }
 
+                console.log("useProductBySku, onlyMatchingVariant:", onlyMatchingVariant, "foundNode:", foundNode);
                 if (foundNode) {
                     return foundNode;
                 } else if (hasNextPage) {

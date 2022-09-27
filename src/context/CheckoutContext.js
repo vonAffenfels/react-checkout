@@ -84,7 +84,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
         ];
 
         setLoadingLineItems(true);
-        console.log("addProductLine", addProductLine);
         const checkoutData = await addProductLine({
             checkoutToken,
             lines: lines
