@@ -29,7 +29,10 @@ export default [
                 minimize: true,
                 inject: {
                     insertAt: "top"
-                }
+                },
+                // stringifier: function (_, __, ___) {
+                //     console.log("stringifier", _, __, ___);
+                // }
             }),
             resolve(),
             commonjs({
