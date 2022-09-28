@@ -34,7 +34,6 @@ const useAddProductLine = (shop, client) => {
         };
     } else if (shop === "shopify") {
         return async ({checkoutToken, lines}) => {
-            console.log("useAddProductLine", checkoutToken, lines);
             const {data} = await client.mutate({
                 mutation: SHOPIFY_CHECKOUT_ADD_PRODUCT_LINE,
                 variables: {
@@ -42,7 +41,6 @@ const useAddProductLine = (shop, client) => {
                     lineItems: lines
                 }
             });
-            console.log("useAddProductLine, data:", data);
 
             if (data?.checkoutLineItemsAdd?.checkoutUserErrors?.length) {
                 data.checkoutLineItemsAdd.checkoutUserErrors.forEach(err => console.warn(err));

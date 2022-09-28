@@ -12,8 +12,7 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         const list = await getProductList();
-        const product = await getProductBySku({sku: "DK-11693", onlyMatchingVariant: false});
-        console.log("getProductBySku, product:", product);
+        const product = await getProductBySku({sku: "ZD-6355", onlyMatchingVariant: false});
         setProducts(list || []);
     };
 
