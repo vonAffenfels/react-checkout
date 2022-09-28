@@ -28,7 +28,7 @@ const CartWidget = ({props}) => {
     return (
         <Fragment>
             {!isCartOpen && (
-                <div className="bg-opacity-50 flex justify-center items-center absolute top-10 right-0 z-50">
+                <div className="bg-opacity-50 flex justify-center items-center fixed top-10 right-0 z-50">
                     <button
                         className="bg-indigo-500 px-4 py-2 text-md text-white"
                         onClick={() => setCartOpen(true)}
