@@ -23,12 +23,12 @@ const PaymentMethodOption = ({paymentMethod}) => {
                 <Fragment>
                     <span className="flex-1 flex">
                         <span className="flex flex-col">
-                            <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
+                            <RadioGroup.Label as="span" className="block text-sm font-medium text-color-900">
                                 {paymentMethod.name}
                             </RadioGroup.Label>
                             <RadioGroup.Description
                                 as="span"
-                                className="mt-1 flex items-center text-sm text-gray-500"
+                                className="mt-1 flex items-center text-sm text-color-500"
                             >
                                 {paymentMethod.id}
                             </RadioGroup.Description>

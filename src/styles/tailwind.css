@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    --rez-bg-color-500: rgb(99 102 241);
+    --rez-bg-color-600: rgb(79 70 229);
+    --rez-bg-color-700: rgb(67 56 202);
+    --rez-bg-color-800: rgb(55 48 163);
+    --rez-text-color-200: rgb(229 231 235);
+    --rez-text-color-400: rgb(156 163 175);
+    --rez-text-color-500: rgb(107 114 128);
+    --rez-text-color-600: rgb(75 85 99);
+    --rez-text-color-700: rgb(55 65 81);
+    --rez-text-color-800: rgb(31 41 55);
+    --rez-text-color-900: rgb(17 24 39);
+}

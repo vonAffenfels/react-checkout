@@ -40,7 +40,7 @@ const CartFullPage = ({props}) => {
                             <CheckoutForm />
 
                             <div className="mt-10 lg:mt-0">
-                                <h2 className="text-lg font-medium text-gray-900">Bestellzusammenfassung</h2>
+                                <h2 className="text-lg font-medium text-color-900">Bestellzusammenfassung</h2>
                                 <CheckoutSummary />
                             </div>
                         </form>

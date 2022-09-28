@@ -30,7 +30,7 @@ const CartWidget = ({props}) => {
             {!isCartOpen && (
                 <div className="bg-opacity-50 flex justify-center items-center fixed top-10 right-0 z-50">
                     <button
-                        className="bg-indigo-500 px-4 py-2 text-md text-white"
+                        className="bg-color-500 px-4 py-2 text-md text-white"
                         onClick={() => setCartOpen(true)}
                     >
                         Warenkorb öffnen
@@ -43,11 +43,11 @@ const CartWidget = ({props}) => {
                     <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                         <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
                             <div className="flex items-start justify-between">
-                                <Dialog.Title className="text-lg font-medium text-gray-900">Warenkorb</Dialog.Title>
+                                <Dialog.Title className="text-lg font-medium text-color-900">Warenkorb</Dialog.Title>
                                 <div className="ml-3 flex h-7 items-center">
                                     <button
                                         type="button"
-                                        className="-m-2 p-2 text-gray-400 hover:text-gray-500"
+                                        className="-m-2 p-2 text-color-400 hover:text-color-500"
                                         onClick={() => setCartOpen(false)}
                                     >
                                         <span className="sr-only">Schließen</span>
@@ -71,27 +71,27 @@ const CartWidget = ({props}) => {
                         </div>
 
                         <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                            <div className="flex justify-between text-base font-medium text-gray-900">
+                            <div className="flex justify-between text-base font-medium text-color-900">
                                 <p>Warenkorb</p>
                                 <p><Price price={checkout?.subtotalPrice?.net?.amount}/> {checkout?.subtotalPrice?.net?.currency}</p>
                             </div>
                             {!!checkout?.shippingPrice?.gross?.amount ? (
-                                <div className="flex justify-between text-base font-small text-gray-500">
+                                <div className="flex justify-between text-base font-small text-color-500">
                                     <p>Versand</p>
                                     <p><Price price={checkout?.shippingPrice?.gross?.amount}/> {checkout?.shippingPrice?.gross?.currency}</p>
                                 </div>
                             ) : (
-                                <p className="mt-0.5 text-sm text-gray-500">Versandkosten werden an der Kasse berechnet.</p>
+                                <p className="mt-0.5 text-sm text-color-500">Versandkosten werden an der Kasse berechnet.</p>
                             )}
                             <div className="mt-6">
                                 <a
                                     onClick={openFullPage}
-                                    className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                                    className="flex items-center justify-center rounded-md border border-transparent bg-color-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-color-700"
                                 >
                                     Kasse
                                 </a>
                             </div>
-                            <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
+                            <div className="mt-6 flex justify-center text-center text-sm text-color-500">
                                 <p>
                                     oder{' '}
                                     <button

@@ -19,7 +19,7 @@ export default function Banner({msg, isError}) {
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
                 <div className={
                     classNames(
-                        isError ? "bg-red-600" : "bg-indigo-600",
+                        isError ? "bg-red-600" : "bg-color-600",
                         "p-2 rounded-lg shadow-lg sm:p-3"
                     )
                 }>
@@ -27,7 +27,7 @@ export default function Banner({msg, isError}) {
                         <div className="w-0 flex-1 flex items-center">
                             <span className={
                                 classNames(
-                                    isError ? "bg-red-800" : "bg-indigo-800",
+                                    isError ? "bg-red-800" : "bg-color-800",
                                     "flex p-2 rounded-lg"
                                 )
                             }>
@@ -46,7 +46,7 @@ export default function Banner({msg, isError}) {
                         <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
                             <button
                                 type="button"
-                                className="-mr-1 flex p-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white"
+                                className="-mr-1 flex p-2 rounded-md hover:bg-color-500 focus:outline-none focus:ring-2 focus:ring-white"
                             >
                                 <span className="sr-only">Schließen</span>
                                 <XIcon className="h-6 w-6 text-white" onClick={hide} aria-hidden="true"/>

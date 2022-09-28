@@ -29,16 +29,16 @@ const ShippingMethodOption = ({shippingMethod, loading}) => {
                 <Fragment>
                     <span className="flex-1 flex">
                         <span className="flex flex-col">
-                            <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
+                            <RadioGroup.Label as="span" className="block text-sm font-medium text-color-900">
                                 {shippingMethod.name}
                             </RadioGroup.Label>
                             <RadioGroup.Description
                                 as="span"
-                                className="mt-1 flex items-center text-sm text-gray-500"
+                                className="mt-1 flex items-center text-sm text-color-500"
                             >
                                 {shippingMethod.minimumDeliveryDays && shippingMethod.maximumDeliveryDays && `${shippingMethod.minimumDeliveryDays} - ${shippingMethod.maximumDeliveryDays} Tage`}
                             </RadioGroup.Description>
-                            <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
+                            <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-color-900">
                                 Preis: {isFree ? "kostenlos" : (
                                     <>
                                         <Price price={shippingMethod.price?.amount}/> {shippingMethod.price?.currency}

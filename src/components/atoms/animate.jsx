@@ -21,14 +21,14 @@ const Item = () => (
 
         <div className="ml-4 flex flex-1 flex-col">
             <div>
-                <div className="flex justify-between text-base font-medium text-gray-900 rounded-md bg-gray-300 px-2">
+                <div className="flex justify-between text-base font-medium text-color-900 rounded-md bg-gray-300 px-2">
                     <h3><a>...</a></h3>
                     <p className="ml-4">...</p>
                 </div>
-                <p className="mt-1 text-sm text-gray-500 rounded-md bg-gray-300 px-2">...</p>
+                <p className="mt-1 text-sm text-color-500 rounded-md bg-gray-300 px-2">...</p>
             </div>
             <div className="flex flex-1 items-end justify-between text-sm">
-                <p className="text-gray-500 rounded-md bg-gray-300 px-2">...</p>
+                <p className="text-color-500 rounded-md bg-gray-300 px-2">...</p>
             </div>
         </div>
     </li>
@@ -41,16 +41,16 @@ const LoadingOption = () => (
     >
         <span className="flex-1 flex">
             <span className="flex flex-col">
-                <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900 rounded-md bg-gray-300 px-2">
+                <RadioGroup.Label as="span" className="block text-sm font-medium text-color-900 rounded-md bg-gray-300 px-2">
                     ...
                 </RadioGroup.Label>
                 <RadioGroup.Description
                     as="span"
-                    className="mt-1 flex items-center text-sm text-gray-500 rounded-md bg-gray-300 px-2"
+                    className="mt-1 flex items-center text-sm text-color-500 rounded-md bg-gray-300 px-2"
                 >
                     ...
                 </RadioGroup.Description>
-                <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900 rounded-md bg-gray-300 px-2">
+                <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-color-900 rounded-md bg-gray-300 px-2">
                     ...
                 </RadioGroup.Description>
             </span>
@@ -86,9 +86,9 @@ const Button = ({text}) => (
     <button
         disabled
         type="button"
-        className="py-2.5 px-5 mr-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-50 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
+        className="py-2.5 px-5 mr-2 text-sm font-medium text-color-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-50 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-color-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
     >
-        <svg role="status" className="inline w-4 h-4 mr-2 text-gray-200 animate-spin dark:text-gray-600"
+        <svg role="status" className="inline w-4 h-4 mr-2 text-color-200 animate-spin dark:text-color-600"
              viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"

@@ -65,10 +65,10 @@ const CheckoutForm = ({props}) => {
     return (
         <div>
             <div>
-                <h2 className="text-lg font-medium text-gray-900">Kontaktinformation</h2>
+                <h2 className="text-lg font-medium text-color-900">Kontaktinformation</h2>
 
                 <div className="mt-4">
-                    <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="email-address" className="block text-sm font-medium text-color-700">
                         Email-Adresse
                     </label>
                     <div className="mt-1">
@@ -89,11 +89,11 @@ const CheckoutForm = ({props}) => {
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-                <h2 className="text-lg font-medium text-gray-900">Lieferadresse</h2>
+                <h2 className="text-lg font-medium text-color-900">Lieferadresse</h2>
 
                 <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                     <div>
-                        <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="first-name" className="block text-sm font-medium text-color-700">
                             Vorname
                         </label>
                         <div className="mt-1">
@@ -113,7 +113,7 @@ const CheckoutForm = ({props}) => {
                     </div>
 
                     <div>
-                        <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="last-name" className="block text-sm font-medium text-color-700">
                             Nachname
                         </label>
                         <div className="mt-1">
@@ -133,7 +133,7 @@ const CheckoutForm = ({props}) => {
                     </div>
 
                     <div className="sm:col-span-2">
-                        <label htmlFor="company" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="company" className="block text-sm font-medium text-color-700">
                             Firma
                         </label>
                         <div className="mt-1">
@@ -152,7 +152,7 @@ const CheckoutForm = ({props}) => {
                     </div>
 
                     <div className="sm:col-span-2">
-                        <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="address" className="block text-sm font-medium text-color-700">
                             Straße und Hausnummer
                         </label>
                         <div className="mt-1">
@@ -172,7 +172,7 @@ const CheckoutForm = ({props}) => {
                     </div>
 
                     <div className="sm:col-span-2">
-                        <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="apartment" className="block text-sm font-medium text-color-700">
                             Apartmentnummer, Eingang, etc.
                         </label>
                         <div className="mt-1">
@@ -191,7 +191,7 @@ const CheckoutForm = ({props}) => {
                     </div>
 
                     <div>
-                        <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="city" className="block text-sm font-medium text-color-700">
                             Stadt
                         </label>
                         <div className="mt-1">
@@ -211,7 +211,7 @@ const CheckoutForm = ({props}) => {
                     </div>
 
                     <div>
-                        <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="country" className="block text-sm font-medium text-color-700">
                             Land
                         </label>
                         <div className="mt-1">
@@ -235,7 +235,7 @@ const CheckoutForm = ({props}) => {
                     </div>
 
                     <div>
-                        <label htmlFor="region" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="region" className="block text-sm font-medium text-color-700">
                             Bundesland / Provinz
                         </label>
                         <div className="mt-1">
@@ -255,7 +255,7 @@ const CheckoutForm = ({props}) => {
                     </div>
 
                     <div>
-                        <label htmlFor="postal-code" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="postal-code" className="block text-sm font-medium text-color-700">
                             Postleitzahl
                         </label>
                         <div className="mt-1">
@@ -275,7 +275,7 @@ const CheckoutForm = ({props}) => {
                     </div>
 
                     <div className="sm:col-span-2">
-                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="phone" className="block text-sm font-medium text-color-700">
                             Telefon
                         </label>
                         <div className="mt-1">
@@ -299,7 +299,7 @@ const CheckoutForm = ({props}) => {
             <div className="mt-10 border-t border-gray-200 pt-10">
                 {/*TODO check if shipping is required*/}
                 <RadioGroup value={checkout?.shippingMethod?.id || ""} onChange={onChangeDeliveryMethod}>
-                    <RadioGroup.Label className="text-lg font-medium text-gray-900">Versandart</RadioGroup.Label>
+                    <RadioGroup.Label className="text-lg font-medium text-color-900">Versandart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                         {checkout?.shippingMethods?.map((shippingMethod) => (
@@ -319,7 +319,7 @@ const CheckoutForm = ({props}) => {
 
             <div className="mt-10 border-t border-gray-200 pt-10">
                 <RadioGroup value={selectedPaymentGatewayId || ""} onChange={onChangePaymentMethod}>
-                    <RadioGroup.Label className="text-lg font-medium text-gray-900">Bezahlart</RadioGroup.Label>
+                    <RadioGroup.Label className="text-lg font-medium text-color-900">Bezahlart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                         {checkout?.availablePaymentGateways?.map((paymentMethod) => (

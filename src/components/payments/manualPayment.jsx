@@ -37,10 +37,10 @@ const ManualPaymentMethodOption = ({id, name, description}) => (
             <Fragment>
                 <span className="flex-1 flex">
                     <span className="flex flex-col">
-                        <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
+                        <RadioGroup.Label as="span" className="block text-sm font-medium text-color-900">
                             {name}
                         </RadioGroup.Label>
-                        <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
+                        <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-color-900">
                             {description}
                         </RadioGroup.Description>
                     </span>
@@ -110,7 +110,7 @@ const ManualPayment = ({}) => {
         <Fragment key="manuel-payment-form">
             <div>
                 <RadioGroup value={manualPaymentMethod} onChange={onChangePaymentMethod}>
-                    <RadioGroup.Label className="text-lg font-medium text-gray-900">Zahlungsart</RadioGroup.Label>
+                    <RadioGroup.Label className="text-lg font-medium text-color-900">Zahlungsart</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                         {manualPaymentMethods.map((entry, i) => (
@@ -122,7 +122,7 @@ const ManualPayment = ({}) => {
             {(manualPaymentMethod === "direct_debit") && (
                 <div className="mt-10 border-t border-gray-200 pt-10">
                     <div className="sm:col-span-2">
-                        <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="apartment" className="block text-sm font-medium text-color-700">
                             Name Kontoinhaber
                         </label>
                         <div className="mt-1">
@@ -140,7 +140,7 @@ const ManualPayment = ({}) => {
                         </div>
                     </div>
                     <div className="sm:col-span-2">
-                        <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="apartment" className="block text-sm font-medium text-color-700">
                             IBAN
                         </label>
                         <div className="mt-1">
@@ -166,7 +166,7 @@ const ManualPayment = ({}) => {
                         className={
                             classNames(
                                 "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500",
-                                "w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white"
+                                "w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white"
                             )
                         }
                         onClick={onFinalize}
