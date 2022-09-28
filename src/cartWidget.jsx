@@ -96,7 +96,7 @@ const CartWidget = ({props}) => {
                                     oder{' '}
                                     <button
                                         type="button"
-                                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                                        className="font-medium text-bg-color-600 hover:text-bg-color-500"
                                         onClick={() => setCartOpen(false)}
                                     >
                                         Weiter einkaufen<span aria-hidden="true"> &rarr;</span>

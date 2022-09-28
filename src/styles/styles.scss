@@ -14,6 +14,13 @@
         background-color: var(--rez-bg-color-800);
     }
 
+    .text-bg-color-500, .hover\:text-bg-color-500:hover {
+        color: var(--rez-bg-color-500);
+    }
+    .text-bg-color-600, .hover\:text-bg-color-600:hover {
+        color: var(--rez-bg-color-600);
+    }
+
     .text-color-200, .hover\:text-color-200:hover {
         color: var(--rez-text-color-200);
     }

@@ -43,7 +43,7 @@ const CheckoutLine = ({
                         <button
                             onClick={onRemove}
                             type="button"
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                            className="font-medium text-bg-color-600 hover:text-bg-color-500"
                         >
                             <span className="sr-only">Entfernen</span>
                             <TrashIcon className="h-5 w-5" aria-hidden="true" />

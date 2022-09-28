@@ -34,7 +34,7 @@ const PaymentMethodOption = ({paymentMethod}) => {
                             </RadioGroup.Description>
                         </span>
                     </span>
-                    {checked ? <CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true"/> : null}
+                    {checked ? <CheckCircleIcon className="h-5 w-5 text-bg-color-600" aria-hidden="true"/> : null}
                     <span
                         className={classNames(
                             active ? "border" : "border-2",
