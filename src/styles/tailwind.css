@@ -14,4 +14,10 @@ body {
     --rez-text-color-700: rgb(55 65 81);
     --rez-text-color-800: rgb(31 41 55);
     --rez-text-color-900: rgb(17 24 39);
+    --rez-bg-white: rgb(255 255 255);
+    --rez-bg-slate-50: rgb(248 250 252);
+    --rez-bg-gray-50: rgb(249 250 251);
+    --rez-border-gray-200: rgb(229 231 235);
+    --rez-border-gray-300: rgb(209 213 219);
+    --rez-rounded-md: .375rem;
 }
