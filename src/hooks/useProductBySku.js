@@ -53,7 +53,7 @@ const useProductBySku = (shop, client) => {
                 } else if (hasNextPage) {
                     return doFetch({sku, onlyMatchingVariant, variantCursor: endCursor});
                 } else {
-                    return data.products?.nodes?.[0];
+                    return null;
                 }
             } else {
                 let productNode = {...data?.products?.nodes?.[0]};

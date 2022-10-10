@@ -13,6 +13,7 @@ const ProductList = () => {
     const fetchProducts = async () => {
         const list = await getProductList?.();
         const product = await getProductBySku?.({sku: "KP0003770", onlyMatchingVariant: true});
+        console.log("product", product);
         setProducts(list || []);
     };
 
