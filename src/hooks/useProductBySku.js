@@ -16,8 +16,8 @@ const useProductBySku = (shop, client) => {
             return null;
         };
     } else if (shop === "shopify") {
-        return async ({sku, onlyMatchingVariant}) => {
-            console.log("useProductBySku, query:", `tag:"${sku}"`);
+        const doFetch = async ({sku, onlyMatchingVariant, variantCursor}) => {
+            console.log("useProductBySku, query:", `tag:"${sku}"`, "variantCursor", variantCursor);
             let fetchData = async (variantCursor) => {
                 let {data} = await client.query({
                     query: SHOPIFY_PRODUCT_BY_SKU,
@@ -29,12 +29,12 @@ const useProductBySku = (shop, client) => {
                 });
                 return data;
             };
-            let data = await fetchData();
+            let data = await fetchData(variantCursor);
             let endCursor = data.products.nodes?.[0]?.variants?.pageInfo?.endCursor;
             let hasNextPage = data.products.nodes?.[0]?.variants?.pageInfo?.hasNextPage;
 
             if (onlyMatchingVariant) {
-                let foundNode;
+                let foundNode = null;
                 if (data?.products?.nodes?.length) {
                     data.products.nodes?.[0]?.variants?.nodes?.forEach(node => {
                         if (String(node.sku).toLowerCase() === String(sku).toLowerCase()) {
@@ -48,13 +48,12 @@ const useProductBySku = (shop, client) => {
                     });
                 }
 
-                console.log("useProductBySku, onlyMatchingVariant:", onlyMatchingVariant, "foundNode:", foundNode);
                 if (foundNode) {
                     return foundNode;
                 } else if (hasNextPage) {
-                    return fetchData(endCursor);
+                    return doFetch({sku, onlyMatchingVariant, variantCursor: endCursor});
                 } else {
-                    return null;
+                    return data.products?.nodes?.[0];
                 }
             } else {
                 let productNode = {...data?.products?.nodes?.[0]};
@@ -74,6 +73,7 @@ const useProductBySku = (shop, client) => {
                 };
             }
         };
+        return doFetch;
     }
 }
 
