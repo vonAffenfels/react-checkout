@@ -53,7 +53,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         streetAddress2: "",
         city: "",
         state: "",
-        country: "",
+        country: "DE",
         postalCode: "",
         phone: ""
     });
@@ -120,7 +120,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
             shippingAddressUpdate({checkoutToken, address}),
             billingAddressUpdate({checkoutToken, address})
         ]);
-        console.log("setCheckoutAddress", checkout, shippingAddressCheckout)
         setCheckout({
             ...(checkout || {}),
             ...shippingAddressCheckout
@@ -160,7 +159,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }
 
     const getCheckoutByToken = async () => {
-        console.log("getCheckoutByToken", checkoutToken);
         if (checkoutToken) {
             const data = await checkoutByToken(checkoutToken);
             setCheckout(data);
@@ -227,6 +225,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             if (state) {
                 addressInput.countryArea = state;
             }
+
 
             if (isInputAddressDifferentFromCheckoutAddress(addressInput)) {
                 setCheckoutAddress(addressInput);

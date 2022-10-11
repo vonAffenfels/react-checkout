@@ -16,13 +16,17 @@ const useProductBySku = (shop, client) => {
             return null;
         };
     } else if (shop === "shopify") {
-        const doFetch = async ({sku, onlyMatchingVariant, variantCursor}) => {
-            console.log("useProductBySku, query:", `tag:"${sku}"`, "variantCursor", variantCursor);
+        const doFetch = async ({sku, onlyMatchingVariant, variantCursor, isAbo}) => {
+            let tagQuery = `tag:${sku}`;
+            if (!isAbo) {
+                tagQuery += " tag_not:Subscription";
+            }
+            console.log("useProductBySku, query:", tagQuery, "variantCursor", variantCursor);
             let fetchData = async (variantCursor) => {
                 let {data} = await client.query({
                     query: SHOPIFY_PRODUCT_BY_SKU,
                     variables: {
-                        query: `tag:${sku}`,
+                        query: tagQuery,
                         variantLimit: 3,
                         variantCursor: variantCursor,
                     }
@@ -51,7 +55,7 @@ const useProductBySku = (shop, client) => {
                 if (foundNode) {
                     return foundNode;
                 } else if (hasNextPage) {
-                    return doFetch({sku, onlyMatchingVariant, variantCursor: endCursor});
+                    return doFetch({sku, onlyMatchingVariant, variantCursor: endCursor, isAbo});
                 } else {
                     return null;
                 }

@@ -7,6 +7,8 @@ import ShippingMethodOption from "./shippingMethodOption.jsx";
 import PaymentMethodOption from "./paymentMethodOption.jsx";
 import {LoadingOption} from "./atoms/animate.jsx";
 
+import CONST from "../lib/const";
+
 const CheckoutForm = ({props}) => {
     const {isDebug} = useContext(BuyContext);
     const {
@@ -34,7 +36,7 @@ const CheckoutForm = ({props}) => {
                 lastName: checkout?.shippingAddress?.lastName,
                 streetAddress1: checkout?.shippingAddress?.streetAddress1,
                 city: checkout?.shippingAddress?.city,
-                country: checkout?.shippingAddress?.country?.code,
+                country: checkout?.shippingAddress?.country?.code || "DE",
                 company: checkout?.shippingAddress?.companyName,
                 state: checkout?.shippingAddress?.countryArea,
                 postalCode: checkout?.shippingAddress?.postalCode,
@@ -226,10 +228,9 @@ const CheckoutForm = ({props}) => {
                                     country: e.target.value
                                 })}
                             >
-                                {/*TODO alle länder optionen autom. ziehen*/}
-                                <option value="DE">United States</option>
-                                <option value="DE">Canada</option>
-                                <option value="DE">Mexico</option>
+                                {Object.keys(CONST.COUNTRIES).map(countryCode => (
+                                    <option value={countryCode} key={countryCode}>{CONST.COUNTRIES[countryCode]}</option>
+                                ))}
                             </select>
                         </div>
                     </div>
