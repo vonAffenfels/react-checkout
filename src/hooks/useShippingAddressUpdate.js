@@ -33,7 +33,7 @@ const useDeleteProductLine = (shop, client) => {
         };
     } else if (shop === "shopify") {
         return async ({checkoutToken, address}) => {
-            console.log(JSON.parse(JSON.stringify(transformAddress(address))))
+            console.log("useShippingAddressUpdate", JSON.parse(JSON.stringify(transformAddress(address))))
             const {data} = await client.mutate({
                 mutation: SHOPIFY_CHECKOUT_SHIPPING_ADDRESS_UPDATE,
                 variables: {

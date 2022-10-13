@@ -14,6 +14,7 @@ import useBillingAddressUpdate from "../hooks/useBillingAddressUpdate";
 import useEmailUpdate from "../hooks/useEmailUpdate";
 import useDeliveryMethodUpdate from "../hooks/useDeliveryMethodUpdate";
 import useCheckout from "../hooks/useCheckout";
+import useCreateDraftOrder from "../hooks/useCreateDraftOrder";
 
 import BuyContext from "./BuyContext";
 import CONST from "../lib/const";
@@ -35,6 +36,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const billingAddressUpdate = useBillingAddressUpdate(buyContext.shop, client);
     const emailUpdate = useEmailUpdate(buyContext.shop, client);
     const deliveryMethodUpdate = useDeliveryMethodUpdate(buyContext.shop, client);
+    const createDraftOder = useCreateDraftOrder(buyContext.shop, client);
 
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
@@ -44,6 +46,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [isLoadingShippingMethods, setLoadingShippingMethods] = useState(false);
     const [isSettingShippingMethod, setSettingShippingMethod] = useState(false);
     const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(null);
+    const [loadingDraftOrder, setLoadingDraftOrder] = useState(false);
     const [addressFormData, setAddressFormData] = useState({
         email: "",
         firstName: "",
@@ -67,7 +70,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const addItemToCheckout = async (variantId, quantity = 1) => {
-        console.log("addItemToCheckout", variantId, quantity, checkout)
         if (!isCartOpen) {
             setCartOpen(true);
         }
@@ -88,7 +90,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
             checkoutToken,
             lines: lines
         });
-        console.log("checkoutData", checkoutData)
         setCheckout({
             ...(checkout || {}),
             ...checkoutData
@@ -101,7 +102,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
             return;
         }
 
-        //TODO check if its abo and there is a bonus product to remove
         const checkoutData = await deleteProductLine({checkoutToken, lineId});
         setCheckout({
             ...(checkout || {}),
@@ -114,16 +114,21 @@ export const CheckoutContextProvider = ({children, channel}) => {
             return;
         }
 
-        //TODO billing address different from shipping address;
         setLoadingShippingMethods(true);
-        const [shippingAddressCheckout, billingAddressCheckout] = await Promise.all([
-            shippingAddressUpdate({checkoutToken, address}),
-            billingAddressUpdate({checkoutToken, address})
-        ]);
-        setCheckout({
-            ...(checkout || {}),
-            ...shippingAddressCheckout
-        });
+        try {
+            //TODO billing and shipping different
+            const [shippingAddressCheckout, billingAddressCheckout] = await Promise.all([
+                shippingAddressUpdate({checkoutToken, address}),
+                billingAddressUpdate({checkoutToken, address})
+            ]);
+            setCheckout({
+                ...(checkout || {}),
+                ...(shippingAddressCheckout || {}),
+            });
+        } catch (e) {
+            console.log("catch setCheckoutAddress");
+            console.log(e);
+        }
         setLoadingShippingMethods(false);
     }
 
@@ -157,6 +162,24 @@ export const CheckoutContextProvider = ({children, channel}) => {
         });
         setSettingShippingMethod(false);
     }
+
+    const onBeforePayment = async () => {
+        if (!checkout) {
+            return;
+        }
+
+        setLoadingDraftOrder(true);
+        const checkoutData = await createDraftOder({
+            checkoutToken,
+            checkout,
+            webhookUri: buyContext.webhookUri
+        });
+        setCheckout({
+            ...(checkout || {}),
+            ...checkoutData
+        });
+        setLoadingDraftOrder(false);
+    };
 
     const getCheckoutByToken = async () => {
         if (checkoutToken) {
@@ -243,6 +266,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setCheckoutAddress,
             setCheckoutEmail,
             setCheckoutDeliveryMethod,
+            onBeforePayment,
             getProductList,
             getProductBySku,
             displayState,
@@ -256,6 +280,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setAddressFormData,
             selectedPaymentGatewayId,
             setSelectedPaymentGatewayId,
+            loadingDraftOrder,
+            setLoadingDraftOrder,
         }}>
             {children}
         </CheckoutContext.Provider>

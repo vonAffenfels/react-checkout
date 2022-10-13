@@ -1,7 +1,7 @@
 import React, {Fragment} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 
-const FullPageLayout = ({show, onClose, children}) => (
+const FullPageLayout = ({show, onClose = () => {}, children}) => (
     <Transition.Root show={show} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 z-50" onClose={onClose}>
             <div className="absolute inset-0 bg-white bg-slate-50">

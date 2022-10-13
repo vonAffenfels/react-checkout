@@ -47,7 +47,7 @@ const useDeleteProductLine = (shop, client) => {
 
             if (data?.checkoutShippingAddressUpdateV2?.checkout) {
                 return transformCheckout(data.checkoutShippingAddressUpdateV2.checkout);
-            }
+                }
         };
     }
 }

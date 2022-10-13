@@ -2,6 +2,7 @@ import {gql} from "@apollo/client";
 
 import PriceFragment from "./priceFragment";
 import AvailableShippingRatesFragment from "./availableShippingRatesFragment";
+//TODO lineItems iterable
 
 export default gql`
     ${PriceFragment}
@@ -35,6 +36,7 @@ export default gql`
                     variant {
                         id
                         title
+                        requiresShipping
                         priceV2 {
                             ...PriceFragment
                         }
@@ -96,6 +98,7 @@ export default gql`
                 currencyCode
             }
         }
+        requiresShipping
     }
 `;
 

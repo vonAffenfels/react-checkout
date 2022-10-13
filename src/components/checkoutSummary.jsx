@@ -3,17 +3,19 @@ import React, {useContext, useState, useEffect} from "react";
 import CheckoutContext from "../context/CheckoutContext";
 import CheckoutLine from "./checkoutLine.jsx";
 import Price from "./atoms/price.jsx";
+import {Spin} from "./atoms/animate.jsx";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
 const CheckoutSummary = ({props}) => {
-    const {checkout, selectedPaymentGatewayId} = useContext(CheckoutContext);
+    const {checkout, selectedPaymentGatewayId, loadingDraftOrder} = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
 
     useEffect(() => {
-        if (!enabled && checkout?.email && checkout?.shippingAddress && checkout?.shippingMethod?.id && selectedPaymentGatewayId) {
+        const isValidShipping = (checkout.requiresShipping === false) || (checkout?.shippingAddress && checkout?.shippingMethod?.id);
+        if (!enabled && checkout?.email && isValidShipping && selectedPaymentGatewayId) {
             setEnabled(true);
         }
     }, [checkout?.email, checkout?.shippingAddress, checkout?.shippingMethod?.id, selectedPaymentGatewayId]);
@@ -55,16 +57,16 @@ const CheckoutSummary = ({props}) => {
 
             <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                 <button
-                    disabled={!enabled}
+                    disabled={!enabled || loadingDraftOrder}
                     type="submit"
                     className={
                         classNames(
-                            enabled ? "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
+                            (enabled && !loadingDraftOrder) ? "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
                             "w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white"
                         )
                     }
                 >
-                    Bestellung bestätigen
+                    {loadingDraftOrder ? <Spin /> : "Bestellung bestätigen"}
                 </button>
             </div>
         </div>

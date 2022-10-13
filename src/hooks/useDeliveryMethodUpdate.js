@@ -44,37 +44,9 @@ const useDeliveryMethodUpdate = (shop, client) => {
                 return checkout;
             }
 
-            const draftOrder = await createDraftOrder(webhookUri, {
-                lineItems: transformLineItems(checkout.lines),
-                shippingLine: {
-                    price: shippingMethod.price.amount,
-                    shippingRateHandle: shippingMethod.id,
-                    title: shippingMethod.name,
-                },
-                email: checkout.email,
-                billingAddress: transformAddress(checkout.billingAddress || checkout.shippingAddress),
-                shippingAddress: transformAddress(checkout.shippingAddress),
-                metafields: [
-                    {
-                        key: "checkoutId",
-                        namespace: "checkoutId",
-                        type: "single_line_text_field",
-                        value: checkoutToken
-                    }
-                ]
-            });
-
-            console.log("draftOrder", draftOrder);
-
-            if (draftOrder) {
-                return {
-                    ...(checkout || {}),
-                    //TODO way to make this not being overwritten?!
-                    shippingMethod: shippingMethod,
-                    draftOrder: draftOrder
-                }
-            } else {
-                return checkout;
+            return {
+                ...(checkout || {}),
+                shippingMethod: shippingMethod,
             }
         };
     }

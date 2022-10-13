@@ -4,16 +4,18 @@ import {loadStripe} from "@stripe/stripe-js";
 import CheckoutContext from "../context/CheckoutContext";
 import StripePayment from "./payments/stripePayment.jsx";
 import ManualPayment from "./payments/manualPayment.jsx";
+import BuyContext from "../context/BuyContext";
 
 const PaymentForm = ({}) => {
+    const {availablePaymentGateways, paymentProviders} = useContext(BuyContext);
     const {checkout, selectedPaymentGatewayId} = useContext(CheckoutContext);
     const [selectedPaymentGateway, setSelectedPaymentGateway] = useState(null);
     const [stripePromise, setStripePromise] = useState(null);
     const [component, setComponent] = useState(null);
 
     useEffect(() => {
-        checkout?.availablePaymentGateways?.forEach(paymentGateway => {
-            if (paymentGateway.id === selectedPaymentGatewayId) {
+        paymentProviders?.forEach(paymentGateway => {
+            if ((paymentGateway.name === selectedPaymentGatewayId) && (selectedPaymentGateway?.name !== paymentGateway.name)) {
                 setSelectedPaymentGateway(paymentGateway);
             }
         });
@@ -25,11 +27,7 @@ const PaymentForm = ({}) => {
             switch (name) {
                 case "stripe":
                     if (!stripePromise) {
-                        selectedPaymentGateway.config.forEach(attr => {
-                            if (attr.field === "api_key") {
-                                setStripePromise(loadStripe(attr.value));
-                            }
-                        });
+                        setStripePromise(loadStripe(selectedPaymentGateway.config.apiKey));
                     }
                     break;
                 case "manual":
@@ -41,7 +39,7 @@ const PaymentForm = ({}) => {
         }
     }, [selectedPaymentGateway]);
 
-    if (stripePromise) {
+    if (stripePromise && !component) {
         setComponent(<StripePayment key="stripe-payment" stripePromise={stripePromise} />);
     }
 

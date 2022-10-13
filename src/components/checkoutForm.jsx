@@ -10,7 +10,7 @@ import {LoadingOption} from "./atoms/animate.jsx";
 import CONST from "../lib/const";
 
 const CheckoutForm = ({props}) => {
-    const {isDebug} = useContext(BuyContext);
+    const {isDebug, availablePaymentGateways} = useContext(BuyContext);
     const {
         checkout,
         addressFormData,
@@ -297,41 +297,47 @@ const CheckoutForm = ({props}) => {
                 </div>
             </div>
 
-            <div className="mt-10 border-t border-gray-200 pt-10">
-                {/*TODO check if shipping is required*/}
-                <RadioGroup value={checkout?.shippingMethod?.id || ""} onChange={onChangeDeliveryMethod}>
-                    <RadioGroup.Label className="text-lg font-medium text-color-900">Versandart</RadioGroup.Label>
+            {console.log("checkout?.requiresShipping", checkout?.requiresShipping)}
+            {checkout?.requiresShipping !== false && (
+                <div className="mt-10 border-t border-gray-200 pt-10">
+                    {console.log("checkout?.shippingMethod?.id", checkout?.shippingMethod?.id)}
+                    <RadioGroup value={checkout?.shippingMethod?.id || ""} onChange={onChangeDeliveryMethod}>
+                        <RadioGroup.Label className="text-lg font-medium text-color-900">Versandart</RadioGroup.Label>
 
-                    <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        {checkout?.shippingMethods?.map((shippingMethod) => (
-                            <ShippingMethodOption
-                                shippingMethod={shippingMethod}
-                                key={shippingMethod.id}
-                                loading={(isSettingShippingMethod && (shippingMethod.id === tempSelectedShippingMethodId)) || isDebug}
-                            />
-                        ))}
-                        {((isLoadingShippingMethods && !checkout?.shippingMethods?.length) || isDebug) && <LoadingOption/>}
-                        {!isLoadingShippingMethods && !checkout?.shippingMethods?.length && (
-                            <p>Nach Eingabe der Adresse werden die verfügbaren Versandarten angezeigt</p>
-                        )}
-                    </div>
-                </RadioGroup>
-            </div>
+                        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                            {checkout?.shippingMethods?.map((shippingMethod) => (
+                                <ShippingMethodOption
+                                    shippingMethod={shippingMethod}
+                                    key={shippingMethod.id}
+                                    loading={(isSettingShippingMethod && (shippingMethod.id === tempSelectedShippingMethodId)) || isDebug}
+                                />
+                            ))}
+                            {((isLoadingShippingMethods && !checkout?.shippingMethods?.length) || isDebug) && <LoadingOption/>}
+                            {!isLoadingShippingMethods && !checkout?.shippingMethods?.length && (
+                                <p>Nach Eingabe der Adresse werden die verfügbaren Versandarten angezeigt</p>
+                            )}
+                        </div>
+                    </RadioGroup>
+                </div>
+            )}
 
-            <div className="mt-10 border-t border-gray-200 pt-10">
-                <RadioGroup value={selectedPaymentGatewayId || ""} onChange={onChangePaymentMethod}>
-                    <RadioGroup.Label className="text-lg font-medium text-color-900">Bezahlart</RadioGroup.Label>
+            {(checkout?.shippingMethod?.id || (checkout?.requiresShipping === false)) && (
+                <div className="mt-10 border-t border-gray-200 pt-10">
+                    {console.log("selectedPaymentGatewayId", selectedPaymentGatewayId || "")}
+                    <RadioGroup value={selectedPaymentGatewayId || ""} onChange={onChangePaymentMethod}>
+                        <RadioGroup.Label className="text-lg font-medium text-color-900">Bezahlart</RadioGroup.Label>
 
-                    <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        {checkout?.availablePaymentGateways?.map((paymentMethod) => (
-                            <PaymentMethodOption
-                                paymentMethod={paymentMethod}
-                                key={paymentMethod.id}
-                            />
-                        ))}
-                    </div>
-                </RadioGroup>
-            </div>
+                        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                            {(checkout?.availablePaymentGateways || availablePaymentGateways)?.map((paymentMethod) => (
+                                <PaymentMethodOption
+                                    paymentMethod={paymentMethod}
+                                    key={paymentMethod.id}
+                                />
+                            ))}
+                        </div>
+                    </RadioGroup>
+                </div>
+            )}
         </div>
     );
 }

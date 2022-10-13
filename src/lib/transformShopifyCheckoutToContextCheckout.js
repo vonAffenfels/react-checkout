@@ -1,5 +1,6 @@
 //takes a graphql checkout node as parameter
 function transformCheckout(node) {
+    let shippingRequired = false;
     const shippingMethods = (node.availableShippingRates?.shippingRates || []).map(rate => {
         return {
             id: rate.handle,
@@ -29,6 +30,7 @@ function transformCheckout(node) {
         id: node.id,
         token: node.id,
         webUrl: node.webUrl,
+        requiresShipping: node.requiresShipping,
         lines: (node.lineItems?.edges || []).map(edge => {
             const {quantity, variant, id} = edge.node;
 

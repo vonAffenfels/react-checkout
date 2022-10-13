@@ -8,19 +8,23 @@ import CheckoutForm from "./components/checkoutForm.jsx";
 import CheckoutSummary from "./components/checkoutSummary.jsx";
 
 const CartFullPage = ({props}) => {
-    const {checkout, setDisplayState} = useContext(CheckoutContext);
-    const [isMounting, setMounting] = useState(true);
+    const {checkout, setDisplayState, onBeforePayment, loadingDraftOrder} = useContext(CheckoutContext);
 
     useEffect(() => {
-        setMounting(false);
-    }, []);
+        if (!loadingDraftOrder && checkout?.draftOrder) {
+            setDisplayState("payment");
+        }
+    }, [loadingDraftOrder]);
 
     const onSubmit = (e) => {
-        setDisplayState("payment");
+        e.preventDefault();
+        e.stopPropagation();
+        //TODo create the draftOrder, then useEffect to check if draftOrder is present on cartFullPage
+        onBeforePayment();
     }
 
     return (
-        <FullPageLayout show={true} onClose={() => setMounting(true)}>
+        <FullPageLayout show={true}>
             <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"

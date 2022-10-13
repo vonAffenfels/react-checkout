@@ -2,6 +2,7 @@ import {gql} from "@apollo/client";
 
 import PriceFragment from "./priceFragment";
 //TODO falls mit shippingAddress, immer das ganze CheckoutDetailsShipmentFragment nutzen
+//TODO lineItems iterable
 
 export default gql`
     ${PriceFragment}
@@ -84,6 +85,7 @@ export default gql`
             country
             countryCodeV2
         }
+        requiresShipping
     }
 `;
 

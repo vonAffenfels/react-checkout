@@ -1,14 +1,7 @@
 
 //TODO is debug, later remove
-// try {
-//     const createdDraftOrder = await createDraftOrder(webhookUri, variables);
-//     console.log("createdDraftOrder", createdDraftOrder);
-//     const completedDraftOrder = await completeDraftOrder(webhookUri, createdDraftOrder.id, false);
-//     console.log("completedDraftOrder", completedDraftOrder);
-// } catch (e) {
-//     console.error(e);
-// }
-
+//TODO do this on server side only when stripe payment is accepted?
+//webhookUri, createdDraftOrder.id, false
 async function completeDraftOrder(webhookUri, id, paymentPending) {
     return fetch(webhookUri, {
         method: "POST",
