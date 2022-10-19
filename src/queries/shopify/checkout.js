@@ -4,7 +4,7 @@ import CheckoutDetailsFragment from "../../fragments/shopify/checkoutDetailsFrag
 
 export default gql`
     ${CheckoutDetailsFragment}
-    query ($checkoutToken:ID!) {
+    query Checkout($checkoutToken:ID!, $country: CountryCode) @inContext(country: $country) {
         node(id:$checkoutToken) {
             id
             ... on Checkout {

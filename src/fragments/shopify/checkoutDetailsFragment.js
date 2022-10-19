@@ -26,7 +26,7 @@ export default gql`
         lineItems(first: 5) {
             pageInfo {
                 hasNextPage
-                hasPreviousPage
+                endCursor
             }
             edges {
                 node {

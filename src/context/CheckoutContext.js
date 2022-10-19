@@ -36,7 +36,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const billingAddressUpdate = useBillingAddressUpdate(buyContext.shop, client);
     const emailUpdate = useEmailUpdate(buyContext.shop, client);
     const deliveryMethodUpdate = useDeliveryMethodUpdate(buyContext.shop, client);
-    const createDraftOder = useCreateDraftOrder(buyContext.shop, client);
+    const createDraftOrder = useCreateDraftOrder(buyContext.shop, client);
 
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
@@ -56,7 +56,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         streetAddress2: "",
         city: "",
         state: "",
-        country: "DE",
+        country: "",
         postalCode: "",
         phone: ""
     });
@@ -81,7 +81,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         const lines = [
             {
                 quantity: quantity,
-                variantId: variantId
+                variantId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", "")
             }
         ];
 
@@ -169,7 +169,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
 
         setLoadingDraftOrder(true);
-        const checkoutData = await createDraftOder({
+        const checkoutData = await createDraftOrder({
             checkoutToken,
             checkout,
             webhookUri: buyContext.webhookUri

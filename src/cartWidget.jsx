@@ -9,6 +9,10 @@ import SidePanelLayout from "./components/sidePanelLayout.jsx";
 import {Item} from "./components/atoms/animate.jsx";
 import Price from "./components/atoms/price.jsx";
 
+function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+}
+
 const CartWidget = ({props}) => {
     const {isDebug} = useContext(BuyContext);
     const {
@@ -21,8 +25,10 @@ const CartWidget = ({props}) => {
 
     const openFullPage = (e) => {
         e.preventDefault();
-        setCartOpen(false);
-        setDisplayState("cartFullPage");
+        if (checkout) {
+            setCartOpen(false);
+            setDisplayState("cartFullPage");
+        }
     };
 
     return (
@@ -86,7 +92,12 @@ const CartWidget = ({props}) => {
                             <div className="mt-6">
                                 <a
                                     onClick={openFullPage}
-                                    className="flex items-center justify-center rounded-md border border-transparent bg-color-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-color-700"
+                                    className={
+                                        classNames(
+                                            !checkout ? "cursor-not-allowed" : "hover:bg-color-700",
+                                            "flex items-center justify-center rounded-md border border-transparent bg-color-600 px-6 py-3 text-base font-medium text-white shadow-sm"
+                                        )
+                                    }
                                 >
                                     Kasse
                                 </a>

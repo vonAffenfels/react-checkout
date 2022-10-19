@@ -16,6 +16,11 @@ const CheckoutLine = ({
         await removeItemFromCheckout(id);
     };
 
+    let variantTitle = "";
+    if (String(variant.name).toLowerCase() !== "default title") {
+        variantTitle = variant.name.charAt(0).toUpperCase() + variant.name.substring(1);
+    }
+
     return (
         <li className="flex py-6">
             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
@@ -30,11 +35,11 @@ const CheckoutLine = ({
                 <div>
                     <div className="flex justify-between text-base font-medium text-color-900">
                         <h3>
-                            <a href={variant.product.href}> {variant.product.name} {variant.name} </a>
+                            <a href={variant.product.href}> {variant.product.name} </a>
                         </h3>
                         <p className="ml-4"><Price price={totalPrice.gross.amount}/> {totalPrice.gross.currency}</p>
                     </div>
-                    <p className="mt-1 text-sm text-color-500">...</p>
+                    <p className="mt-1 text-sm text-color-500">{variantTitle}</p>
                 </div>
                 <div className="flex flex-1 items-end justify-between text-sm">
                     <p className="text-color-500">Menge {quantity}</p>
@@ -72,9 +77,9 @@ const CheckoutLineDetail = ({
         console.warn("TODO onChangeQuantity");
     }
 
-    let variantTitle = variant.product.name;
+    let variantTitle = "";
     if (String(variant.name).toLowerCase() !== "default title") {
-        variantTitle += " " + variant.name;
+        variantTitle = variant.name.charAt(0).toUpperCase() + variant.name.substring(1);
     }
 
     return (
@@ -92,11 +97,10 @@ const CheckoutLineDetail = ({
                     <div className="min-w-0 flex-1">
                         <h4 className="text-sm">
                             <a href={variant.product.href} className="font-medium text-color-700 hover:text-color-800">
-                                {variantTitle}
+                                {variant.product.name}
                             </a>
                         </h4>
-                        <p className="mt-1 text-sm text-color-500">...</p>
-                        <p className="mt-1 text-sm text-color-500">...</p>
+                        <p className="mt-1 text-sm text-color-500">{variantTitle}</p>
                     </div>
 
                     <div className="ml-4 flex-shrink-0 flow-root">

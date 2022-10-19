@@ -49,7 +49,12 @@ const useCheckoutCreate = (shop, client) => {
                             quantity: 1,
                             variantId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", "")
                         }
-                    ]
+                    ],
+                    //TODO buyerIdentitiy für marketplace prices
+                    //TODO if not updateable, use carts instead
+                    // buyerIdentity: {
+                    //     countryCode: "AT"
+                    // }
                 }
             };
 
@@ -67,30 +72,6 @@ const useCheckoutCreate = (shop, client) => {
             }
         };
     }
-}
-
-//TODO is debug, later remove
-// try {
-//     const createdDraftOrder = await createDraftOrder(webhookUri, variables);
-//     console.log("createdDraftOrder", createdDraftOrder);
-//     const completedDraftOrder = await completeDraftOrder(webhookUri, createdDraftOrder.id, false);
-//     console.log("completedDraftOrder", completedDraftOrder);
-// } catch (e) {
-//     console.error(e);
-// }
-
-async function completeDraftOrder(webhookUri, id, paymentPending) {
-    return fetch(webhookUri, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            type: "shopify.draft_order_complete",
-            id: id,
-            paymentPending: !!paymentPending,
-        })
-    }).then(res => res.json());
 }
 
 export default useCheckoutCreate;

@@ -36,7 +36,7 @@ const CheckoutForm = ({props}) => {
                 lastName: checkout?.shippingAddress?.lastName,
                 streetAddress1: checkout?.shippingAddress?.streetAddress1,
                 city: checkout?.shippingAddress?.city,
-                country: checkout?.shippingAddress?.country?.code || "DE",
+                country: checkout?.shippingAddress?.countryCode,
                 company: checkout?.shippingAddress?.companyName,
                 state: checkout?.shippingAddress?.countryArea,
                 postalCode: checkout?.shippingAddress?.postalCode,
@@ -68,6 +68,7 @@ const CheckoutForm = ({props}) => {
         <div>
             <div>
                 <h2 className="text-lg font-medium text-color-900">Kontaktinformation</h2>
+                {isDebug && <a href={checkout?.webUrl} target="_blank" className="text-lg font-medium text-color-900">Zum Shopify Checkout</a>}
 
                 <div className="mt-4">
                     <label htmlFor="email-address" className="block text-sm font-medium text-color-700">

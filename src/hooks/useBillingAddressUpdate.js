@@ -45,9 +45,10 @@ const useDeleteProductLine = (shop, client) => {
                 data.checkoutShippingAddressUpdateV2.checkoutUserErrors.forEach(err => console.warn(err));
             }
 
+            console.log("useBillingAddressUpdate", data);
             if (data?.checkoutShippingAddressUpdateV2?.checkout) {
                 return transformCheckout(data.checkoutShippingAddressUpdateV2.checkout);
-                }
+            }
         };
     }
 }

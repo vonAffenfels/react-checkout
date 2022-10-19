@@ -34,6 +34,7 @@ function transformCheckout(node) {
         lines: (node.lineItems?.edges || []).map(edge => {
             const {quantity, variant, id} = edge.node;
 
+            console.log("lineItem", edge.node);
             if (!variant) {
                 return null;
             }
@@ -107,6 +108,7 @@ function transformCheckout(node) {
             companyName: node.shippingAddress?.company,
             countryArea: node.shippingAddress?.province,
             country: node.shippingAddress?.countryCode || node.shippingAddress?.country,
+            countryCode: node.shippingAddress?.countryCodeV2
         },
         shippingMethods: shippingMethods,
         // discount {

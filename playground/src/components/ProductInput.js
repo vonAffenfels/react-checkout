@@ -10,8 +10,7 @@ const ProductInput = ({}) => {
         setReady(true);
     }, []);
 
-    // const [variantId, setVariantId] = useState("UHJvZHVjdFZhcmlhbnQ6MQ==");
-    const [variantId, setVariantId] = useState("43203376447741");
+    const [variantId, setVariantId] = useState("43494647693565"); //KP0003826
 
     const onChange = (e) => {
         setVariantId(e.target.value);
@@ -26,7 +25,7 @@ const ProductInput = ({}) => {
     }
 
     return (
-        <main>
+        <main style={{marginTop: "25px", marginLeft: "25px", color: "blue"}}>
             <input type="text" value={variantId} onChange={onChange} />
             <input type="button" onClick={onClick} value="Produkt in Warenkorb legen" />
         </main>
