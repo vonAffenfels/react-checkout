@@ -8,7 +8,7 @@ import SHOPIFY_CHECKOUT_BILLING_ADDRESS_UPDATE from "../mutations/shopify/checko
 import transformCheckout from "../lib/transformShopifyCheckoutToContextCheckout";
 import transformAddress from "../lib/transformShopifyAddressInput";
 
-const useDeleteProductLine = (shop, client) => {
+const useDeleteProductLine = (shop, client, type) => {
     if (!shop || !client) {
         return {};
     }
@@ -32,7 +32,8 @@ const useDeleteProductLine = (shop, client) => {
             }
         };
     } else if (shop === "shopify") {
-        return async ({checkoutToken, address}) => {
+        const handleCart = async ({}) => {};
+        const handleCheckout = async ({checkoutToken, address}) => {
             const {data} = await client.mutate({
                 mutation: SHOPIFY_CHECKOUT_BILLING_ADDRESS_UPDATE,
                 variables: {
@@ -50,6 +51,7 @@ const useDeleteProductLine = (shop, client) => {
                 return transformCheckout(data.checkoutShippingAddressUpdateV2.checkout);
             }
         };
+        return type === "cart" ? handleCart : handleCheckout;
     }
 }
 

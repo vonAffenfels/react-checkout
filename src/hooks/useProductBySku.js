@@ -21,7 +21,6 @@ const useProductBySku = (shop, client) => {
             if (!isAbo) {
                 tagQuery += " tag_not:Subscription";
             }
-            console.log("useProductBySku, query:", tagQuery, "variantCursor", variantCursor);
             let fetchData = async (variantCursor) => {
                 let {data} = await client.query({
                     query: SHOPIFY_PRODUCT_BY_SKU,

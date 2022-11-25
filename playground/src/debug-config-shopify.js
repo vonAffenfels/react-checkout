@@ -1,8 +1,8 @@
 export default {
     shop: "shopify",
-    uri: "https://vonaffenfels-playground.myshopify.com/api/2022-07/graphql.json",
+    uri: "https://delius-klasing.myshopify.com/api/2022-10/graphql.json",
     webhookUri: "https://mmstupicl7.execute-api.eu-central-1.amazonaws.com/shopify",
-    storefrontApiKey: "5861012507d5e7b228c9c8f13b88551f",
+    storefrontApiKey: "21ec7ad8aceac22f6fbd61e1fec7c27b",
     channel: "b2c",
     availablePaymentGateways: [
         {

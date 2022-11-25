@@ -1,6 +1,7 @@
 let CONST = {};
 
 CONST.CHECKOUT_KEY = "react-ez-checkout-token";
+CONST.CART_KEY = "react-ez-cart-id";
 CONST.ENABLED_SHOPS = [
     "saleor",
     "shopify"

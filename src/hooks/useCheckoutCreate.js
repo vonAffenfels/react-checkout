@@ -6,6 +6,7 @@ import SALEOR_CHECKOUT_CREATE from "../mutations/saleor/checkoutCreate";
 
 //shopify
 import SHOPIFY_CHECKOUT_CREATE from "../mutations/shopify/checkoutCreate";
+import SHOPIFY_CART_CREATE from "../mutations/shopify/cartCreate";
 
 const useCheckoutCreate = (shop, client) => {
     const {webhookUri} = useContext(BuyContext);
@@ -40,22 +41,9 @@ const useCheckoutCreate = (shop, client) => {
             }
         };
     } else if (shop === "shopify") {
-        return async ({variantId}) => {
+        return async ({input}) => {
             const variables = {
-                input: {
-                    allowPartialAddresses: true,
-                    lineItems: [
-                        {
-                            quantity: 1,
-                            variantId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", "")
-                        }
-                    ],
-                    //TODO buyerIdentitiy für marketplace prices
-                    //TODO if not updateable, use carts instead
-                    // buyerIdentity: {
-                    //     countryCode: "AT"
-                    // }
-                }
+                input: input
             };
 
             const {data} = await client.mutate({

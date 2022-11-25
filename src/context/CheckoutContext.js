@@ -1,12 +1,20 @@
 import React, {createContext, useState, useEffect, useContext} from "react";
 import {useQuery, useApolloClient} from "@apollo/client";
 
+//misc
 import useLocalStorage from "../hooks/useLocalStorage";
 import useDebounce from "../hooks/useDebounce";
+
+//helpers
 import useProductBySku from "../hooks/useProductBySku";
 import useProductList from "../hooks/useProductList";
+
+//cart
+import useCartCreate from "../hooks/useCartCreate";
+import useCart from "../hooks/useCart";
+
+//checkout
 import useCheckoutCreate from "../hooks/useCheckoutCreate";
-import useAddBonusProductLine from "../hooks/useAddBonusProductLine";
 import useAddProductLine from "../hooks/useAddProductLine";
 import useDeleteProductLine from "../hooks/useDeleteProductLine";
 import useShippingAddressUpdate from "../hooks/useShippingAddressUpdate";
@@ -25,21 +33,38 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const buyContext = useContext(BuyContext);
     const client = useApolloClient();
 
+    //helpers
     const getProductBySku = useProductBySku(buyContext.shop, client);
     const getProductList = useProductList(buyContext.shop, client);
+
+    //cart
+    const cartById = useCart(buyContext.shop, client);
+    const cartCreate = useCartCreate(buyContext.shop, client);
+    const addProductLine = useAddProductLine(buyContext.shop, client, "cart");
+    const deleteProductLine = useDeleteProductLine(buyContext.shop, client, "cart");
+    const shippingAddressUpdate = useShippingAddressUpdate(buyContext.shop, client, "cart");
+    const billingAddressUpdate = useBillingAddressUpdate(buyContext.shop, client, "cart");
+    const deliveryMethodUpdate = useDeliveryMethodUpdate(buyContext.shop, client, "cart");
+
+    //checkout
     const checkoutByToken = useCheckout(buyContext.shop, client);
     const checkoutCreate = useCheckoutCreate(buyContext.shop, client);
-    const addBonusProductLine = useAddBonusProductLine(buyContext.shop, client);
-    const addProductLine = useAddProductLine(buyContext.shop, client);
-    const deleteProductLine = useDeleteProductLine(buyContext.shop, client);
-    const shippingAddressUpdate = useShippingAddressUpdate(buyContext.shop, client);
-    const billingAddressUpdate = useBillingAddressUpdate(buyContext.shop, client);
-    const emailUpdate = useEmailUpdate(buyContext.shop, client);
-    const deliveryMethodUpdate = useDeliveryMethodUpdate(buyContext.shop, client);
+    const addProductLineCheckout = useAddProductLine(buyContext.shop, client, "checkout");
+    const deleteProductLineCheckout = useDeleteProductLine(buyContext.shop, client, "checkout");
+    const shippingAddressUpdateCheckout = useShippingAddressUpdate(buyContext.shop, client, "checkout");
+    const billingAddressUpdateCheckout = useBillingAddressUpdate(buyContext.shop, client, "checkout");
+    const emailUpdateCheckout = useEmailUpdate(buyContext.shop, client, "checkout");
+    const deliveryMethodUpdateCheckout = useDeliveryMethodUpdate(buyContext.shop, client, "checkout");
+
+    //order
     const createDraftOrder = useCreateDraftOrder(buyContext.shop, client);
 
     const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
+
+    const [cartId, setCartId] = useLocalStorage(CONST.CART_KEY);
+    const [cart, setCart] = useState(null);
+
     const [displayState, setDisplayState] = useState("widget");
     const [isCartOpen, setCartOpen] = useState(false);
     const [isLoadingLineItems, setLoadingLineItems] = useState(false);
@@ -62,20 +87,33 @@ export const CheckoutContextProvider = ({children, channel}) => {
     });
     const addressFormDataDebounced = useDebounce(addressFormData, 750);
 
-    const createCheckout = async (variantId) => {
+    const createCart = async (variantId) => {
         setLoadingLineItems(true);
-        const checkoutToken = await checkoutCreate({channel, variantId});
+        const createdCartId = await cartCreate({channel, variantId});
         setLoadingLineItems(false);
+        setCartId(createdCartId);
+    };
+
+    const createCheckout = async ({variants}) => {
+        if (!Array.isArray(variants)) {
+            variants = [variants];
+        }
+
+        const lineItems = variants.map(variant => ({
+            quantity: variant.quantity || 1,
+            variantId: "gid://shopify/ProductVariant/" + String(variant.id).replace("gid://shopify/ProductVariant/", "")
+        }));
+        const checkoutToken = await checkoutCreate({channel, lineItems});
         setCheckoutToken(checkoutToken);
     };
 
-    const addItemToCheckout = async (variantId, quantity = 1) => {
+    const addItemToCart = async (variantId, quantity = 1) => {
         if (!isCartOpen) {
             setCartOpen(true);
         }
 
-        if (!checkout) {
-            return createCheckout(variantId);
+        if (!cart) {
+            return createCart(variantId);
         }
 
         const lines = [
@@ -86,105 +124,162 @@ export const CheckoutContextProvider = ({children, channel}) => {
         ];
 
         setLoadingLineItems(true);
-        const checkoutData = await addProductLine({
+        const cartData = await addProductLine({
             checkoutToken,
-            lines: lines
+            cartId,
+            lines: lines,
+            totalQuantity: cart.totalQuantity,
         });
-        setCheckout({
-            ...(checkout || {}),
-            ...checkoutData
+        setCart({
+            ...(cart || {}),
+            ...cartData
         });
         setLoadingLineItems(false);
     };
 
-    const removeItemFromCheckout = async (lineId) => {
-        if (!checkout) {
+    const removeItemFromCart = async (lineId) => {
+        if (!cart) {
             return;
         }
 
-        const checkoutData = await deleteProductLine({checkoutToken, lineId});
-        setCheckout({
-            ...(checkout || {}),
-            ...checkoutData
+        const cartData = await deleteProductLine({checkoutToken, cartId, lineId, totalQuantity: cart.totalQuantity});
+        setCart({
+            ...(cart || {}),
+            ...cartData
         });
     };
 
-    const setCheckoutAddress = async (address) => {
-        if (!checkout) {
+    const setCartAddress = async (address) => {
+        if (!cart) {
             return;
         }
 
         setLoadingShippingMethods(true);
         try {
             //TODO billing and shipping different
-            const [shippingAddressCheckout, billingAddressCheckout] = await Promise.all([
-                shippingAddressUpdate({checkoutToken, address}),
-                billingAddressUpdate({checkoutToken, address})
+            const [shippingAddressCart, billingAddressCheckout] = await Promise.all([
+                shippingAddressUpdate({checkoutToken, cartId, address, totalQuantity: cart.totalQuantity}),
+                billingAddressUpdate({checkoutToken, cartId, address, totalQuantity: cart.totalQuantity})
             ]);
-            setCheckout({
-                ...(checkout || {}),
-                ...(shippingAddressCheckout || {}),
+            setCart({
+                ...(cart || {}),
+                ...(shippingAddressCart || {}),
             });
         } catch (e) {
-            console.log("catch setCheckoutAddress");
+            console.log("catch setCartAddress");
             console.log(e);
         }
         setLoadingShippingMethods(false);
     }
 
-    const setCheckoutEmail = async (email) => {
-        if (!checkout) {
-            return;
-        }
-
-        const checkoutData = await emailUpdate({checkoutToken, email});
-        setCheckout({
-            ...(checkout || {}),
-            ...checkoutData
-        });
-    }
-
-    const setCheckoutDeliveryMethod = async (deliveryMethodId) => {
-        if (!checkout) {
+    const setCartDeliveryMethod = async (deliveryMethodId) => {
+        if (!cart) {
             return;
         }
 
         setSettingShippingMethod(true);
-        const checkoutData = await deliveryMethodUpdate({
+        const cartData = await deliveryMethodUpdate({
             checkoutToken,
-            deliveryMethodId,
             checkout,
-            webhookUri: buyContext.webhookUri
+            cartId,
+            deliveryMethodId,
+            cart,
+            webhookUri: buyContext.webhookUri,
         });
-        setCheckout({
-            ...(checkout || {}),
-            ...checkoutData
+        setCart({
+            ...(cart || {}),
+            ...cartData
         });
         setSettingShippingMethod(false);
     }
 
     const onBeforePayment = async () => {
-        if (!checkout) {
+        console.log("onBeforePayment", cart);
+        if (!cart || !cart?.lines?.length) {
             return;
         }
 
         setLoadingDraftOrder(true);
+        let paymentCheckoutToken = checkout?.token;
+        let paymentCheckoutData = JSON.parse(JSON.stringify(checkout));
+
+        if (!paymentCheckoutToken) {
+            //TODO before creating the draftOrder, now create the checkout or maybe on server api?
+            //TODO if on server side, you have to send all the data...
+            const lineItems = cart.lines.map(line => ({
+                quantity: line.quantity || 1,
+                variantId: "gid://shopify/ProductVariant/" + String(line.variant.id).replace("gid://shopify/ProductVariant/", "")
+            }));
+            const input = {
+                allowPartialAddresses: false,
+                lineItems: lineItems,
+                email: cart.email,
+                buyerIdentity: {
+                    countryCode: cart.shippingAddress.countryCode
+                },
+                shippingAddress: {
+                    address1: cart.shippingAddress.streetAddress1,
+                    address2: cart.shippingAddress.streetAddress2,
+                    city: cart.shippingAddress.city,
+                    company: cart.shippingAddress.companyName,
+                    country: cart.shippingAddress.countryCode,
+                    firstName: cart.shippingAddress.firstName,
+                    lastName: cart.shippingAddress.lastName,
+                    province: cart.shippingAddress.countryArea,
+                    zip: cart.shippingAddress.postalCode
+                },
+            };
+            console.log("checkoutCreate, input:", input);
+            paymentCheckoutToken = await checkoutCreate({channel, input});
+            paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
+            console.log("paymentCheckoutData", paymentCheckoutData);
+            if (paymentCheckoutData.requiresShipping) {
+                paymentCheckoutData.shippingMethods.forEach(rate => {
+                    if (rate.name === cart.shippingMethod.name) {
+                        paymentCheckoutData.shippingMethod = {
+                            price: {
+                                amount: rate.price.amount
+                            },
+                            id: rate.id,
+                            name: rate.name
+                        };
+                    }
+                });
+            }
+        }
+
         const checkoutData = await createDraftOrder({
-            checkoutToken,
-            checkout,
+            checkoutToken: paymentCheckoutToken,
+            checkout: paymentCheckoutData,
             webhookUri: buyContext.webhookUri
         });
         setCheckout({
             ...(checkout || {}),
             ...checkoutData
         });
+        setCheckoutToken(paymentCheckoutToken);
         setLoadingDraftOrder(false);
+    };
+
+    const getCartById = async () => {
+        if (cartId) {
+            let data = await cartById(cartId, cart?.totalQuantity);
+            if (data.lines?.length && (data.lines.length < data.totalQuantity)) {
+                data = await cartById(cartId, data.totalQuantity);
+            }
+            setCart(data);
+        } else {
+            setCart(null);
+        }
     };
 
     const getCheckoutByToken = async () => {
         if (checkoutToken) {
             const data = await checkoutByToken(checkoutToken);
-            setCheckout(data);
+            setCheckout({
+                ...(checkout || {}),
+                ...data
+            });
         } else {
             setCheckout(null);
         }
@@ -213,8 +308,14 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     useEffect(() => {
-        getCheckoutByToken();
+        if (checkoutToken && checkout) {
+            getCheckoutByToken();
+        }
     }, [checkoutToken]);
+
+    useEffect(() => {
+        getCartById();
+    }, [cartId]);
 
     useEffect(() => {
         if (displayState === "widget") {
@@ -232,12 +333,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
     useEffect(() => {
         let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
-        if (email && (email !== checkout?.email)) {
-            setCheckoutEmail(email);
-        }
-
         if (firstName && lastName && streetAddress1 && city && country && postalCode) {
-            let addressInput = {firstName, lastName, city, country, postalCode, streetAddress1};
+            let addressInput = {firstName, lastName, city, country, postalCode, streetAddress1, email};
 
             if (phone) {
                 addressInput.phone = phone;
@@ -251,7 +348,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
 
             if (isInputAddressDifferentFromCheckoutAddress(addressInput)) {
-                setCheckoutAddress(addressInput);
+                setCartAddress(addressInput);
             }
         }
     }, [addressFormDataDebounced]);
@@ -259,13 +356,13 @@ export const CheckoutContextProvider = ({children, channel}) => {
     return (
         <CheckoutContext.Provider value={{
             checkout,
+            cart,
+            createCart,
             createCheckout,
-            addItemToCheckout,
-            addBonusProductLine,
-            removeItemFromCheckout,
-            setCheckoutAddress,
-            setCheckoutEmail,
-            setCheckoutDeliveryMethod,
+            addItemToCart,
+            removeItemFromCart,
+            setCartAddress,
+            setCartDeliveryMethod,
             onBeforePayment,
             getProductList,
             getProductBySku,

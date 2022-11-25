@@ -4,10 +4,12 @@ import React from "react";
 import SALEOR_CHECKOUT_DELIVERY_METHOD_UPDATE from "../mutations/saleor/checkoutDeliveryMethodUpdate";
 
 //shopify
+import SHOPIFY_CART_DELIVERY_METHOD_UPDATE from "../mutations/shopify/cartSelectedDeliveryOptionsUpdate";
 import transformAddress from "../lib/transformShopifyAddressInput";
 import transformLineItems from "../lib/transformShopifyLineItems";
+import transformCart from "../lib/transformShopifyCartToContextCheckout";
 
-const useDeliveryMethodUpdate = (shop, client) => {
+const useDeliveryMethodUpdate = (shop, client, type) => {
     if (!shop || !client) {
         return {};
     }
@@ -31,7 +33,36 @@ const useDeliveryMethodUpdate = (shop, client) => {
             }
         };
     } else if (shop === "shopify") {
-        return async ({checkoutToken, deliveryMethodId, webhookUri, checkout}) => {
+        const handleCart = async ({cartId, deliveryMethodId, cart}) => {
+            let deliveryGroupId = "";
+            let deliveryOptionHandle = "";
+            cart.shippingMethods.forEach(shippingMethod => {
+                if (shippingMethod.id === deliveryMethodId) {
+                    deliveryGroupId = shippingMethod.deliveryGroupId;
+                    deliveryOptionHandle = shippingMethod.handle;
+                }
+            });
+            const {data} = await client.mutate({
+                mutation: SHOPIFY_CART_DELIVERY_METHOD_UPDATE,
+                variables: {
+                    cartId,
+                    selectedDeliveryOptions: [{
+                        deliveryGroupId: deliveryGroupId,
+                        deliveryOptionHandle: deliveryOptionHandle
+                    }],
+                    linesCount: (cart?.totalQuantity || 0) + 1
+                }
+            });
+
+            if (data.cartSelectedDeliveryOptionsUpdate?.userErrors?.length) {
+                data.cartSelectedDeliveryOptionsUpdate.userErrors.forEach(console.warn);
+            }
+
+            if (data?.cartSelectedDeliveryOptionsUpdate?.cart) {
+                return transformCart(data.cartSelectedDeliveryOptionsUpdate.cart);
+            }
+        };
+        const handleCheckout = async ({checkoutToken, deliveryMethodId, webhookUri, checkout}) => {
             console.log("useDeliveryMethodUpdate", checkoutToken, deliveryMethodId, webhookUri, checkout);
             if (checkout.draftOrder) {
                 console.log("already having an draftOrder", checkout);
@@ -49,6 +80,7 @@ const useDeliveryMethodUpdate = (shop, client) => {
                 shippingMethod: shippingMethod,
             }
         };
+        return type === "cart" ? handleCart : handleCheckout;
     }
 }
 

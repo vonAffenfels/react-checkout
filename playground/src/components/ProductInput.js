@@ -3,21 +3,21 @@ import React, {useContext, useState, useEffect} from "react";
 import ReactCheckout from "react-ez-checkout";
 
 const ProductInput = ({}) => {
-    const {addItemToCheckout} = useContext(ReactCheckout.API);
+    const {addItemToCart} = useContext(ReactCheckout.API);
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
         setReady(true);
     }, []);
 
-    const [variantId, setVariantId] = useState("43494647693565"); //KP0003826
+    const [variantId, setVariantId] = useState("41092545380484"); //DK-12125
 
     const onChange = (e) => {
         setVariantId(e.target.value);
     };
 
     const onClick = async () => {
-        await addItemToCheckout(variantId);
+        await addItemToCart(variantId);
     };
 
     if (!ready) {

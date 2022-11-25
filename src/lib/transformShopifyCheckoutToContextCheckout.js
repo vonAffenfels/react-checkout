@@ -1,7 +1,8 @@
 //takes a graphql checkout node as parameter
 function transformCheckout(node) {
-    let shippingRequired = false;
+    console.log("transformCheckout", node)
     const shippingMethods = (node.availableShippingRates?.shippingRates || []).map(rate => {
+        console.log("rate", rate);
         return {
             id: rate.handle,
             name: rate.title,
@@ -34,7 +35,6 @@ function transformCheckout(node) {
         lines: (node.lineItems?.edges || []).map(edge => {
             const {quantity, variant, id} = edge.node;
 
-            console.log("lineItem", edge.node);
             if (!variant) {
                 return null;
             }
@@ -111,41 +111,6 @@ function transformCheckout(node) {
             countryCode: node.shippingAddress?.countryCodeV2
         },
         shippingMethods: shippingMethods,
-        // discount {
-        //     ...PriceFragment
-        // }
-        // discountName
-        // availableShippingMethods {
-        //     ...ShippingMethodDetailsFragment
-        // }
-
-        //TODO need hard config in shopify-config?
-        // https://shopify.dev/api/storefront/2022-07/mutations/checkoutCompleteWithTokenizedPaymentV3
-        // availablePaymentGateways {
-        //     id
-        //     name
-        //     config {
-        //         field
-        //         value
-        //     }
-        // }
-        // billingAddress {
-        //     ...AddressDetailsFragment
-        // }
-
-        //TODO
-        // ADMIN-API: https://shopify.dev/api/admin-graphql/2022-07/queries/paymentProviders
-        // https://shopify.dev/api/admin-graphql/2022-07/mutations/draftOrderCreate => checkout into order, then complete it
-        // https://shopify.dev/api/admin-graphql/2022-07/mutations/draftOrderComplete => if payment pending, then use
-        // https://shopify.dev/api/admin-graphql/2022-07/mutations/orderMarkAsPaid
-        // noch offen: wie dann die rechnungsabwickling/versand aus shopify? bzw. ist das überhaupt gewünscht oder
-        // anderes system dafür?
-
-
-        // https://shopify.dev/api/admin-graphql/2022-07/mutations/orderCapture => seems linke requirement for the storefront checkout
-        // https://shopify.dev/api/admin-graphql/2022-07/objects/PaymentMethod
-        // https://shopify.dev/api/admin-graphql/2022-07/objects/CustomPaymentMethod
-        // https://shopify.dev/api/admin-graphql/2022-07/mutations/orderCreateMandatePayment
     };
 
     if (shippingMethod) {

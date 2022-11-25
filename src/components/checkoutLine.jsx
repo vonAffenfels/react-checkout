@@ -10,10 +10,10 @@ const CheckoutLine = ({
     quantity,
     totalPrice
 }) => {
-    const {removeItemFromCheckout} = useContext(CheckoutContext);
+    const {removeItemFromCart} = useContext(CheckoutContext);
 
     const onRemove = async () => {
-        await removeItemFromCheckout(id);
+        await removeItemFromCart(id);
     };
 
     let variantTitle = "";
@@ -66,10 +66,10 @@ const CheckoutLineDetail = ({
     quantity,
     totalPrice
 }) => {
-    const {removeItemFromCheckout} = useContext(CheckoutContext);
+    const {removeItemFromCart} = useContext(CheckoutContext);
 
     const onRemove = async () => {
-        await removeItemFromCheckout(id);
+        await removeItemFromCart(id);
     };
 
     const onChangeQuantity = async () => {

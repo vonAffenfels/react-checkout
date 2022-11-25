@@ -12,10 +12,11 @@ import CONST from "../lib/const";
 const CheckoutForm = ({props}) => {
     const {isDebug, availablePaymentGateways} = useContext(BuyContext);
     const {
+        cart,
         checkout,
         addressFormData,
         setAddressFormData,
-        setCheckoutDeliveryMethod,
+        setCartDeliveryMethod,
         selectedPaymentGatewayId,
         setSelectedPaymentGatewayId,
         isSettingShippingMethod,
@@ -27,20 +28,20 @@ const CheckoutForm = ({props}) => {
         let updateAddressFormData = {
             ...addressFormData
         };
-        if (checkout?.email && checkout?.email !== "anonymous@example.com") {
-            updateAddressFormData.email = checkout.email;
+        if (cart?.email && cart?.email !== "anonymous@example.com") {
+            updateAddressFormData.email = cart.email;
         }
-        if (checkout?.shippingAddress) {
+        if (cart?.shippingAddress) {
             let adressData = {
-                firstName: checkout?.shippingAddress?.firstName,
-                lastName: checkout?.shippingAddress?.lastName,
-                streetAddress1: checkout?.shippingAddress?.streetAddress1,
-                city: checkout?.shippingAddress?.city,
-                country: checkout?.shippingAddress?.countryCode,
-                company: checkout?.shippingAddress?.companyName,
-                state: checkout?.shippingAddress?.countryArea,
-                postalCode: checkout?.shippingAddress?.postalCode,
-                phone: checkout?.shippingAddress?.phone
+                firstName: cart?.shippingAddress?.firstName,
+                lastName: cart?.shippingAddress?.lastName,
+                streetAddress1: cart?.shippingAddress?.streetAddress1,
+                city: cart?.shippingAddress?.city,
+                country: cart?.shippingAddress?.countryCode,
+                company: cart?.shippingAddress?.companyName,
+                state: cart?.shippingAddress?.countryArea,
+                postalCode: cart?.shippingAddress?.postalCode,
+                phone: cart?.shippingAddress?.phone
             };
             updateAddressFormData = {
                 ...updateAddressFormData,
@@ -51,9 +52,9 @@ const CheckoutForm = ({props}) => {
     }, []);
 
     const onChangeDeliveryMethod = async (deliveryMethodId) => {
-        if (checkout?.shippingMethod?.id !== deliveryMethodId) {
+        if (cart?.shippingMethod?.id !== deliveryMethodId) {
             setTempSelectedShippingMethodId(deliveryMethodId);
-            await setCheckoutDeliveryMethod(deliveryMethodId);
+            await setCartDeliveryMethod(deliveryMethodId);
             setTempSelectedShippingMethodId("");
         }
     };
@@ -68,7 +69,7 @@ const CheckoutForm = ({props}) => {
         <div>
             <div>
                 <h2 className="text-lg font-medium text-color-900">Kontaktinformation</h2>
-                {isDebug && <a href={checkout?.webUrl} target="_blank" className="text-lg font-medium text-color-900">Zum Shopify Checkout</a>}
+                {isDebug && <a href={checkout?.webUrl || cart?.webUrl} target="_blank" className="text-lg font-medium text-color-900">Zum Shopify Checkout</a>}
 
                 <div className="mt-4">
                     <label htmlFor="email-address" className="block text-sm font-medium text-color-700">
@@ -298,23 +299,21 @@ const CheckoutForm = ({props}) => {
                 </div>
             </div>
 
-            {console.log("checkout?.requiresShipping", checkout?.requiresShipping)}
-            {checkout?.requiresShipping !== false && (
+            {cart?.requiresShipping !== false && (
                 <div className="mt-10 border-t border-gray-200 pt-10">
-                    {console.log("checkout?.shippingMethod?.id", checkout?.shippingMethod?.id)}
-                    <RadioGroup value={checkout?.shippingMethod?.id || ""} onChange={onChangeDeliveryMethod}>
+                    <RadioGroup value={cart?.shippingMethod?.id || ""} onChange={onChangeDeliveryMethod}>
                         <RadioGroup.Label className="text-lg font-medium text-color-900">Versandart</RadioGroup.Label>
 
                         <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                            {checkout?.shippingMethods?.map((shippingMethod) => (
+                            {cart?.shippingMethods?.map((shippingMethod) => (
                                 <ShippingMethodOption
                                     shippingMethod={shippingMethod}
                                     key={shippingMethod.id}
                                     loading={(isSettingShippingMethod && (shippingMethod.id === tempSelectedShippingMethodId)) || isDebug}
                                 />
                             ))}
-                            {((isLoadingShippingMethods && !checkout?.shippingMethods?.length) || isDebug) && <LoadingOption/>}
-                            {!isLoadingShippingMethods && !checkout?.shippingMethods?.length && (
+                            {((isLoadingShippingMethods && !cart?.shippingMethods?.length) || isDebug) && <LoadingOption/>}
+                            {!isLoadingShippingMethods && !cart?.shippingMethods?.length && (
                                 <p>Nach Eingabe der Adresse werden die verfügbaren Versandarten angezeigt</p>
                             )}
                         </div>
@@ -322,14 +321,13 @@ const CheckoutForm = ({props}) => {
                 </div>
             )}
 
-            {(checkout?.shippingMethod?.id || (checkout?.requiresShipping === false)) && (
+            {(cart?.shippingMethod?.id || (cart?.requiresShipping === false)) && (
                 <div className="mt-10 border-t border-gray-200 pt-10">
-                    {console.log("selectedPaymentGatewayId", selectedPaymentGatewayId || "")}
                     <RadioGroup value={selectedPaymentGatewayId || ""} onChange={onChangePaymentMethod}>
                         <RadioGroup.Label className="text-lg font-medium text-color-900">Bezahlart</RadioGroup.Label>
 
                         <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                            {(checkout?.availablePaymentGateways || availablePaymentGateways)?.map((paymentMethod) => (
+                            {(cart?.availablePaymentGateways || availablePaymentGateways)?.map((paymentMethod) => (
                                 <PaymentMethodOption
                                     paymentMethod={paymentMethod}
                                     key={paymentMethod.id}

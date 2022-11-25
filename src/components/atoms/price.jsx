@@ -3,6 +3,7 @@ const Price = ({price}) => {
         return "--";
     }
 
+    price = parseFloat(price).toFixed(2);
     price = String(price).replace(",", ".").split(".");
     if (price.length === 1) {
         price.push("00");

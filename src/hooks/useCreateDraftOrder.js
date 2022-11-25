@@ -17,7 +17,6 @@ const useDeliveryMethodUpdate = (shop, client) => {
         };
     } else if (shop === "shopify") {
         return async ({checkoutToken, webhookUri, checkout}) => {
-            console.log("useCreateDraftOrder");
             const input = {
                 lineItems: transformLineItems(checkout.lines),
                 email: checkout.email,
@@ -40,8 +39,8 @@ const useDeliveryMethodUpdate = (shop, client) => {
                     title: shippingMethod.name,
                 };
             }
+            console.log("useCreateDraftOrder", input);
             const draftOrder = await createDraftOrder(webhookUri, input);
-
             console.log("draftOrder", draftOrder);
 
             if (draftOrder) {

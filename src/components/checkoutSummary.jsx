@@ -3,28 +3,28 @@ import React, {useContext, useState, useEffect} from "react";
 import CheckoutContext from "../context/CheckoutContext";
 import CheckoutLine from "./checkoutLine.jsx";
 import Price from "./atoms/price.jsx";
-import {Spin} from "./atoms/animate.jsx";
+import {SpinButton, ButtonBlue} from "./atoms/animate.jsx";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
 const CheckoutSummary = ({props}) => {
-    const {checkout, selectedPaymentGatewayId, loadingDraftOrder} = useContext(CheckoutContext);
+    const {cart, checkout, selectedPaymentGatewayId, loadingDraftOrder} = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
 
     useEffect(() => {
-        const isValidShipping = (checkout.requiresShipping === false) || (checkout?.shippingAddress && checkout?.shippingMethod?.id);
-        if (!enabled && checkout?.email && isValidShipping && selectedPaymentGatewayId) {
+        const isValidShipping = (cart.requiresShipping === false) || (cart?.shippingAddress && cart?.shippingMethod?.id);
+        if (!enabled && cart?.email && isValidShipping && selectedPaymentGatewayId) {
             setEnabled(true);
         }
-    }, [checkout?.email, checkout?.shippingAddress, checkout?.shippingMethod?.id, selectedPaymentGatewayId]);
+    }, [cart?.email, cart?.shippingAddress, cart?.shippingMethod?.id, selectedPaymentGatewayId]);
 
     return (
         <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
             <h3 className="sr-only">Items in your cart</h3>
             <ul role="list" className="divide-y divide-gray-200">
-                {checkout?.lines?.map((cartItem) => (
+                {cart?.lines?.map((cartItem) => (
                     <CheckoutLine.Detail {...cartItem} key={cartItem.id} />
                 ))}
             </ul>
@@ -32,25 +32,25 @@ const CheckoutSummary = ({props}) => {
                 <div className="flex items-center justify-between">
                     <dt className="text-sm">Preis</dt>
                     <dd className="text-sm font-medium text-color-900">
-                        <Price price={checkout?.subtotalPrice?.net?.amount}/> {checkout?.subtotalPrice?.net?.currency}
+                        <Price price={cart?.subtotalPrice?.net?.amount}/> {cart?.subtotalPrice?.net?.currency}
                     </dd>
                 </div>
                 <div className="flex items-center justify-between">
                     <dt className="text-sm">Versand</dt>
                     <dd className="text-sm font-medium text-color-900">
-                        <Price price={checkout?.shippingPrice?.gross?.amount}/> {checkout?.shippingPrice?.gross?.currency}
+                        <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
                     </dd>
                 </div>
                 <div className="flex items-center justify-between">
                     <dt className="text-sm">Steuern</dt>
                     <dd className="text-sm font-medium text-color-900">
-                        <Price price={checkout?.subtotalPrice?.tax?.amount}/> {checkout?.subtotalPrice?.tax?.currency}
+                        <Price price={cart?.subtotalPrice?.tax?.amount}/> {cart?.subtotalPrice?.tax?.currency}
                     </dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                     <dt className="text-base font-medium">Summe</dt>
                     <dd className="text-base font-medium text-color-900">
-                        <Price price={checkout?.totalPrice?.gross?.amount}/> {checkout?.totalPrice?.gross?.currency}
+                        <Price price={cart?.totalPrice?.gross?.amount}/> {cart?.totalPrice?.gross?.currency}
                     </dd>
                 </div>
             </dl>
@@ -66,7 +66,12 @@ const CheckoutSummary = ({props}) => {
                         )
                     }
                 >
-                    {loadingDraftOrder ? <Spin /> : "Bestellung bestätigen"}
+                    {loadingDraftOrder ? (
+                        <>
+                            <SpinButton />
+                            Bezahlprozess wird vorbereitet ...
+                        </>
+                    ) : "Bestellung bestätigen"}
                 </button>
             </div>
         </div>

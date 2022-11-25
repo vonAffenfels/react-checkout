@@ -5,8 +5,6 @@ import postcss from "rollup-plugin-postcss";
 import babel from "rollup-plugin-babel";
 import pkg from "./package.json";
 
-//TODO different build without css
-
 export default [
     {
         input: "src/index.jsx",

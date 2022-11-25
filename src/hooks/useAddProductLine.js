@@ -5,20 +5,26 @@ import SALEOR_CHECKOUT_ADD_PRODUCT_LINE from "../mutations/saleor/checkoutAddPro
 
 //shopify
 import transformCheckout from "../lib/transformShopifyCheckoutToContextCheckout";
+import transformCart from "../lib/transformShopifyCartToContextCheckout";
 import SHOPIFY_CHECKOUT_ADD_PRODUCT_LINE from "../mutations/shopify/checkoutAddProductLine";
+import SHOPIFY_CART_ADD_PRODUCT_LINE from "../mutations/shopify/cartAddProductLine";
 
-const useAddProductLine = (shop, client) => {
+/*
+type may be "cart" or "checkout"
+ */
+const useAddProductLine = (shop, client, type) => {
     if (!shop || !client) {
         return {};
     }
 
     if (shop === "saleor") {
-        return async ({checkoutToken, lines}) => {
+        return async ({checkoutToken, lines, totalQuantity}) => {
             const {data} = await client.mutate({
                 mutation: SALEOR_CHECKOUT_ADD_PRODUCT_LINE,
                 variables: {
                     checkoutToken,
                     lines,
+                    linesCount: (totalQuantity || 0) + 1
                 }
             });
 
@@ -33,7 +39,30 @@ const useAddProductLine = (shop, client) => {
             return data.checkoutLinesAdd.checkout;
         };
     } else if (shop === "shopify") {
-        return async ({checkoutToken, lines}) => {
+        const handleCart = async ({cartId, lines, totalQuantity}) => {
+            const {data} = await client.mutate({
+                mutation: SHOPIFY_CART_ADD_PRODUCT_LINE,
+                variables: {
+                    cartId,
+                    lines: lines.map(line => {
+                        return {
+                            quantity: line.quantity,
+                            merchandiseId: line.variantId
+                        }
+                    }),
+                    linesCount: (totalQuantity || 0) + 1
+                }
+            });
+
+            if (data?.cartLinesAdd?.userErrors?.length) {
+                data.cartLinesAdd.userErrors.forEach(err => console.warn(err));
+            }
+
+            if (data?.cartLinesAdd?.cart) {
+                return transformCart(data.cartLinesAdd.cart);
+            }
+        };
+        const handleCheckout = async ({checkoutToken, lines}) => {
             const {data} = await client.mutate({
                 mutation: SHOPIFY_CHECKOUT_ADD_PRODUCT_LINE,
                 variables: {
@@ -50,6 +79,7 @@ const useAddProductLine = (shop, client) => {
                 return transformCheckout(data.checkoutLineItemsAdd.checkout);
             }
         };
+        return type === "cart" ? handleCart : handleCheckout;
     }
 }
 

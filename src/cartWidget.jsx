@@ -14,8 +14,9 @@ function classNames(...classes) {
 }
 
 const CartWidget = ({props}) => {
-    const {isDebug} = useContext(BuyContext);
+    const {isDebug, hideDefaultCartButton} = useContext(BuyContext);
     const {
+        cart,
         checkout,
         isCartOpen,
         setCartOpen,
@@ -25,7 +26,7 @@ const CartWidget = ({props}) => {
 
     const openFullPage = (e) => {
         e.preventDefault();
-        if (checkout) {
+        if (cart) {
             setCartOpen(false);
             setDisplayState("cartFullPage");
         }
@@ -33,7 +34,7 @@ const CartWidget = ({props}) => {
 
     return (
         <Fragment>
-            {!isCartOpen && (
+            {!isCartOpen && !hideDefaultCartButton && (
                 <div className="bg-opacity-50 flex justify-center items-center fixed top-10 right-0 z-50">
                     <button
                         className="bg-color-500 px-4 py-2 text-md text-white"
@@ -65,7 +66,7 @@ const CartWidget = ({props}) => {
                             <div className="mt-8">
                                 <div className="flow-root">
                                     <ul role="list" className="-my-6 divide-y divide-gray-200">
-                                        {checkout?.lines?.map((cartItem) => {
+                                        {cart?.lines?.map((cartItem) => {
                                             return (
                                                 <CheckoutLine {...cartItem} key={cartItem.id} />
                                             )
@@ -79,12 +80,12 @@ const CartWidget = ({props}) => {
                         <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                             <div className="flex justify-between text-base font-medium text-color-900">
                                 <p>Warenkorb</p>
-                                <p><Price price={checkout?.subtotalPrice?.net?.amount}/> {checkout?.subtotalPrice?.net?.currency}</p>
+                                <p><Price price={cart?.subtotalPrice?.net?.amount}/> {cart?.subtotalPrice?.net?.currency}</p>
                             </div>
-                            {!!checkout?.shippingPrice?.gross?.amount ? (
+                            {!!cart?.shippingPrice?.gross?.amount ? (
                                 <div className="flex justify-between text-base font-small text-color-500">
                                     <p>Versand</p>
-                                    <p><Price price={checkout?.shippingPrice?.gross?.amount}/> {checkout?.shippingPrice?.gross?.currency}</p>
+                                    <p><Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}</p>
                                 </div>
                             ) : (
                                 <p className="mt-0.5 text-sm text-color-500">Versandkosten werden an der Kasse berechnet.</p>
@@ -94,7 +95,7 @@ const CartWidget = ({props}) => {
                                     onClick={openFullPage}
                                     className={
                                         classNames(
-                                            !checkout ? "cursor-not-allowed" : "hover:bg-color-700",
+                                            !cart ? "cursor-not-allowed" : "hover:bg-color-700",
                                             "flex items-center justify-center rounded-md border border-transparent bg-color-600 px-6 py-3 text-base font-medium text-white shadow-sm"
                                         )
                                     }

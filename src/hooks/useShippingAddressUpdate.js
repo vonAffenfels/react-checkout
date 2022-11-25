@@ -5,10 +5,13 @@ import SALEOR_CHECKOUT_SHIPPING_ADDRESS_UPDATE from "../mutations/saleor/checkou
 
 //shopify
 import SHOPIFY_CHECKOUT_SHIPPING_ADDRESS_UPDATE from "../mutations/shopify/checkoutShippingAddressUpdate";
+import SHOPIFY_CART_SHIPPING_ADDRESS_UPDATE from "../mutations/shopify/cartShippingAddressUpdate";
 import transformCheckout from "../lib/transformShopifyCheckoutToContextCheckout";
+import transformCart from "../lib/transformShopifyCartToContextCheckout";
 import transformAddress from "../lib/transformShopifyAddressInput";
+import transformBuyerIdentity from "../lib/transformShopifyBuyerIdentity";
 
-const useDeleteProductLine = (shop, client) => {
+const useShippingAddressUpdate = (shop, client, type) => {
     if (!shop || !client) {
         return {};
     }
@@ -21,7 +24,7 @@ const useDeleteProductLine = (shop, client) => {
                     checkoutToken,
                     address
                 }
-            })
+            });
 
             if (data?.checkoutShippingAddressUpdate?.errors?.length) {
                 data.checkoutShippingAddressUpdate.errors.forEach(err => console.warn(err));
@@ -32,7 +35,26 @@ const useDeleteProductLine = (shop, client) => {
             }
         };
     } else if (shop === "shopify") {
-        return async ({checkoutToken, address}) => {
+        const handleCart = async ({cartId, address, totalQuantity}) => {
+            console.log("useShippingAddressUpdate", JSON.parse(JSON.stringify(transformBuyerIdentity(address))));
+            const {data} = await client.mutate({
+                mutation: SHOPIFY_CART_SHIPPING_ADDRESS_UPDATE,
+                variables: {
+                    cartId,
+                    buyerIdentity: JSON.parse(JSON.stringify(transformBuyerIdentity(address))),
+                    linesCount: (totalQuantity || 0) + 1,
+                }
+            });
+
+            if (data?.cartBuyerIdentityUpdate?.userErrors?.length) {
+                data.cartBuyerIdentityUpdate.userErrors.forEach(err => console.warn(err));
+            }
+
+            if (data?.cartBuyerIdentityUpdate?.cart) {
+                return transformCart(data.cartBuyerIdentityUpdate.cart);
+            }
+        };
+        const handleCheckout = async ({checkoutToken, address}) => {
             const {data} = await client.mutate({
                 mutation: SHOPIFY_CHECKOUT_SHIPPING_ADDRESS_UPDATE,
                 variables: {
@@ -40,18 +62,17 @@ const useDeleteProductLine = (shop, client) => {
                     address: JSON.parse(JSON.stringify(transformAddress(address))),
                 }
             });
-            console.log("useShippingAddressUpdate", data?.checkoutShippingAddressUpdateV2?.checkout);
 
             if (data?.checkoutShippingAddressUpdateV2?.checkoutUserErrors?.length) {
                 data.checkoutShippingAddressUpdateV2.checkoutUserErrors.forEach(err => console.warn(err));
             }
 
             if (data?.checkoutShippingAddressUpdateV2?.checkout) {
-                const transformedCheckout = transformCheckout(data.checkoutShippingAddressUpdateV2.checkout);
-                return transformedCheckout;
+                return transformCheckout(data.checkoutShippingAddressUpdateV2.checkout);
             }
         };
+        return type === "cart" ? handleCart : handleCheckout;
     }
 }
 
-export default useDeleteProductLine;
+export default useShippingAddressUpdate;

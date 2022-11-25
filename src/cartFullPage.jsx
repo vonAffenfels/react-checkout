@@ -8,7 +8,14 @@ import CheckoutForm from "./components/checkoutForm.jsx";
 import CheckoutSummary from "./components/checkoutSummary.jsx";
 
 const CartFullPage = ({props}) => {
-    const {checkout, setDisplayState, onBeforePayment, loadingDraftOrder} = useContext(CheckoutContext);
+    const {
+        cart,
+        checkout,
+        setDisplayState,
+        createCheckout,
+        onBeforePayment,
+        loadingDraftOrder
+    } = useContext(CheckoutContext);
 
     useEffect(() => {
         if (!loadingDraftOrder && checkout?.draftOrder) {
@@ -16,10 +23,14 @@ const CartFullPage = ({props}) => {
         }
     }, [loadingDraftOrder]);
 
+    useEffect(() => {
+
+    }, [checkout?.id]);
+
     const onSubmit = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        //TODo create the draftOrder, then useEffect to check if draftOrder is present on cartFullPage
+
         onBeforePayment();
     }
 

@@ -1,12 +1,21 @@
 import {gql} from "@apollo/client";
 
 import PriceFragment from "./priceFragment";
-//TODO falls mit shippingAddress, immer das ganze CheckoutDetailsShipmentFragment nutzen
 //TODO lineItems iterable
 
 export default gql`
     ${PriceFragment}
     fragment CheckoutDetailsFragment on Checkout {
+        availableShippingRates {
+            ready
+            shippingRates {
+                handle
+                priceV2 {
+                    amount
+                }
+                title
+            }
+        }
         discountApplications(first: 2) {
             pageInfo {
                 hasNextPage
