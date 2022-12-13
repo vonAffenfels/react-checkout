@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect} from "react";
+import React, {createContext, useState, useEffect, useRef} from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 import CONST from "../lib/const";
 import {ApolloContextProvider} from "./ApolloContext";
@@ -10,11 +10,14 @@ import Banner from "../components/banner.jsx";
 export const BuyContext = createContext({});
 
 export const BuyContextProvider = (props) => {
+    const isMountedRef = useRef(false);
+    const [isMounted, setMounted] = useState(false);
     const {uri, shop, children, paymentProviders, channel} = props;
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [bannerMessage, setBannerMessage] = useState(null);
 
-    if (!uri || !shop || typeof window === "undefined") {
+    // TODO hydration-error?
+    if (!uri || !shop) {
         return children;
     }
 
@@ -57,6 +60,22 @@ export const BuyContextProvider = (props) => {
             fetchStripePaymentIntent(stripePaymentParam);
         }
     }, []);
+
+    useEffect(() => {
+        console.log("execute hook", isMounted)
+        if (isMountedRef?.current || isMounted) {
+            return;
+        }
+
+        isMountedRef.current = true;
+        setMounted(true);
+        return () => isMountedRef.current = false;
+    }, []);
+
+    // enable SSR
+    if (!isMounted) {
+        return children;
+    }
 
     console.log("Starting react-checkout for shop type", shop, "..");
     return (

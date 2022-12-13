@@ -1,6 +1,6 @@
 {
     "name": "react-ez-checkout",
-    "version": "1.0.243",
+    "version": "1.0.244",
     "description": "react-component based cart for a shop checkout",
     "main": "dist/index.cjs.js",
     "module": "dist/index.esm.js",
@@ -17,7 +17,9 @@
         "dev": "npm-run-all --parallel build-watch start-playground",
         "dev-playground": "cd playground && npm run start",
         "dev-checkout": "npm run build-watch",
-        "i-all": "npm i && npm link && cd node_modules/react && npm link && cd.. && cd react-dom && npm link && cd.. && cd.. && cd playground && npm i && npm link react-ez-checkout && npm link react && npm link react-dom"
+        "dev-ssr": "cd playground-ssr && npm run dev",
+        "i-pg": "npm i && npm link && cd node_modules/react && npm link && cd.. && cd react-dom && npm link && cd.. && cd.. && cd playground && npm i && npm link react-ez-checkout && npm link react && npm link react-dom",
+        "i-pg-ssr": "npm i && npm link && cd playground-ssr && npm link react-ez-checkout"
     },
     "repository": {
         "type": "git",

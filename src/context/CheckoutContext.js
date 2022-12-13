@@ -7,6 +7,7 @@ import useDebounce from "../hooks/useDebounce";
 
 //helpers
 import useProductBySku from "../hooks/useProductBySku";
+import useProductById from "../hooks/useProductById";
 import useProductList from "../hooks/useProductList";
 
 //cart
@@ -35,6 +36,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     //helpers
     const getProductBySku = useProductBySku(buyContext.shop, client);
+    const getProductById = useProductById(buyContext.shop, client);
     const getProductList = useProductList(buyContext.shop, client);
 
     //cart
@@ -366,6 +368,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             onBeforePayment,
             getProductList,
             getProductBySku,
+            getProductById,
             displayState,
             setDisplayState,
             isCartOpen,
