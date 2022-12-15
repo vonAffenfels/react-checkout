@@ -10,7 +10,7 @@ export default gql`
             lines: $lines
         ) {
             checkout {
-                ...CheckoutDetailsFragment
+                ...CheckoutDetailsFragmentSaleor
             }
             errors {
                 message

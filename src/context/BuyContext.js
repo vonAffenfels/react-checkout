@@ -16,7 +16,6 @@ export const BuyContextProvider = (props) => {
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [bannerMessage, setBannerMessage] = useState(null);
 
-    // TODO hydration-error?
     if (!uri || !shop) {
         return children;
     }
@@ -62,7 +61,6 @@ export const BuyContextProvider = (props) => {
     }, []);
 
     useEffect(() => {
-        console.log("execute hook", isMounted)
         if (isMountedRef?.current || isMounted) {
             return;
         }

@@ -10,7 +10,7 @@ export default gql`
             deliveryMethodId: $deliveryMethodId
         ) {
             checkout {
-                ...CheckoutDetailsFragment
+                ...CheckoutDetailsFragmentSaleor
             }
             errors {
                 field

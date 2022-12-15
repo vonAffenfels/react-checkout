@@ -10,7 +10,7 @@ export default gql`
             email: $email
         ) {
             checkout {
-                ...CheckoutDetailsFragment
+                ...CheckoutDetailsFragmentSaleor
             }
             errors {
                 field

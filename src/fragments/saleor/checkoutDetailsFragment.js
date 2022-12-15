@@ -8,30 +8,30 @@ export default gql`
     ${PriceFragment}
     ${ShippingMethodDetailsFragment}
     ${AddressDetailsFragment}
-    fragment CheckoutDetailsFragment on Checkout {
+    fragment CheckoutDetailsFragmentSaleor on Checkout {
         id
         token
         email
         discount {
-            ...PriceFragment
+            ...PriceFragmentSaleor
         }
         discountName
         subtotalPrice {
             net {
-                ...PriceFragment
+                ...PriceFragmentSaleor
             }
             tax {
-                ...PriceFragment
+                ...PriceFragmentSaleor
             }
         }
         shippingPrice {
             gross {
-                ...PriceFragment
+                ...PriceFragmentSaleor
             }
         }
         totalPrice {
             gross {
-                ...PriceFragment
+                ...PriceFragmentSaleor
             }
         }
         availableShippingMethods {
@@ -54,7 +54,7 @@ export default gql`
         lines {
             totalPrice {
                 gross {
-                    ...PriceFragment
+                    ...PriceFragmentSaleor
                 }
             }
             variant {
@@ -63,7 +63,7 @@ export default gql`
                 pricing {
                     price {
                         gross {
-                            ...PriceFragment
+                            ...PriceFragmentSaleor
                         }
                     }
                 }

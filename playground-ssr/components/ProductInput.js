@@ -10,7 +10,7 @@ const ProductInput = ({}) => {
         setReady(true);
     }, []);
 
-    const [variantId, setVariantId] = useState("41092545380484"); //DK-12125
+    const [variantId, setVariantId] = useState("41092720754820");
 
     const onChange = (e) => {
         setVariantId(e.target.value);

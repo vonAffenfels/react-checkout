@@ -1,5 +1,8 @@
 //takes a graphql cart as parameter
 function transformCart(node) {
+    if (!node) {
+        return null;
+    }
     let requiresShipping = false;
     let shippingMethod = null;
     let shippingAddress = null;
@@ -143,7 +146,7 @@ function transformCart(node) {
         },
         totalPrice: {
             gross: {
-                amount: totalAmount?.amount,
+                amount: totalAmount?.amount + (shippingMethod?.price?.amount || 0),
                 currency: totalAmount?.currencyCode
             }
         },

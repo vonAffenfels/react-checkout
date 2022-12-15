@@ -10,7 +10,7 @@ export default gql`
             billingAddress: $address
         ) {
             checkout {
-                ...CheckoutDetailsFragment
+                ...CheckoutDetailsFragmentSaleor
             }
             errors {
                 field

@@ -10,7 +10,7 @@ export default gql`
             lineId: $lineId
         ) {
             checkout {
-                ...CheckoutDetailsFragment
+                ...CheckoutDetailsFragmentSaleor
             }
             errors {
                 field

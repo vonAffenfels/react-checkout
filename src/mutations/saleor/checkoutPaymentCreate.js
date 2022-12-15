@@ -1,9 +1,6 @@
 import {gql} from "@apollo/client";
 
-import CheckoutDetailsFragment from "../../fragments/saleor/checkoutDetailsFragment";
-
 export default gql`
-    ${CheckoutDetailsFragment}
     mutation CheckoutPaymentCreate($checkoutToken: UUID!, $input: PaymentInput!) {
         checkoutPaymentCreate(
             token: $checkoutToken
