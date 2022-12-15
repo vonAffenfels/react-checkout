@@ -18,6 +18,16 @@ export const ApolloContextProvider = ({children, uri}) => {
 
     const client = new ApolloClient({
         cache: new InMemoryCache(),
+        defaultOptions: {
+            watchQuery: {
+                fetchPolicy: "no-cache",
+                errorPolicy: "ignore",
+            },
+            query: {
+                fetchPolicy: "no-cache",
+                errorPolicy: "all",
+            }
+        },
         // link: from([httpLink]),
         uri: uri,
         headers: {

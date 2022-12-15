@@ -170,6 +170,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         } catch (e) {
             console.log("catch setCartAddress");
             console.log(e);
+            getCartById();
         }
         setLoadingShippingMethods(false);
     }
@@ -264,11 +265,13 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const getCartById = async () => {
+        console.log("getCartById", cartId)
         if (cartId) {
             let data = await cartById(cartId, cart?.totalQuantity);
             if (data.lines?.length && (data.lines.length < data.totalQuantity)) {
                 data = await cartById(cartId, data.totalQuantity);
             }
+            console.log("getCartById data", data);
             setCart(data);
         } else {
             setCart(null);

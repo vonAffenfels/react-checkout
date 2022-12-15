@@ -146,7 +146,7 @@ function transformCart(node) {
         },
         totalPrice: {
             gross: {
-                amount: totalAmount?.amount + (shippingMethod?.price?.amount || 0),
+                amount: parseFloat(parseFloat(totalAmount?.amount).toFixed(2)),
                 currency: totalAmount?.currencyCode
             }
         },
