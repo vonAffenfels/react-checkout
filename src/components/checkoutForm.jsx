@@ -107,7 +107,7 @@ const CheckoutForm = ({props}) => {
                                 name="first-name"
                                 autoComplete="given-name"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={addressFormData.firstName}
+                                value={addressFormData.firstName || ""}
                                 onChange={(e) => setAddressFormData({
                                     ...addressFormData,
                                     firstName: e.target.value
@@ -127,7 +127,7 @@ const CheckoutForm = ({props}) => {
                                 name="last-name"
                                 autoComplete="family-name"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={addressFormData.lastName}
+                                value={addressFormData.lastName || ""}
                                 onChange={(e) => setAddressFormData({
                                     ...addressFormData,
                                     lastName: e.target.value
@@ -146,7 +146,7 @@ const CheckoutForm = ({props}) => {
                                 name="company"
                                 id="company"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={addressFormData.company}
+                                value={addressFormData.company || ""}
                                 onChange={(e) => setAddressFormData({
                                     ...addressFormData,
                                     company: e.target.value
@@ -166,7 +166,7 @@ const CheckoutForm = ({props}) => {
                                 id="address"
                                 autoComplete="street-address"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={addressFormData.streetAddress1}
+                                value={addressFormData.streetAddress1 || ""}
                                 onChange={(e) => setAddressFormData({
                                     ...addressFormData,
                                     streetAddress1: e.target.value
@@ -185,7 +185,7 @@ const CheckoutForm = ({props}) => {
                                 name="apartment"
                                 id="apartment"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={addressFormData.streetAddress2}
+                                value={addressFormData.streetAddress2 || ""}
                                 onChange={(e) => setAddressFormData({
                                     ...addressFormData,
                                     streetAddress2: e.target.value
@@ -205,7 +205,7 @@ const CheckoutForm = ({props}) => {
                                 id="city"
                                 autoComplete="address-level2"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={addressFormData.city}
+                                value={addressFormData.city || ""}
                                 onChange={(e) => setAddressFormData({
                                     ...addressFormData,
                                     city: e.target.value
@@ -224,7 +224,7 @@ const CheckoutForm = ({props}) => {
                                 name="country"
                                 autoComplete="country-name"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={addressFormData.country}
+                                value={addressFormData.country || ""}
                                 onChange={(e) => setAddressFormData({
                                     ...addressFormData,
                                     country: e.target.value
@@ -268,7 +268,7 @@ const CheckoutForm = ({props}) => {
                                 id="postal-code"
                                 autoComplete="postal-code"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={addressFormData.postalCode}
+                                value={addressFormData.postalCode || ""}
                                 onChange={(e) => setAddressFormData({
                                     ...addressFormData,
                                     postalCode: e.target.value
@@ -288,7 +288,7 @@ const CheckoutForm = ({props}) => {
                                 id="phone"
                                 autoComplete="tel"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={addressFormData.phone}
+                                value={addressFormData.phone || ""}
                                 onChange={(e) => setAddressFormData({
                                     ...addressFormData,
                                     phone: e.target.value

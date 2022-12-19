@@ -23,7 +23,7 @@ const CheckoutSummary = ({props}) => {
     return (
         <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
             <h3 className="sr-only">Items in your cart</h3>
-            <ul role="list" className="divide-y divide-gray-200">
+            <ul role="list" className="divide-y divide-gray-200 relative">
                 {cart?.lines?.map((cartItem) => (
                     <CheckoutLine.Detail {...cartItem} key={cartItem.id} />
                 ))}

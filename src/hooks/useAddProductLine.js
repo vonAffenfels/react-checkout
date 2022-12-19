@@ -44,12 +44,7 @@ const useAddProductLine = (shop, client, type) => {
                 mutation: SHOPIFY_CART_ADD_PRODUCT_LINE,
                 variables: {
                     cartId,
-                    lines: lines.map(line => {
-                        return {
-                            quantity: line.quantity,
-                            merchandiseId: line.variantId
-                        }
-                    }),
+                    lines: lines,
                     linesCount: (totalQuantity || 0) + 1
                 }
             });

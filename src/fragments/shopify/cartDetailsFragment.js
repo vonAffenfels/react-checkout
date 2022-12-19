@@ -51,6 +51,9 @@ export default gql`
                         ...PriceFragment
                     }
                 }
+                attribute(key: "bonus_id") {
+                    value
+                }
                 merchandise {
                     ...on ProductVariant {
                         id

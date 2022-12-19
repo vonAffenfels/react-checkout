@@ -65,12 +65,8 @@ const CartWidget = ({props}) => {
 
                             <div className="mt-8">
                                 <div className="flow-root">
-                                    <ul role="list" className="-my-6 divide-y divide-gray-200">
-                                        {cart?.lines?.map((cartItem) => {
-                                            return (
-                                                <CheckoutLine {...cartItem} key={cartItem.id} />
-                                            )
-                                        })}
+                                    <ul role="list" className="-my-6 divide-y divide-gray-200 relative">
+                                        {cart?.lines?.map((cartItem) => <CheckoutLine {...cartItem} key={cartItem.id} />)}
                                         {(isLoadingLineItems || isDebug) && <Item/>}
                                     </ul>
                                 </div>

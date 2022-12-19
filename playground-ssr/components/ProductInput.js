@@ -17,7 +17,7 @@ const ProductInput = ({}) => {
     };
 
     const onClick = async () => {
-        await addItemToCart(variantId);
+        await addItemToCart(variantId, 1, [{key: "bonus_id", value: "123456_gid://shopify/ProductVariant/123456"}]);
     };
 
     if (!ready) {

@@ -109,7 +109,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         setCheckoutToken(checkoutToken);
     };
 
-    const addItemToCart = async (variantId, quantity = 1) => {
+    const addItemToCart = async (variantId, quantity = 1, attributes) => {
         if (!isCartOpen) {
             setCartOpen(true);
         }
@@ -121,21 +121,29 @@ export const CheckoutContextProvider = ({children, channel}) => {
         const lines = [
             {
                 quantity: quantity,
-                variantId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", "")
+                merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", ""),
             }
         ];
+        if (attributes?.length) {
+            lines[0].attributes = attributes;
+        }
 
         setLoadingLineItems(true);
-        const cartData = await addProductLine({
-            checkoutToken,
-            cartId,
-            lines: lines,
-            totalQuantity: cart.totalQuantity,
-        });
-        setCart({
-            ...(cart || {}),
-            ...cartData
-        });
+        try {
+            const cartData = await addProductLine({
+                checkoutToken,
+                cartId,
+                lines: lines,
+                totalQuantity: cart.totalQuantity,
+            });
+            setCart({
+                ...(cart || {}),
+                ...cartData
+            });
+        } catch (e) {
+            console.log("error in addItemToCart", e);
+            getCartById();
+        }
         setLoadingLineItems(false);
     };
 
@@ -144,11 +152,16 @@ export const CheckoutContextProvider = ({children, channel}) => {
             return;
         }
 
-        const cartData = await deleteProductLine({checkoutToken, cartId, lineId, totalQuantity: cart.totalQuantity});
-        setCart({
-            ...(cart || {}),
-            ...cartData
-        });
+        try {
+            const cartData = await deleteProductLine({checkoutToken, cartId, lineId, totalQuantity: cart.totalQuantity});
+            setCart({
+                ...(cart || {}),
+                ...cartData
+            });
+        } catch (e) {
+            console.log("error in removeItemFromCart", e);
+            getCartById();
+        }
     };
 
     const setCartAddress = async (address) => {
@@ -265,13 +278,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const getCartById = async () => {
-        console.log("getCartById", cartId)
         if (cartId) {
             let data = await cartById(cartId, cart?.totalQuantity);
             if (data.lines?.length && (data.lines.length < data.totalQuantity)) {
                 data = await cartById(cartId, data.totalQuantity);
             }
-            console.log("getCartById data", data);
             setCart(data);
         } else {
             setCart(null);

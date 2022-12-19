@@ -83,7 +83,6 @@ function transformCart(node) {
         totalTaxAmount,
     } = node.cost;
 
-    console.log("transformCart", node);
     const checkout = {
         //TODO its variant x quantity, not count of lineItems
         totalQuantity: node.totalQuantity,
@@ -91,7 +90,7 @@ function transformCart(node) {
         token: node.id,
         webUrl: node.checkoutUrl,
         lines: (node.lines?.nodes || []).map(node => {
-            const {cost, id, merchandise, quantity} = node;
+            const {cost, id, merchandise, quantity, attribute} = node;
 
             if (!merchandise) {
                 return null;
@@ -102,7 +101,7 @@ function transformCart(node) {
             }
 
             const {amount, currencyCode} = cost.amountPerQuantity;
-            return {
+            const retVal = {
                 quantity: quantity,
                 id: id,
                 variant: {
@@ -131,7 +130,17 @@ function transformCart(node) {
                         currency: currencyCode
                     }
                 }
+            };
+
+            const bonusProduct = attribute?.value?.split?.("_") || [];
+            if (bonusProduct?.length) {
+                retVal.bonusProduct = {
+                    sku: bonusProduct?.[0],
+                    variantId: bonusProduct?.[1],
+                };
             }
+
+            return retVal;
         }).filter(Boolean),
         email: node.buyerIdentity?.email,
         subtotalPrice: {

@@ -1,5 +1,5 @@
 const Price = ({price}) => {
-    if (!price) {
+    if (!price && price !== 0) {
         return "--";
     }
 
