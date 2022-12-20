@@ -62,7 +62,7 @@ const CheckoutLine = ({
             </li>
             {bonusProduct && (
                 <>
-                    <div style={{border: "0", marginTop: "-.75rem"}} className="pl-10 absolute z-50">
+                    <div style={{border: "0", marginTop: "-.75rem"}} className="pl-10 absolute z-50 text-color-500">
                         <span className="inline bg-white pl-5 pr-5">
                             <CheckMarkIcon />
                             kostenfrei als Prämie
@@ -183,7 +183,7 @@ const CheckoutLineDetail = ({
             </li>
             {bonusProduct && (
                 <>
-                    <div style={{border: "0", marginTop: "-.75rem"}} className="pl-10 absolute z-50">
+                    <div style={{border: "0", marginTop: "-.75rem"}} className="pl-10 absolute z-50 text-color-500">
                         <span className="inline bg-white pl-5 pr-5">
                             <CheckMarkIcon />
                             kostenfrei als Prämie
