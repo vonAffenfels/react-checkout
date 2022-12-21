@@ -8,7 +8,7 @@ const SidePanelLayout = ({show, onClose, children}) => {
             show={show}
             as={"div"}
         >
-            <Dialog className="relative z-50" onClose={onClose}>
+            <Dialog className="relative z-insane" onClose={onClose}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-500"
