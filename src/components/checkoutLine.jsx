@@ -42,7 +42,7 @@ const CheckoutLine = ({
                             </h3>
                             <p className="ml-4"><Price price={totalPrice?.gross?.amount}/> {totalPrice?.gross?.currency}</p>
                         </div>
-                        <p className="mt-1 text-sm text-color-500">{variantTitle}</p>
+                        {!bonusProduct && <p className="mt-1 text-sm text-color-500">{variantTitle}</p>}
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
                         <p className="text-color-500">Menge {quantity}</p>
@@ -69,14 +69,14 @@ const CheckoutLine = ({
                         </span>
                     </div>
                     <div className="w-full border-top-0 border-bottom-1 absolute" />
-                    <BonusLine {...bonusProduct} />
+                    <BonusLine {...bonusProduct} variantTitle={variantTitle} />
                 </>
             )}
         </>
     );
 };
 
-const BonusLine = ({sku, variantId, product}) => {
+const BonusLine = ({aboSku, variantSku, product, variantTitle}) => {
     return (
         <li className="flex py-6" style={{border: "0"}}>
             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
@@ -89,7 +89,7 @@ const BonusLine = ({sku, variantId, product}) => {
             <div className="ml-4 flex flex-1 flex-col">
                 <div>
                     <div className="flex justify-between text-base font-medium text-color-900">
-                        <h3>{sku} {variantId}</h3>
+                        <h3>{variantTitle}</h3>
                     </div>
                     <p className="mt-1 text-sm text-color-500">Prämie</p>
                 </div>
@@ -140,7 +140,7 @@ const CheckoutLineDetail = ({
                                     {variant.product.name}
                                 </a>
                             </h4>
-                            <p className="mt-1 text-sm text-color-500">{variantTitle}</p>
+                            {!bonusProduct && <p className="mt-1 text-sm text-color-500">{variantTitle}</p>}
                         </div>
 
                         <div className="ml-4 flex-shrink-0 flow-root">
@@ -190,14 +190,14 @@ const CheckoutLineDetail = ({
                         </span>
                     </div>
                     <div className="w-full border-top-0 border-bottom-1 absolute" />
-                    <BonusLineDetail {...bonusProduct} />
+                    <BonusLineDetail {...bonusProduct} variantTitle={variantTitle} />
                 </>
             )}
         </>
     );
 };
 
-const BonusLineDetail = ({sku, variantId, product}) => {
+const BonusLineDetail = ({aboSku, variantSku, product, variantTitle}) => {
     return (
         <li className="flex py-6 px-4 sm:px-6">
             <div className="flex-shrink-0">
@@ -212,7 +212,7 @@ const BonusLineDetail = ({sku, variantId, product}) => {
                 <div className="flex">
                     <div className="min-w-0 flex-1">
                         <h4 className="text-sm font-medium text-color-700 hover:text-color-800">
-                            {sku} {variantId}
+                            {variantTitle}
                         </h4>
                         <p className="mt-1 text-sm text-color-500">Prämie</p>
                     </div>

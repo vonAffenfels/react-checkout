@@ -7,7 +7,7 @@ function transformShopifyLineItems(lines) {
         if (line.bonusProduct) {
             retVal.customAttributes = [{
                 key: "bonus_id",
-                value: line.bonusProduct.sku + "_" + line.bonusProduct.variantId,
+                value: line.bonusProduct.aboSku + "_" + line.bonusProduct.variantSku,
             }];
         }
         return retVal;

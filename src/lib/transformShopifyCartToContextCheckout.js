@@ -135,8 +135,8 @@ function transformCart(node) {
             const bonusProduct = attribute?.value?.split?.("_") || [];
             if (bonusProduct?.length) {
                 retVal.bonusProduct = {
-                    sku: bonusProduct?.[0],
-                    variantId: bonusProduct?.[1],
+                    aboSku: bonusProduct?.[0],
+                    variantSku: bonusProduct?.[1],
                 };
             }
 
