@@ -224,7 +224,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
             //TODO if on server side, you have to send all the data...
             const lineItems = cart.lines.map(line => ({
                 quantity: line.quantity || 1,
-                variantId: "gid://shopify/ProductVariant/" + String(line.variant.id).replace("gid://shopify/ProductVariant/", "")
+                variantId: "gid://shopify/ProductVariant/" + String(line.variant.id).replace("gid://shopify/ProductVariant/", ""),
+                customAttributes: line.bonusProduct ? [
+                    {key: "bonus_id", value: line.bonusProduct.aboSku + "_" + line.bonusProduct.variantSku}
+                ] : [],
             }));
             const input = {
                 allowPartialAddresses: false,

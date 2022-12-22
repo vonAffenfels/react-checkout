@@ -40,6 +40,10 @@ export default gql`
             edges {
                 node {
                     id
+                    customAttributes {
+                        key
+                        value
+                    }
                     quantity
                     variant {
                         id

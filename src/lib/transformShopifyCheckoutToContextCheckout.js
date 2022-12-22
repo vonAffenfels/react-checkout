@@ -2,7 +2,6 @@
 function transformCheckout(node) {
     console.log("transformCheckout", node)
     const shippingMethods = (node.availableShippingRates?.shippingRates || []).map(rate => {
-        console.log("rate", rate);
         return {
             id: rate.handle,
             name: rate.title,
@@ -33,7 +32,7 @@ function transformCheckout(node) {
         webUrl: node.webUrl,
         requiresShipping: node.requiresShipping,
         lines: (node.lineItems?.edges || []).map(edge => {
-            const {quantity, variant, id} = edge.node;
+            const {quantity, variant, id, customAttributes = []} = edge.node;
 
             if (!variant) {
                 return null;
@@ -43,6 +42,7 @@ function transformCheckout(node) {
             return {
                 quantity: quantity,
                 id: id,
+                customAttributes: customAttributes.map(v => ({key: v.key, value: v.value})),
                 variant: {
                     id: variant.id,
                     name: variant.title,

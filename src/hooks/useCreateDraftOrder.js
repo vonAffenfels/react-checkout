@@ -39,9 +39,7 @@ const useDeliveryMethodUpdate = (shop, client) => {
                     title: shippingMethod.name,
                 };
             }
-            console.log("useCreateDraftOrder", input);
             const draftOrder = await createDraftOrder(webhookUri, input);
-            console.log("draftOrder", draftOrder);
 
             if (draftOrder) {
                 return {

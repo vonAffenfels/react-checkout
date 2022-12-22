@@ -44,11 +44,10 @@ export const BuyContextProvider = (props) => {
                 headers: {"Content-Type": "application/x-www-form-urlencoded"}
             }).then(res => res.json());
 
-            console.log("PAYMENT STATE:", result);
             let isError = result.status !== "succeeded";
             let msg = isError ? "Bei der Bestellung ist etwas schiefgegangen." : "Die Bestellung war erfolgreich!";
-            setBannerMessage({msg, isError});
-            setTimeout(() => setBannerMessage(null), 10000);
+            // setBannerMessage({msg, isError});
+            // setTimeout(() => setBannerMessage(null), 10000);
         }
     }
 
