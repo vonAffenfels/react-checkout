@@ -2,8 +2,8 @@ import React, {Fragment} from "react";
 import {RadioGroup} from "@headlessui/react";
 import {CheckCircleIcon, RefreshIcon} from "@heroicons/react/solid";
 
-import {Spin} from "./atoms/animate.jsx";
-import Price from "./atoms/price.jsx";
+import {Spin} from "../atoms/animate.jsx";
+import Price from "../atoms/price.jsx";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");

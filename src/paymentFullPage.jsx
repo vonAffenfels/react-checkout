@@ -2,6 +2,7 @@ import React, {Fragment, useContext, useEffect, useState} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 
 import CheckoutContext from "./context/CheckoutContext";
+import AbortButton from "./components/abortButton.jsx";
 import CloseButton from "./components/closeButton.jsx";
 import FullPageLayout from "./components/fullPageLayout.jsx";
 import PaymentForm from "./components/paymentForm.jsx";
@@ -26,6 +27,7 @@ const PaymentFullPage = ({}) => {
                 leaveTo="translate-x-full"
             >
                 <Dialog.Panel className="pointer-events-auto w-screen overflow-y-auto">
+                    <AbortButton onClick={() => setDisplayState("cartFullPage")} />
                     <CloseButton onClick={() => setDisplayState("widget")} />
                 </Dialog.Panel>
 

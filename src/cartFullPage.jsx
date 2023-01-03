@@ -9,23 +9,9 @@ import CheckoutSummary from "./components/checkoutSummary.jsx";
 
 const CartFullPage = ({props}) => {
     const {
-        cart,
-        checkout,
         setDisplayState,
-        createCheckout,
         onBeforePayment,
-        loadingDraftOrder
     } = useContext(CheckoutContext);
-
-    useEffect(() => {
-        if (!loadingDraftOrder && checkout?.draftOrder) {
-            setDisplayState("payment");
-        }
-    }, [loadingDraftOrder]);
-
-    useEffect(() => {
-
-    }, [checkout?.id]);
 
     const onSubmit = (e) => {
         e.preventDefault();

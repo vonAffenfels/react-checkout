@@ -61,10 +61,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
     //order
     const createDraftOrder = useCreateDraftOrder(buyContext.shop, client);
 
-    const [checkoutToken, setCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
+    const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
 
-    const [cartId, setCartId] = useLocalStorage(CONST.CART_KEY);
+    const [cartId, setCartId, removeCartId] = useLocalStorage(CONST.CART_KEY);
     const [cart, setCart] = useState(null);
 
     const [displayState, setDisplayState] = useState("widget");
@@ -74,6 +74,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [isSettingShippingMethod, setSettingShippingMethod] = useState(false);
     const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(null);
     const [loadingDraftOrder, setLoadingDraftOrder] = useState(false);
+
     const [addressFormData, setAddressFormData] = useState({
         email: "",
         firstName: "",
@@ -88,12 +89,32 @@ export const CheckoutContextProvider = ({children, channel}) => {
         phone: ""
     });
     const addressFormDataDebounced = useDebounce(addressFormData, 750);
+    const [isBillingAddressDeviating, setBillingAddressDeviating] = useState(false);
+    const [billingAddress, setBillingAddress] = useState({
+        email: "",
+        firstName: "",
+        lastName: "",
+        company: "",
+        streetAddress1: "",
+        streetAddress2: "",
+        city: "",
+        state: "",
+        country: "",
+        postalCode: "",
+        phone: ""
+    });
+    const billingAddressDebounced = useDebounce(billingAddress, 750);
 
-    const createCart = async (variantId) => {
+    const createCart = async (lines) => {
         setLoadingLineItems(true);
-        const createdCartId = await cartCreate({channel, variantId});
+        try {
+            const createdCartId = await cartCreate({channel, lines});
+            setCartId(createdCartId);
+        } catch (e) {
+            console.log("error in createCart");
+            console.log(e);
+        }
         setLoadingLineItems(false);
-        setCartId(createdCartId);
     };
 
     const createCheckout = async ({variants}) => {
@@ -101,21 +122,22 @@ export const CheckoutContextProvider = ({children, channel}) => {
             variants = [variants];
         }
 
-        const lineItems = variants.map(variant => ({
-            quantity: variant.quantity || 1,
-            variantId: "gid://shopify/ProductVariant/" + String(variant.id).replace("gid://shopify/ProductVariant/", "")
-        }));
-        const checkoutToken = await checkoutCreate({channel, lineItems});
-        setCheckoutToken(checkoutToken);
+        try {
+            const lineItems = variants.map(variant => ({
+                quantity: variant.quantity || 1,
+                variantId: "gid://shopify/ProductVariant/" + String(variant.id).replace("gid://shopify/ProductVariant/", "")
+            }));
+            const checkoutToken = await checkoutCreate({channel, lineItems});
+            setCheckoutToken(checkoutToken);
+        } catch (e) {
+            console.log("error in createCheckout");
+            console.log(e);
+        }
     };
 
     const addItemToCart = async (variantId, quantity = 1, attributes) => {
         if (!isCartOpen) {
             setCartOpen(true);
-        }
-
-        if (!cart) {
-            return createCart(variantId);
         }
 
         const lines = [
@@ -126,6 +148,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
         ];
         if (attributes?.length) {
             lines[0].attributes = attributes;
+        }
+
+        if (!cart) {
+            return createCart(lines);
         }
 
         setLoadingLineItems(true);
@@ -165,17 +191,19 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const setCartAddress = async (address) => {
+        console.log("setCartAddress", address);
         if (!cart) {
             return;
         }
 
         setLoadingShippingMethods(true);
         try {
-            //TODO billing and shipping different
-            const [shippingAddressCart, billingAddressCheckout] = await Promise.all([
-                shippingAddressUpdate({checkoutToken, cartId, address, totalQuantity: cart.totalQuantity}),
-                billingAddressUpdate({checkoutToken, cartId, address, totalQuantity: cart.totalQuantity})
-            ]);
+            const shippingAddressCart = await shippingAddressUpdate({
+                checkoutToken,
+                cartId,
+                address,
+                totalQuantity: cart.totalQuantity
+            });
             setCart({
                 ...(cart || {}),
                 ...(shippingAddressCart || {}),
@@ -194,83 +222,86 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
 
         setSettingShippingMethod(true);
-        const cartData = await deliveryMethodUpdate({
-            checkoutToken,
-            checkout,
-            cartId,
-            deliveryMethodId,
-            cart,
-            webhookUri: buyContext.webhookUri,
-        });
-        setCart({
-            ...(cart || {}),
-            ...cartData
-        });
+        try {
+            const cartData = await deliveryMethodUpdate({
+                checkoutToken,
+                checkout,
+                cartId,
+                deliveryMethodId,
+                cart,
+                webhookUri: buyContext.webhookUri,
+            });
+            setCart({
+                ...(cart || {}),
+                ...cartData
+            });
+        } catch (e) {
+            console.log("catch setCartDeliveryMethod");
+            console.log(e);
+            getCartById();
+        }
         setSettingShippingMethod(false);
     }
 
     const onBeforePayment = async () => {
-        console.log("onBeforePayment", cart);
         if (!cart || !cart?.lines?.length) {
             return;
         }
 
         setLoadingDraftOrder(true);
-        let paymentCheckoutToken = checkout?.token;
-        let paymentCheckoutData = JSON.parse(JSON.stringify(checkout));
-
-        if (!paymentCheckoutToken) {
-            //TODO before creating the draftOrder, now create the checkout or maybe on server api?
-            //TODO if on server side, you have to send all the data...
-            const lineItems = cart.lines.map(line => ({
-                quantity: line.quantity || 1,
-                variantId: "gid://shopify/ProductVariant/" + String(line.variant.id).replace("gid://shopify/ProductVariant/", ""),
-                customAttributes: line.bonusProduct ? [
-                    {key: "bonus_id", value: line.bonusProduct.aboSku + "_" + line.bonusProduct.variantSku}
-                ] : [],
-            }));
-            const input = {
-                allowPartialAddresses: false,
-                lineItems: lineItems,
-                email: cart.email,
-                buyerIdentity: {
-                    countryCode: cart.shippingAddress.countryCode
-                },
-                shippingAddress: {
-                    address1: cart.shippingAddress.streetAddress1,
-                    address2: cart.shippingAddress.streetAddress2,
-                    city: cart.shippingAddress.city,
-                    company: cart.shippingAddress.companyName,
-                    country: cart.shippingAddress.countryCode,
-                    firstName: cart.shippingAddress.firstName,
-                    lastName: cart.shippingAddress.lastName,
-                    province: cart.shippingAddress.countryArea,
-                    zip: cart.shippingAddress.postalCode
-                },
-            };
-            console.log("checkoutCreate, input:", input);
-            paymentCheckoutToken = await checkoutCreate({channel, input});
-            paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
-            console.log("paymentCheckoutData", paymentCheckoutData);
-            if (paymentCheckoutData.requiresShipping) {
-                paymentCheckoutData.shippingMethods.forEach(rate => {
-                    if (rate.name === cart.shippingMethod.name) {
-                        paymentCheckoutData.shippingMethod = {
-                            price: {
-                                amount: rate.price.amount
-                            },
-                            id: rate.id,
-                            name: rate.name
-                        };
-                    }
-                });
-            }
+        const lineItems = cart.lines.map(line => ({
+            quantity: line.quantity || 1,
+            variantId: "gid://shopify/ProductVariant/" + String(line.variant.id).replace("gid://shopify/ProductVariant/", ""),
+            customAttributes: line.bonusProduct ? [
+                {key: "bonus_id", value: line.bonusProduct.aboSku + "_" + line.bonusProduct.variantSku}
+            ] : [],
+        }));
+        const input = {
+            allowPartialAddresses: false,
+            lineItems: lineItems,
+            email: cart.email,
+            buyerIdentity: {
+                countryCode: cart.shippingAddress.countryCode
+            },
+            shippingAddress: {
+                address1: cart.shippingAddress.streetAddress1,
+                address2: cart.shippingAddress.streetAddress2,
+                city: cart.shippingAddress.city,
+                company: cart.shippingAddress.companyName,
+                country: cart.shippingAddress.countryCode,
+                firstName: cart.shippingAddress.firstName,
+                lastName: cart.shippingAddress.lastName,
+                province: cart.shippingAddress.countryArea,
+                zip: cart.shippingAddress.postalCode
+            },
+        };
+        console.log("checkoutCreate, input:", input);
+        let paymentCheckoutToken = await checkoutCreate({channel, input});
+        let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
+        console.log("paymentCheckoutData", paymentCheckoutData);
+        if (paymentCheckoutData.requiresShipping) {
+            paymentCheckoutData.shippingMethods.forEach(rate => {
+                if (rate.name === cart.shippingMethod.name) {
+                    paymentCheckoutData.shippingMethod = {
+                        price: {
+                            amount: rate.price.amount
+                        },
+                        id: rate.id,
+                        name: rate.name
+                    };
+                }
+            });
         }
 
         const checkoutData = await createDraftOrder({
             checkoutToken: paymentCheckoutToken,
             checkout: paymentCheckoutData,
-            webhookUri: buyContext.webhookUri
+            webhookUri: buyContext.webhookUri,
+            billingAddress: isBillingAddressDeviating ? {
+                ...billingAddress,
+                email: addressFormData.email
+            } : paymentCheckoutData.shippingAddress,
+            selectedPaymentGatewayId: selectedPaymentGatewayId,
         });
         setCheckout({
             ...(checkout || {}),
@@ -278,31 +309,47 @@ export const CheckoutContextProvider = ({children, channel}) => {
         });
         setCheckoutToken(paymentCheckoutToken);
         setLoadingDraftOrder(false);
+        setDisplayState("payment");
     };
 
     const getCartById = async () => {
-        if (cartId) {
-            let data = await cartById(cartId, cart?.totalQuantity);
-            if (data.lines?.length && (data.lines.length < data.totalQuantity)) {
-                data = await cartById(cartId, data.totalQuantity);
+        try {
+            if (cartId) {
+                let data = await cartById(cartId, cart?.totalQuantity);
+                if (data?.lines?.length && (data.lines.length < data.totalQuantity)) {
+                    data = await cartById(cartId, data.totalQuantity);
+                }
+                setCart(data);
+            } else {
+                setCart(null);
             }
-            setCart(data);
-        } else {
-            setCart(null);
+        } catch (e) {
+            console.log("catch getCartById");
+            console.log(e);
         }
     };
 
     const getCheckoutByToken = async () => {
-        if (checkoutToken) {
-            const data = await checkoutByToken(checkoutToken);
-            setCheckout({
-                ...(checkout || {}),
-                ...data
-            });
-        } else {
-            setCheckout(null);
+        try {
+            if (checkoutToken) {
+                const data = await checkoutByToken(checkoutToken);
+                setCheckout({
+                    ...(checkout || {}),
+                    ...data
+                });
+            } else {
+                setCheckout(null);
+            }
+        } catch (e) {
+            console.log("error in getCheckoutByToken");
+            console.log(e)
         }
     };
+
+    const isAddressDataValid = (addressData) => {
+        const {firstName, lastName, streetAddress1, city, country, postalCode} = addressData;
+        return firstName && lastName && streetAddress1 && city && country && postalCode;
+    }
 
     const isInputAddressDifferentFromCheckoutAddress = (inputAddress) => {
         let foundDiff = false;
@@ -326,10 +373,14 @@ export const CheckoutContextProvider = ({children, channel}) => {
         return foundDiff;
     };
 
+    const reset = () => {
+        setCartId(null);
+        setCheckoutToken(null);
+        setDisplayState("widget");
+    };
+
     useEffect(() => {
-        if (checkoutToken && checkout) {
-            getCheckoutByToken();
-        }
+        getCheckoutByToken();
     }, [checkoutToken]);
 
     useEffect(() => {
@@ -352,7 +403,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     useEffect(() => {
         let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
-        if (firstName && lastName && streetAddress1 && city && country && postalCode) {
+        // if (isAddressDataValid(addressFormDataDebounced)) {
             let addressInput = {firstName, lastName, city, country, postalCode, streetAddress1, email};
 
             if (phone) {
@@ -365,11 +416,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 addressInput.countryArea = state;
             }
 
-
             if (isInputAddressDifferentFromCheckoutAddress(addressInput)) {
                 setCartAddress(addressInput);
             }
-        }
+        // }
     }, [addressFormDataDebounced]);
 
     return (
@@ -397,8 +447,15 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setAddressFormData,
             selectedPaymentGatewayId,
             setSelectedPaymentGatewayId,
+            billingAddress,
+            billingAddressDebounced,
+            setBillingAddress,
+            isBillingAddressDeviating,
+            setBillingAddressDeviating,
             loadingDraftOrder,
-            setLoadingDraftOrder,
+            removeCartId,
+            removeCheckoutToken,
+            reset
         }}>
             {children}
         </CheckoutContext.Provider>

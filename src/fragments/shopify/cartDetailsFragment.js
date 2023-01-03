@@ -65,9 +65,9 @@ export default gql`
                         product {
                             id
                             title
+                            productType
                             featuredImage {
                                 url
-                                altText
                             }
                         }
                     }

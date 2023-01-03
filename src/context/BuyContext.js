@@ -14,7 +14,7 @@ export const BuyContextProvider = (props) => {
     const [isMounted, setMounted] = useState(false);
     const {uri, shop, children, paymentProviders, channel} = props;
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
-    const [bannerMessage, setBannerMessage] = useState(null);
+    const [bannerMessage, setBannerMessage] = useState({msg: "", isError: false});
 
     if (!uri || !shop) {
         return children;
@@ -46,8 +46,6 @@ export const BuyContextProvider = (props) => {
 
             let isError = result.status !== "succeeded";
             let msg = isError ? "Bei der Bestellung ist etwas schiefgegangen." : "Die Bestellung war erfolgreich!";
-            // setBannerMessage({msg, isError});
-            // setTimeout(() => setBannerMessage(null), 10000);
         }
     }
 
@@ -78,6 +76,7 @@ export const BuyContextProvider = (props) => {
     return (
         <BuyContext.Provider value={{
             ...props,
+            bannerMessage,
             setBannerMessage,
             isDebug: window?.location?.search?.indexOf?.("isDebug") !== -1
         }}>
@@ -85,7 +84,7 @@ export const BuyContextProvider = (props) => {
                 <CheckoutContextProvider channel={channel}>
                     {children}
                     <Cart />
-                    {bannerMessage && <Banner {...bannerMessage} />}
+                    <Banner {...bannerMessage} key="banner-message" />
                 </CheckoutContextProvider>
             </ApolloContextProvider>
         </BuyContext.Provider>

@@ -10,15 +10,17 @@ function classNames(...classes) {
 }
 
 const CheckoutSummary = ({props}) => {
-    const {cart, checkout, selectedPaymentGatewayId, loadingDraftOrder} = useContext(CheckoutContext);
+    const {cart, checkout, selectedPaymentGatewayId, loadingDraftOrder, billingAddressDebounced} = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
 
     useEffect(() => {
-        const isValidShipping = (cart.requiresShipping === false) || (cart?.shippingAddress && cart?.shippingMethod?.id);
-        if (!enabled && cart?.email && isValidShipping && selectedPaymentGatewayId) {
+        const isValidShippingMethod = (cart.requiresShipping === false) || (cart?.shippingAddress && cart?.shippingMethod?.id);
+        if (!enabled && cart?.email && isValidShippingMethod && selectedPaymentGatewayId) {
             setEnabled(true);
         }
     }, [cart?.email, cart?.shippingAddress, cart?.shippingMethod?.id, selectedPaymentGatewayId]);
+
+    const isInvoice = selectedPaymentGatewayId === "invoice";
 
     return (
         <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
@@ -69,9 +71,9 @@ const CheckoutSummary = ({props}) => {
                     {loadingDraftOrder ? (
                         <>
                             <SpinButton />
-                            Bezahlprozess wird vorbereitet ...
+                            {isInvoice ? "Bestellung wird übertragen ..." : "Bezahlprozess wird vorbereitet ..."}
                         </>
-                    ) : "Bestellung bestätigen"}
+                    ) : (isInvoice ? "Bestellung abschließen" : "Bestellung bestätigen")}
                 </button>
             </div>
         </div>

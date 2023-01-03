@@ -1,21 +1,26 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useContext} from "react";
 import {RadioGroup} from "@headlessui/react";
 import {CheckCircleIcon} from "@heroicons/react/solid";
+import CheckoutContext from "../../context/CheckoutContext";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
 const PaymentMethodOption = ({paymentMethod}) => {
+    const {cart} = useContext(CheckoutContext);
+    const isDisabled = typeof paymentMethod.isDisabled === "function" ? paymentMethod.isDisabled(cart) : false;
 
     return (
         <RadioGroup.Option
             value={paymentMethod.id}
+            disabled={isDisabled}
             className={({active, checked}) =>
                 classNames(
                     checked ? "border-transparent" : "border-gray-300",
                     active ? "ring-2 ring-indigo-500" : "",
-                    "relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
+                    isDisabled ? "cursor-not-allowed opacity-75" : "cursor-pointer",
+                    "relative bg-white border rounded-lg shadow-sm p-4 flex focus:outline-none"
                 )
             }
         >
@@ -23,15 +28,28 @@ const PaymentMethodOption = ({paymentMethod}) => {
                 <Fragment>
                     <span className="flex-1 flex">
                         <span className="flex flex-col">
-                            <RadioGroup.Label as="span" className="block text-sm font-medium text-color-900">
+                            <RadioGroup.Label as="span" className={
+                                classNames(
+                                    "block text-sm font-medium",
+                                    isDisabled ? "text-color-500" : "text-color-900"
+                                )
+                            }>
                                 {paymentMethod.name}
                             </RadioGroup.Label>
                             <RadioGroup.Description
                                 as="span"
                                 className="mt-1 flex items-center text-sm text-color-500"
                             >
-                                {paymentMethod.id}
+                                {paymentMethod.description}
                             </RadioGroup.Description>
+                            {isDisabled && (
+                                <RadioGroup.Description
+                                    as="span"
+                                    className="mt-1 flex items-center text-sm text-color-500"
+                                >
+                                    Für diese Auswahl an Produkten nicht verfügbar
+                                </RadioGroup.Description>
+                            )}
                         </span>
                     </span>
                     {checked ? <CheckCircleIcon className="h-5 w-5 text-bg-color-600" aria-hidden="true"/> : null}

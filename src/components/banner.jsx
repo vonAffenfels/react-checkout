@@ -1,22 +1,37 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {SpeakerphoneIcon, XIcon} from "@heroicons/react/outline";
+import BuyContext from "../context/BuyContext";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function Banner({msg, isError}) {
-    const [show, setShow] = useState(true);
+let timeoutHandle = null;
 
-    const hide = () => setShow(false);
+export default function Banner() {
+    const {bannerMessage: {msg, isError}, setBannerMessage} = useContext(BuyContext);
 
-    if (!show) {
+    const hide = () => {
+        setBannerMessage({msg: "", isError: false});
+    };
+
+    useEffect(() => {
+        if (timeoutHandle) {
+            clearTimeout(timeoutHandle);
+        }
+        timeoutHandle = setTimeout(() => {
+            hide();
+            timeoutHandle = null;
+        }, 7000);
+    }, [msg]);
+
+    if (!msg) {
         return null;
     }
 
     return (
-        <div className="fixed top-10 inset-x-0 pb-2 sm:pb-5">
-            <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div id="react-ez-checkout-banner" className="fixed top-10 inset-x-0 pb-2 sm:pb-5">
+            <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8">
                 <div className={
                     classNames(
                         isError ? "bg-red-600" : "bg-color-600",
@@ -38,18 +53,13 @@ export default function Banner({msg, isError}) {
                                 <span className="hidden md:inline">{msg}</span>
                             </p>
                         </div>
-                        <div className="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
-                            <a className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-bg-color-600 bg-white hover:bg-color-200">
-                                Details
-                            </a>
-                        </div>
                         <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
                             <button
                                 type="button"
                                 className="-mr-1 flex p-2 rounded-md hover:bg-color-500 focus:outline-none focus:ring-2 focus:ring-white"
                             >
                                 <span className="sr-only">Schließen</span>
-                                <XIcon className="h-6 w-6 text-white" onClick={hide} aria-hidden="true"/>
+                                <XIcon className="h-6 w-6" onClick={hide} aria-hidden="true"/>
                             </button>
                         </div>
                     </div>

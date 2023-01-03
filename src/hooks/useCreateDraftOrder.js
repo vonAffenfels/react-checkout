@@ -16,11 +16,11 @@ const useDeliveryMethodUpdate = (shop, client) => {
 
         };
     } else if (shop === "shopify") {
-        return async ({checkoutToken, webhookUri, checkout}) => {
+        return async ({checkoutToken, webhookUri, checkout, billingAddress, selectedPaymentGatewayId}) => {
             const input = {
                 lineItems: transformLineItems(checkout.lines),
                 email: checkout.email,
-                billingAddress: transformAddress(checkout.billingAddress || checkout.shippingAddress),
+                billingAddress: transformAddress(billingAddress),
                 shippingAddress: transformAddress(checkout.shippingAddress),
                 metafields: [
                     {
@@ -39,30 +39,28 @@ const useDeliveryMethodUpdate = (shop, client) => {
                     title: shippingMethod.name,
                 };
             }
-            const draftOrder = await createDraftOrder(webhookUri, input);
+            const {draftOrder, order} = await createDraftOrder(webhookUri, JSON.stringify({
+                type: "shopify.draft_order_create",
+                input: input,
+                selectedPaymentGatewayId: selectedPaymentGatewayId,
+            }));
 
-            if (draftOrder) {
-                return {
-                    ...(checkout || {}),
-                    draftOrder: draftOrder
-                }
-            } else {
-                return checkout;
+            return {
+                ...(checkout || {}),
+                draftOrder: draftOrder,
+                order: order
             }
         };
     }
 }
 
-async function createDraftOrder(webhookUri, input) {
+async function createDraftOrder(webhookUri, body) {
     return fetch(webhookUri, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            type: "shopify.draft_order_create",
-            input: input
-        })
+        body: body
     }).then(res => res.json());
 }
 

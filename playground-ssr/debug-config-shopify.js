@@ -7,7 +7,25 @@ export default {
     availablePaymentGateways: [
         {
             id: "stripe",
-            name: "Stripe"
+            name: "Stripe",
+            description: "Kreditkarte, Lastschrift, SEPA-Überweisung, Giropay",
+            isDisabled: function isStripeDisabled (cart) {
+                return false;
+            }
+        },
+        {
+            id: "invoice",
+            name: "Rechnung",
+            isDisabled: function isInvoiceDisabled (cart) {
+                return cart.hasDigitalItem;
+            }
+        },
+        {
+            id: "paypal",
+            name: "PayPal",
+            isDisabled: function isPayPalDisabled (cart) {
+                return cart.hasSubscriptionItem;
+            }
         }
     ],
     paymentProviders: [
@@ -15,8 +33,16 @@ export default {
             name: "stripe",
             config: {
                 apiUri: "https://mmstupicl7.execute-api.eu-central-1.amazonaws.com/shopify",
-                apiKey: "pk_test_51KyvxoC6ZdKmUgiesvK91vRkvWQ0X7qrPDLObx0U8awu9dyPwfTiU3vcCRpOnvCruyCMUoFsIDoE1aDm8flWLefY00es42eq9A"
+                apiKey: "pk_live_51MCi5UGfzuneej5pip9BTmYZzbCeQHngCbYNhousDpeWxwXitHsw0s3ElYdPGQYBwSqnZO74jJeystZZuB8thVrt0064WrDXJv"
             }
+        },
+        {
+            name: "invoice",
+            config: {}
+        },
+        {
+            name: "paypal",
+            config: {}
         }
     ]
 };

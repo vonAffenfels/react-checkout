@@ -4,6 +4,8 @@ function transformCart(node) {
         return null;
     }
     let requiresShipping = false;
+    let hasDigitalItem = false;
+    let hasSubscriptionItem = false;
     let shippingMethod = null;
     let shippingAddress = null;
     const shippingMethods = [];
@@ -98,6 +100,12 @@ function transformCart(node) {
 
             if (merchandise.requiresShipping) {
                 requiresShipping = true;
+            } else {
+                hasDigitalItem = true;
+            }
+
+            if (String(merchandise.product?.productType).toLowerCase() === "abo") {
+                hasSubscriptionItem = true;
             }
 
             const {amount, currencyCode} = cost.amountPerQuantity;
@@ -169,6 +177,8 @@ function transformCart(node) {
     };
 
     checkout.requiresShipping = requiresShipping;
+    checkout.hasDigitalItem = hasDigitalItem;
+    checkout.hasSubscriptionItem = hasSubscriptionItem;
     checkout.shippingAddress = shippingAddress;
 
     if (shippingMethod) {
@@ -180,6 +190,9 @@ function transformCart(node) {
             }
         }
     }
+
+    // TODO set by config and strip off if digital/abo or whatever
+    //checkout.availablePaymentGateways = [];
 
     return checkout;
 }

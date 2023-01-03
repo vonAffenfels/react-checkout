@@ -4,6 +4,7 @@ import {loadStripe} from "@stripe/stripe-js";
 import CheckoutContext from "../context/CheckoutContext";
 import StripePayment from "./payments/stripePayment.jsx";
 import ManualPayment from "./payments/manualPayment.jsx";
+import Success from "./payments/success.jsx";
 import BuyContext from "../context/BuyContext";
 
 const PaymentForm = ({}) => {
@@ -31,8 +32,11 @@ const PaymentForm = ({}) => {
                     }
                     break;
                 case "manual":
-                    const renderOutput = <ManualPayment key="manual-payment" />;
-                    setComponent(renderOutput);
+                    setComponent(<ManualPayment key="manual-payment" />);
+                    break;
+                case "invoice":
+                    setComponent(<Success key="invoice-success" />);
+                    break;
                 default:
                     break;
             }

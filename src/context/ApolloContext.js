@@ -4,9 +4,9 @@ import {
     ApolloProvider,
     InMemoryCache,
     HttpLink,
-    // ApolloLink,
-    from
+    ApolloLink,
 } from "@apollo/client";
+import {onError} from "@apollo/client/link/error";
 import BuyContext from "./BuyContext";
 
 export const ApolloContext = createContext({});
@@ -14,7 +14,16 @@ export const ApolloContext = createContext({});
 export const ApolloContextProvider = ({children, uri}) => {
     const {storefrontApiKey} = useContext(BuyContext);
 
-    const httpLink = new HttpLink({uri: uri});
+    const errorLink = onError((errorResponse) => {
+        const {graphQLErrors, networkError} = errorResponse;
+        console.log("graphQL errorResponse", errorResponse);
+    });
+    const httpLink = new HttpLink({
+        uri: uri,
+        headers: {
+            "X-Shopify-Storefront-Access-Token": storefrontApiKey || ""
+        }
+    });
 
     const client = new ApolloClient({
         cache: new InMemoryCache(),
@@ -28,11 +37,7 @@ export const ApolloContextProvider = ({children, uri}) => {
                 errorPolicy: "all",
             }
         },
-        // link: from([httpLink]),
-        uri: uri,
-        headers: {
-            "X-Shopify-Storefront-Access-Token": storefrontApiKey || ""
-        }
+        link: ApolloLink.from([errorLink, httpLink]),
     });
 
     return (

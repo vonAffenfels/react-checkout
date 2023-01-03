@@ -19,13 +19,7 @@ const useCheckoutCreate = (shop, client) => {
 
         };
     } else if (shop === "shopify") {
-        return async ({variantId}) => {
-            const lines = [
-                {
-                    quantity: 1,
-                    merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", "")
-                }
-            ];
+        return async ({lines}) => {
             const {data} = await client.mutate({
                 mutation: SHOPIFY_CART_CREATE,
                 variables: {
