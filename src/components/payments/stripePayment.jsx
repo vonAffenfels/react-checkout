@@ -79,7 +79,6 @@ const StripePayment = ({stripePromise}) => {
     });
 
     const createPaymentIntent = async () => {
-        console.log("createPaymentIntent", GLOBAL_PAYMENT_INTENT_HANDLED_FLAG, clientSecret);
         try {
             if (GLOBAL_PAYMENT_INTENT_HANDLED_FLAG || clientSecret) {
                 return;
@@ -99,8 +98,6 @@ const StripePayment = ({stripePromise}) => {
                 })
             }).then(res => res.json());
 
-            console.log("apiUri", apiUri);
-            console.log("paymentIntent", paymentIntent);
             if (!paymentIntent || !paymentIntent.client_secret) {
                 return;
             }
@@ -112,7 +109,6 @@ const StripePayment = ({stripePromise}) => {
     };
 
     useEffect(() => {
-        console.log("useEffect, stripePayment.jsx:", executedRef?.current);
         if (executedRef?.current) {
             return;
         }

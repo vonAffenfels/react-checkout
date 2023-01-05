@@ -73,7 +73,7 @@ function transformCart(node) {
             companyName: node.shippingAddress?.company,
             countryArea: node.shippingAddress?.province,
             country: node.shippingAddress?.countryCode || node.shippingAddress?.country,
-            countryCode: node.shippingAddress?.countryCodeV2
+            countryCode: node.shippingAddress?.countryCodeV2 || node.buyerIdentity?.countryCode
         };
     }
 
@@ -174,6 +174,10 @@ function transformCart(node) {
             }
         },
         shippingMethods: shippingMethods,
+        buyerIdentity: {
+            countryCode: node.buyerIdentity?.countryCode,
+            email: node.buyerIdentity?.email,
+        }
     };
 
     checkout.requiresShipping = requiresShipping;

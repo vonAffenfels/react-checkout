@@ -147,6 +147,7 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                                 country: e.target.value
                             })}
                         >
+                            <option value={null}>Bitte wählen</option>
                             {Object.keys(CONST.COUNTRIES).map(countryCode => (
                                 <option value={countryCode} key={countryCode}>{CONST.COUNTRIES[countryCode]}</option>
                             ))}

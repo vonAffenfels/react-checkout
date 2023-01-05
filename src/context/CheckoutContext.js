@@ -167,7 +167,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 ...cartData
             });
         } catch (e) {
-            console.log("error in addItemToCart", e);
+            console.log("error in addProductLine", e);
             getCartById();
         }
         setLoadingLineItems(false);
@@ -191,8 +191,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const setCartAddress = async (address) => {
-        console.log("setCartAddress", address);
-        if (!cart) {
+        console.log("setCartAddress", address, !!cart);
+        if (!cart || !address?.country) {
             return;
         }
 
@@ -256,14 +256,17 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 {key: "bonus_id", value: line.bonusProduct.aboSku + "_" + line.bonusProduct.variantSku}
             ] : [],
         }));
+        console.log("onBeforePayment, cart:", cart);
         const input = {
             allowPartialAddresses: false,
             lineItems: lineItems,
             email: cart.email,
             buyerIdentity: {
-                countryCode: cart.shippingAddress.countryCode
+                countryCode: cart.shippingAddress.countryCode || cart.buyerIdentity?.countryCode
             },
-            shippingAddress: {
+        };
+        if (cart.requiresShipping) {
+            input.shippingAddress = {
                 address1: cart.shippingAddress.streetAddress1,
                 address2: cart.shippingAddress.streetAddress2,
                 city: cart.shippingAddress.city,
@@ -273,8 +276,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 lastName: cart.shippingAddress.lastName,
                 province: cart.shippingAddress.countryArea,
                 zip: cart.shippingAddress.postalCode
-            },
-        };
+            };
+        }
         console.log("checkoutCreate, input:", input);
         let paymentCheckoutToken = await checkoutCreate({channel, input});
         let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
@@ -318,6 +321,14 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 let data = await cartById(cartId, cart?.totalQuantity);
                 if (data?.lines?.length && (data.lines.length < data.totalQuantity)) {
                     data = await cartById(cartId, data.totalQuantity);
+                }
+                const availablePaymentGateways = data?.availablePaymentGateways || buyContext.availablePaymentGateways || [];
+                if (selectedPaymentGatewayId) {
+                    availablePaymentGateways.forEach(gateway => {
+                        if (gateway.id === selectedPaymentGatewayId && gateway?.isDisabled?.(data)) {
+                            setSelectedPaymentGatewayId(null);
+                        }
+                    });
                 }
                 setCart(data);
             } else {
@@ -374,6 +385,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const reset = () => {
+        setSelectedPaymentGatewayId(null);
         setCartId(null);
         setCheckoutToken(null);
         setDisplayState("widget");

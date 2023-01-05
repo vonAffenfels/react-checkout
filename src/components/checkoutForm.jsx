@@ -35,7 +35,7 @@ const CheckoutForm = ({props}) => {
         if (cart?.email && cart?.email !== "anonymous@example.com") {
             updateAddressFormData.email = cart.email;
         }
-        if (cart?.shippingAddress) {
+        if (cart?.shippingAddress && cart?.requiresShipping) {
             let adressData = {
                 firstName: cart?.shippingAddress?.firstName,
                 lastName: cart?.shippingAddress?.lastName,
@@ -68,8 +68,6 @@ const CheckoutForm = ({props}) => {
             setSelectedPaymentGatewayId(paymentGatewayId);
         }
     };
-
-    console.log("isBillingAddressDeviating", isBillingAddressDeviating);
 
     return (
         <div>

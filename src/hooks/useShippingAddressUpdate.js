@@ -50,6 +50,7 @@ const useShippingAddressUpdate = (shop, client, type) => {
             }
 
             if (data?.cartBuyerIdentityUpdate?.cart) {
+                console.log("data.cartBuyerIdentityUpdate.cart", data.cartBuyerIdentityUpdate.cart);
                 return transformCart(data.cartBuyerIdentityUpdate.cart);
             }
         };

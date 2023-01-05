@@ -33,7 +33,7 @@ export default {
             name: "stripe",
             config: {
                 apiUri: "https://mmstupicl7.execute-api.eu-central-1.amazonaws.com/shopify",
-                apiKey: "pk_live_51MCi5UGfzuneej5pip9BTmYZzbCeQHngCbYNhousDpeWxwXitHsw0s3ElYdPGQYBwSqnZO74jJeystZZuB8thVrt0064WrDXJv"
+                apiKey: "pk_test_51MCi5UGfzuneej5pJsAnnx22NIEU3B2Ak7xdhuNuKROMp4uHWuxpCKJ4nlOOovqxmSRl1qwOHFyMXtyQDN9cmgRC00oy2Zctgg"
             }
         },
         {
@@ -42,7 +42,10 @@ export default {
         },
         {
             name: "paypal",
-            config: {}
+            config: {
+                apiUri: "https://mmstupicl7.execute-api.eu-central-1.amazonaws.com/shopify",
+                apiKey: "AZQxQ7RoNULnLO2A6Um5rEOZHfn4L5o33RlkYtrOKKUc0A1vpDyPb57hg6PhqypLFher1dxo7lWPyiAD"
+            }
         }
     ]
 };
