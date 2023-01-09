@@ -208,7 +208,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 ...cartData
             });
         } catch (e) {
-            console.log("error in addProductLine", e);
+            console.log("error in updateCartItems", e);
             getCartById();
         }
         setLoadingLineItems(false);
@@ -475,6 +475,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         // }
     }, [addressFormDataDebounced]);
 
+    console.log("CheckoutContext.js");
     return (
         <CheckoutContext.Provider value={{
             checkout,

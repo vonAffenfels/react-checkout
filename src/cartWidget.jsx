@@ -28,8 +28,11 @@ const CartWidget = ({props}) => {
         console.log("openFullPage called, cart:", cart);
         e.preventDefault();
         if (cart) {
+            console.log("setCartOpen");
             setCartOpen(false);
+            console.log("setDisplayState");
             setDisplayState("cartFullPage");
+            console.log("passed");
         }
     };
 
