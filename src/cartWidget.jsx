@@ -25,6 +25,7 @@ const CartWidget = ({props}) => {
     } = useContext(CheckoutContext);
 
     const openFullPage = (e) => {
+        console.log("openFullPage called, cart:", cart);
         e.preventDefault();
         if (cart) {
             setCartOpen(false);

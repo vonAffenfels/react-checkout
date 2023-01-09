@@ -12,8 +12,6 @@ const Success = () => {
     const orderName = checkout?.order?.name;
     const executedRef = useRef(false);
 
-    console.log("checkout", checkout, JSON.parse(JSON.stringify(checkout)), orderName);
-
     useEffect(() => {
         if (executedRef?.current) {
             return;

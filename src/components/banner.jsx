@@ -30,7 +30,7 @@ export default function Banner() {
     }
 
     return (
-        <div id="react-ez-checkout-banner" className="fixed top-10 inset-x-0 pb-2 sm:pb-5">
+        <div id="react-ez-checkout-banner" className="fixed top-10 inset-x-0 pb-2 sm:pb-5 z-insane">
             <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8">
                 <div className={
                     classNames(
