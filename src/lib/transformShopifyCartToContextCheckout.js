@@ -195,9 +195,6 @@ function transformCart(node) {
         }
     }
 
-    // TODO set by config and strip off if digital/abo or whatever
-    //checkout.availablePaymentGateways = [];
-
     return checkout;
 }
 

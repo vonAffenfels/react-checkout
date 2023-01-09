@@ -1,7 +1,6 @@
 import {gql} from "@apollo/client";
 
 import PriceFragment from "./priceFragment";
-//TODO lineItems iterable
 
 export default gql`
     ${PriceFragment}
@@ -55,7 +54,7 @@ export default gql`
                             id
                             title
                             featuredImage {
-                                url
+                                url(transform: {maxHeight: 128, maxWidth: 128, crop: CENTER, preferredContentType: WEBP})
                                 altText
                             }
                         }

@@ -18,6 +18,7 @@ import useCart from "../hooks/useCart";
 import useCheckoutCreate from "../hooks/useCheckoutCreate";
 import useAddProductLine from "../hooks/useAddProductLine";
 import useDeleteProductLine from "../hooks/useDeleteProductLine";
+import useUpdateProductLine from "../hooks/useUpdateProductLine";
 import useShippingAddressUpdate from "../hooks/useShippingAddressUpdate";
 import useBillingAddressUpdate from "../hooks/useBillingAddressUpdate";
 import useEmailUpdate from "../hooks/useEmailUpdate";
@@ -44,6 +45,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const cartCreate = useCartCreate(buyContext.shop, client);
     const addProductLine = useAddProductLine(buyContext.shop, client, "cart");
     const deleteProductLine = useDeleteProductLine(buyContext.shop, client, "cart");
+    const updateProductLine = useUpdateProductLine(buyContext.shop, client, "cart");
     const shippingAddressUpdate = useShippingAddressUpdate(buyContext.shop, client, "cart");
     const billingAddressUpdate = useBillingAddressUpdate(buyContext.shop, client, "cart");
     const deliveryMethodUpdate = useDeliveryMethodUpdate(buyContext.shop, client, "cart");
@@ -172,6 +174,45 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
         setLoadingLineItems(false);
     };
+
+    const updateCartItems = async ({lineId, variantId, quantity, bonusProduct}) => {
+        if (!isCartOpen) {
+            setCartOpen(true);
+        }
+
+        const lines = [
+            {
+                id: lineId,
+                quantity: quantity,
+                merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", ""),
+            }
+        ];
+        if (bonusProduct) {
+            lines[0].attributes = [{key: "bonus_id", value: bonusProduct.aboSku + "_" + bonusProduct.variantSku}];
+        }
+
+        if (!cart) {
+            return createCart(lines);
+        }
+
+        setLoadingLineItems(true);
+        try {
+            const cartData = await updateProductLine({
+                checkoutToken,
+                cartId,
+                lines: lines,
+                totalQuantity: cart.totalQuantity,
+            });
+            setCart({
+                ...(cart || {}),
+                ...cartData
+            });
+        } catch (e) {
+            console.log("error in addProductLine", e);
+            getCartById();
+        }
+        setLoadingLineItems(false);
+    }
 
     const removeItemFromCart = async (lineId) => {
         if (!cart) {
@@ -442,6 +483,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             createCheckout,
             addItemToCart,
             removeItemFromCart,
+            updateCartItems,
             setCartAddress,
             setCartDeliveryMethod,
             onBeforePayment,

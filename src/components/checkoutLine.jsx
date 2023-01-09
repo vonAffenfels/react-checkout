@@ -4,6 +4,7 @@ import {TrashIcon} from "@heroicons/react/solid";
 import CheckoutContext from "../context/CheckoutContext";
 import Price from "./atoms/price.jsx";
 import {CheckMarkIcon} from "./atoms/icons.jsx";
+import {Spin} from "./atoms/animate.jsx";
 
 const CheckoutLine = ({
     id,
@@ -103,22 +104,49 @@ const CheckoutLineDetail = ({
     variant,
     quantity,
     totalPrice,
-    bonusProduct
+    bonusProduct,
 }) => {
-    const {removeItemFromCart} = useContext(CheckoutContext);
+    const {removeItemFromCart, updateCartItems, isLoadingLineItems} = useContext(CheckoutContext);
 
     const onRemove = async () => {
         await removeItemFromCart(id);
     };
 
-    const onChangeQuantity = async () => {
-        // TODO
-        console.warn("TODO onChangeQuantity");
+    const onChangeQuantity = async (e) => {
+        const updatedQuantity = parseInt(e.target.value);
+        await updateCartItems({
+            lineId: id,
+            variantId: variant.id,
+            quantity: updatedQuantity,
+            bonusProduct: bonusProduct,
+        });
     }
 
     let variantTitle = "";
     if (String(variant.name).toLowerCase() !== "default title") {
         variantTitle = variant.name.charAt(0).toUpperCase() + variant.name.substring(1);
+    }
+
+    const getOptions = () => {
+        let values = [quantity];
+        let count = 0;
+        while (values.length < 8) {
+            let newLowerVal = quantity - 1 - count;
+            let newUpperVal = quantity + 1 + count;
+            if (newLowerVal > 0) {
+                values.push(newLowerVal);
+            }
+            values.push(newUpperVal);
+            count++;
+        }
+        values.sort((a, b) => {
+            if (a > b) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+        return values.map(v => <option value={v} key={"checkout-line-option-" + id + v}>{v}</option>);
     }
 
     return (
@@ -162,21 +190,22 @@ const CheckoutLineDetail = ({
                             <label htmlFor="quantity" className="sr-only">
                                 Anzahl
                             </label>
-                            <select
-                                id="quantity"
-                                name="quantity"
-                                onChange={onChangeQuantity}
-                                className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            >
-                                <option value={1}>1</option>
-                                <option value={2}>2</option>
-                                <option value={3}>3</option>
-                                <option value={4}>4</option>
-                                <option value={5}>5</option>
-                                <option value={6}>6</option>
-                                <option value={7}>7</option>
-                                <option value={8}>8</option>
-                            </select>
+                            {isLoadingLineItems ? (
+                                <div className="rounded-md border border-gray-300 ml-2 pl-4 py-2">
+                                    <Spin h={6} w={6} />
+                                </div>
+                            ) : (
+                                <select
+                                    id="quantity"
+                                    name="quantity"
+                                    onChange={onChangeQuantity}
+                                    value={quantity}
+                                    disabled={isLoadingLineItems}
+                                    className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                >
+                                    {getOptions()}
+                                </select>
+                            )}
                         </div>
                     </div>
                 </div>

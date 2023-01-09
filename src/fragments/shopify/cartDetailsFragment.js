@@ -1,7 +1,6 @@
 import {gql} from "@apollo/client";
 
 import PriceFragment from "./priceFragment";
-//TODO lines iterable
 
 export default gql`
     ${PriceFragment}
@@ -67,14 +66,13 @@ export default gql`
                             title
                             productType
                             featuredImage {
-                                url
+                                url(transform: {maxHeight: 128, maxWidth: 128, crop: CENTER, preferredContentType: WEBP})
                             }
                         }
                     }
                 }
             }
         }
-        # TODO what exactly is a group? because options already is an array, multiple needed here?
         deliveryGroups(first: 2) {
             nodes {
                 id
@@ -106,16 +104,5 @@ export default gql`
                 }
             }
         }
-
-
-
-# TODO shippingLine seems to be the selectedDeliveryOption
-#        shippingLine {
-#            title
-#            priceV2 {
-#                ...PriceFragment
-#            }
-#        }
-#        requiresShipping
     }
 `;
