@@ -14,7 +14,7 @@ const CheckoutSummary = ({props}) => {
     const [enabled, setEnabled] = useState(false);
 
     useEffect(() => {
-        const isValidShippingMethod = (cart.requiresShipping === false) || (cart?.shippingAddress && cart?.shippingMethod?.id);
+        const isValidShippingMethod = (cart?.requiresShipping === false) || (cart?.shippingAddress && cart?.shippingMethod?.id);
         if (!enabled && cart?.email && isValidShippingMethod && selectedPaymentGatewayId) {
             setEnabled(true);
         }

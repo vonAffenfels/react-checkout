@@ -14,12 +14,14 @@ const CartFullPage = ({props}) => {
     } = useContext(CheckoutContext);
 
     const onSubmit = (e) => {
+        console.log("CartFullPage, onSubmit");
         e.preventDefault();
         e.stopPropagation();
 
         onBeforePayment();
     }
 
+    console.log("CartFullPage");
     return (
         <FullPageLayout show={true}>
             <Transition.Child

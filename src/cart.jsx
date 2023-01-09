@@ -9,6 +9,7 @@ const Cart = ({...props}) => {
     let {displayState} = useContext(CheckoutContext);
     let component = null;
 
+    console.log("rez: cart, displayState", displayState);
     if (displayState === "widget") {
         component = <CartWidget />
     } else if (displayState === "cartFullPage") {
