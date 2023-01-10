@@ -14,6 +14,7 @@ const CheckoutSummary = ({props}) => {
     const [enabled, setEnabled] = useState(false);
 
     useEffect(() => {
+        console.log("CheckoutSummary, useEffect");
         const isValidShippingMethod = (cart?.requiresShipping === false) || (cart?.shippingAddress && cart?.shippingMethod?.id);
         if (!enabled && cart?.email && isValidShippingMethod && selectedPaymentGatewayId) {
             setEnabled(true);
@@ -22,6 +23,7 @@ const CheckoutSummary = ({props}) => {
 
     const isInvoice = selectedPaymentGatewayId === "invoice";
 
+    console.log("CheckoutSummary");
     return (
         <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
             <h3 className="sr-only">Items in your cart</h3>
