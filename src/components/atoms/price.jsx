@@ -1,3 +1,5 @@
+import React from "react";
+
 const Price = ({price}) => {
     if (!price && price !== 0) {
         return <>{"--"}</>;

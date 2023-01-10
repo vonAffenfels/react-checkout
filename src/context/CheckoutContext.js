@@ -67,7 +67,12 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [checkout, setCheckout] = useState(null);
 
     const [cartId, setCartId, removeCartId] = useLocalStorage(CONST.CART_KEY);
-    const [cart, setCart] = useState(null);
+    const [cart, _setCart] = useState(null);
+
+    const setCart = (cart) => {
+        console.log("setCart called", cart);
+        _setCart(cart);
+    }
 
     const [displayState, setDisplayState] = useState("widget");
     const [isCartOpen, setCartOpen] = useState(false);
@@ -454,6 +459,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [isCartOpen, displayState]);
 
     useEffect(() => {
+        console.log("useEffect, deps [addressFormDataDebounced]")
         let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
         // if (isAddressDataValid(addressFormDataDebounced)) {
