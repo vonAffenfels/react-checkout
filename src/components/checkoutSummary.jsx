@@ -24,6 +24,7 @@ const CheckoutSummary = ({props}) => {
     const isInvoice = selectedPaymentGatewayId === "invoice";
 
     console.log("CheckoutSummary");
+    return null;
     return (
         <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
             <h3 className="sr-only">Items in your cart</h3>
