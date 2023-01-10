@@ -106,6 +106,7 @@ const CheckoutLineDetail = ({
     totalPrice,
     bonusProduct,
 }) => {
+    console.log("CheckoutLineDetail");
     const {removeItemFromCart, updateCartItems, isLoadingLineItems} = useContext(CheckoutContext);
 
     const onRemove = async () => {

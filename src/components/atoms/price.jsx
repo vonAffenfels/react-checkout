@@ -1,6 +1,6 @@
 const Price = ({price}) => {
     if (!price && price !== 0) {
-        return "--";
+        return <>{"--"}</>;
     }
 
     price = parseFloat(price).toFixed(2);
@@ -11,7 +11,7 @@ const Price = ({price}) => {
         price[1] = price[1] + "0";
     }
 
-    return price.join(".");
+    return <>{price.join(".")}</>;
 };
 
 export default Price;
