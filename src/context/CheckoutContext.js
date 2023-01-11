@@ -528,6 +528,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
         // }
     }, [addressFormDataDebounced]);
 
+    useEffect(() => {
+        console.log("useEffect CART!");
+    }, [cart]);
+
     return (
         <CheckoutContext.Provider value={{
             checkout,

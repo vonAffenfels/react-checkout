@@ -75,12 +75,12 @@ const CartWidget = ({props}) => {
 
                         <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                             <div className="flex justify-between text-base font-medium text-color-900">
-                                <p>Warenkorb</p>
+                                <p>Warenkorb inkl. gesetzlicher Mwst.</p>
                                 <p><Price price={cart?.subtotalPrice?.net?.amount}/> {cart?.subtotalPrice?.net?.currency}</p>
                             </div>
                             {!!cart?.shippingPrice?.gross?.amount ? (
                                 <div className="flex justify-between text-base font-small text-color-500">
-                                    <p>Versand</p>
+                                    <p>Versand inkl. gesetzlicher Mwst.</p>
                                     <p><Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}</p>
                                 </div>
                             ) : (
