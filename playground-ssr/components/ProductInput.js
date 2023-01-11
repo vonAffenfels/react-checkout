@@ -10,14 +10,14 @@ const ProductInput = ({}) => {
         setReady(true);
     }, []);
 
-    const [variantId, setVariantId] = useState("41229846839428");
+    const [variantId, setVariantId] = useState("41207459545220");
 
     const onChange = (e) => {
         setVariantId(e.target.value);
     };
 
     const onClick = async () => {
-        await addItemToCart(variantId, 1, [{key: "bonus_id", value: "KP0000023_A000000524"}]);
+        await addItemToCart(variantId, 1);
     };
 
     if (!ready) {

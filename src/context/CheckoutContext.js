@@ -25,6 +25,7 @@ import useEmailUpdate from "../hooks/useEmailUpdate";
 import useDeliveryMethodUpdate from "../hooks/useDeliveryMethodUpdate";
 import useCheckout from "../hooks/useCheckout";
 import useCreateDraftOrder from "../hooks/useCreateDraftOrder";
+import useDiscountCodeUpdate from "../hooks/useDiscountCodeUpdate";
 
 import BuyContext from "./BuyContext";
 import CONST from "../lib/const";
@@ -49,6 +50,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const shippingAddressUpdate = useShippingAddressUpdate(buyContext.shop, client, "cart");
     const billingAddressUpdate = useBillingAddressUpdate(buyContext.shop, client, "cart");
     const deliveryMethodUpdate = useDeliveryMethodUpdate(buyContext.shop, client, "cart");
+    const discountCodeUpdate = useDiscountCodeUpdate(buyContext.shop, client, "cart");
 
     //checkout
     const checkoutByToken = useCheckout(buyContext.shop, client);
@@ -59,6 +61,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const billingAddressUpdateCheckout = useBillingAddressUpdate(buyContext.shop, client, "checkout");
     const emailUpdateCheckout = useEmailUpdate(buyContext.shop, client, "checkout");
     const deliveryMethodUpdateCheckout = useDeliveryMethodUpdate(buyContext.shop, client, "checkout");
+    const discountCodeUpdateCheckout = useDiscountCodeUpdate(buyContext.shop, client, "checkout");
 
     //order
     const createDraftOrder = useCreateDraftOrder(buyContext.shop, client);
@@ -258,7 +261,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         } catch (e) {
             console.log("catch setCartAddress");
             console.log("setCartAddress", e.toString());
-            // getCartById();
+            getCartById();
         } finally {
             console.log("finally");
         }
@@ -290,6 +293,27 @@ export const CheckoutContextProvider = ({children, channel}) => {
             getCartById();
         }
         setSettingShippingMethod(false);
+    }
+
+    const applyDiscountCode = async (discountCodes = [""]) => {
+        if (!cart) {
+            return;
+        }
+
+        try {
+            const cartData = await discountCodeUpdate({
+                cartId,
+                discountCodes: discountCodes,
+                totalQuantity: cart.totalQuantity,
+            });
+            setCart({
+                ...(cart || {}),
+                ...cartData
+            });
+        } catch (e) {
+            console.log("catch applyDiscountCode");
+            console.log(e);
+        }
     }
 
     const onBeforePayment = async () => {
@@ -345,6 +369,20 @@ export const CheckoutContextProvider = ({children, channel}) => {
             });
         }
 
+        if (cart.discountCodes.length) {
+            for (let i = 0; cart.discountCodes.length > i; i++) {
+                try {
+                    await discountCodeUpdateCheckout({
+                        checkoutToken: paymentCheckoutToken,
+                        discountCode: cart.discountCodes[i].code
+                    });
+                } catch (e) {
+                    console.log("error in discountCodeUpdateCheckout");
+                    console.log(e);
+                }
+            }
+        }
+
         const checkoutData = await createDraftOrder({
             checkoutToken: paymentCheckoutToken,
             checkout: paymentCheckoutData,
@@ -366,15 +404,20 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     const getCartById = async () => {
         try {
+            console.log("getCartById", cartId);
             if (cartId) {
                 let data = await cartById(cartId, cart?.totalQuantity);
+                console.log("getCartById, first res", data);
                 if (data?.lines?.length && (data.lines.length < data.totalQuantity)) {
                     data = await cartById(cartId, data.totalQuantity);
+                    console.log("getCartById, second res", data);
                 }
                 const availablePaymentGateways = data?.availablePaymentGateways || buyContext.availablePaymentGateways || [];
+                console.log("getCartById, selectedPaymentGatewayId", selectedPaymentGatewayId);
                 if (selectedPaymentGatewayId) {
                     availablePaymentGateways.forEach(gateway => {
                         if (gateway.id === selectedPaymentGatewayId && gateway?.isDisabled?.(data)) {
+                            console.log("getCartById, setting the gateway to null");
                             setSelectedPaymentGatewayId(null);
                         }
                     });
@@ -517,6 +560,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             loadingDraftOrder,
             removeCartId,
             removeCheckoutToken,
+            applyDiscountCode,
             reset
         }}>
             {children}

@@ -3,6 +3,7 @@ function transformCart(node) {
     if (!node) {
         return null;
     }
+
     let requiresShipping = false;
     let hasDigitalItem = false;
     let hasSubscriptionItem = false;
@@ -91,6 +92,18 @@ function transformCart(node) {
         id: node.id,
         token: node.id,
         webUrl: node.checkoutUrl,
+        discountCodes: (node.discountCodes || []).map(discount => {
+            return {
+                applicable: discount?.applicable,
+                code: discount?.code
+            }
+        }),
+        discountAllocations: (node.discountAllocations || []).map(discount => {
+            return {
+                amount: discount.discountedAmount.amount,
+                currency: discount.discountedAmount.currencyCode
+            }
+        }),
         lines: (node.lines?.nodes || []).map(node => {
             const {cost, id, merchandise, quantity, attribute} = node;
 

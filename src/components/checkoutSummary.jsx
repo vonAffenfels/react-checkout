@@ -10,8 +10,11 @@ function classNames(...classes) {
 }
 
 const CheckoutSummary = ({props}) => {
-    const {cart, checkout, selectedPaymentGatewayId, loadingDraftOrder, billingAddressDebounced} = useContext(CheckoutContext);
+    const {cart, checkout, selectedPaymentGatewayId, loadingDraftOrder, billingAddressDebounced, applyDiscountCode} = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
+    const [discountCode, setDiscountCode] = useState("");
+
+    const isInvoice = selectedPaymentGatewayId === "invoice";
 
     useEffect(() => {
         const isValidShippingMethod = (cart?.requiresShipping === false) || (cart?.shippingAddress && cart?.shippingMethod?.id);
@@ -20,7 +23,10 @@ const CheckoutSummary = ({props}) => {
         }
     }, [cart?.email, cart?.shippingAddress, cart?.shippingMethod?.id, selectedPaymentGatewayId]);
 
-    const isInvoice = selectedPaymentGatewayId === "invoice";
+    const onClickDiscountCode = (e) => {
+        console.log("onClickDiscountCode");
+        applyDiscountCode([discountCode]);
+    };
 
     return (
         <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
@@ -43,6 +49,14 @@ const CheckoutSummary = ({props}) => {
                         <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
                     </dd>
                 </div>
+                {cart?.discountAllocations?.length > 0 && cart.discountAllocations.map((discount, i) => (
+                    <div className="flex items-center justify-between" key={"discount-allocation-" + i}>
+                        <dt className="text-sm">Rabatt</dt>
+                        <dd className="text-sm font-medium text-color-900">
+                            -<Price price={discount?.amount}/> {discount?.currency}
+                        </dd>
+                    </div>
+                ))}
                 <div className="flex items-center justify-between">
                     <dt className="text-sm">Steuern</dt>
                     <dd className="text-sm font-medium text-color-900">
@@ -56,6 +70,49 @@ const CheckoutSummary = ({props}) => {
                     </dd>
                 </div>
             </dl>
+
+            <div className="border-t border-gray-200 py-6 px-4 sm:px-6 grid grid-cols-4">
+                <div className="col-span-3">
+                    <input
+                        type="text"
+                        id="discount-code"
+                        name="discount-code"
+                        className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        placeholder="Gutscheincode oder Rabattkarte"
+                        value={discountCode}
+                        onChange={(e) => setDiscountCode(e.target.value)}
+                    />
+                </div>
+                <div className="ml-4 col-span-1">
+                    <button
+                        disabled={!discountCode}
+                        onClick={onClickDiscountCode}
+                        type="button"
+                        className={
+                            classNames(
+                                discountCode ? "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
+                                "bg-color-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-base font-medium text-white"
+                            )
+                        }
+                    >Anwenden</button>
+                </div>
+                {cart?.discountCodes?.length > 0 && (
+                    <div className="col-span-4 mt-4">
+                        {cart.discountCodes.map((discount, i) => (
+                            <dt className="flex" key={discount.code}>
+                                <span className={
+                                    classNames(
+                                        "mr-2 rounded-full py-0.5 px-2 text-xs tracking-wide text-color-600",
+                                        discount.applicable ? "bg-green-200" : "bg-red-200"
+                                    )
+                                }>
+                                    {discount.code}
+                                </span>
+                            </dt>
+                        ))}
+                    </div>
+                )}
+            </div>
 
             <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                 <button

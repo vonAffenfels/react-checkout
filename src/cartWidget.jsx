@@ -96,7 +96,7 @@ const CartWidget = ({props}) => {
                                         )
                                     }
                                 >
-                                    Kasse
+                                    Zur Kasse
                                 </a>
                             </div>
                             <div className="mt-6 flex justify-center text-center text-sm text-color-500">
