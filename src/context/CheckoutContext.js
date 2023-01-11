@@ -243,24 +243,24 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
 
         console.log("shippingAddressUpdate call is blocked..");
-        // setLoadingShippingMethods(true);
-        // try {
-        //     const shippingAddressCart = await shippingAddressUpdate({
-        //         checkoutToken,
-        //         cartId,
-        //         address,
-        //         totalQuantity: cart.totalQuantity
-        //     });
-        //     setCart({
-        //         ...(cart || {}),
-        //         ...(shippingAddressCart || {}),
-        //     });
-        // } catch (e) {
-        //     console.log("catch setCartAddress");
-        //     console.log(e);
-        //     getCartById();
-        // }
-        // setLoadingShippingMethods(false);
+        setLoadingShippingMethods(true);
+        try {
+            const shippingAddressCart = await shippingAddressUpdate({
+                checkoutToken,
+                cartId,
+                address,
+                totalQuantity: cart.totalQuantity
+            });
+            setCart({
+                ...(cart || {}),
+                ...(shippingAddressCart || {}),
+            });
+        } catch (e) {
+            console.log("catch setCartAddress");
+            console.log(e);
+            getCartById();
+        }
+        setLoadingShippingMethods(false);
     }
 
     const setCartDeliveryMethod = async (deliveryMethodId) => {
@@ -460,7 +460,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [isCartOpen, displayState]);
 
     useEffect(() => {
-        console.log("useEffect, deps [addressFormDataDebounced]")
         let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
         // if (isAddressDataValid(addressFormDataDebounced)) {
@@ -482,7 +481,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
         // }
     }, [addressFormDataDebounced]);
 
-    console.log("CheckoutContext.js");
     return (
         <CheckoutContext.Provider value={{
             checkout,
