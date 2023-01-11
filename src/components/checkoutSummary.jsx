@@ -10,7 +10,7 @@ function classNames(...classes) {
 }
 
 const CheckoutSummary = ({props}) => {
-    const {cart, checkout, selectedPaymentGatewayId, loadingDraftOrder, billingAddressDebounced, applyDiscountCode} = useContext(CheckoutContext);
+    const {cart, selectedPaymentGatewayId, loadingDraftOrder, applyDiscountCode} = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
     const [discountCode, setDiscountCode] = useState("");
 
@@ -24,13 +24,11 @@ const CheckoutSummary = ({props}) => {
     }, [cart?.email, cart?.shippingAddress, cart?.shippingMethod?.id, selectedPaymentGatewayId]);
 
     const onClickDiscountCode = (e) => {
-        console.log("onClickDiscountCode");
         applyDiscountCode([discountCode]);
     };
 
     return (
         <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-            <h3 className="sr-only">Items in your cart</h3>
             <ul role="list" className="divide-y divide-gray-200 relative">
                 {cart?.lines?.map((cartItem) => (
                     <CheckoutLine.Detail {...cartItem} key={cartItem.id} />

@@ -1,6 +1,8 @@
 import React, {useContext, useEffect, useState} from "react";
 import {RadioGroup} from "@headlessui/react";
 
+import useDebounce from "../hooks/useDebounce";
+
 import CheckoutContext from "../context/CheckoutContext";
 import BuyContext from "../context/BuyContext";
 import ShippingMethodOption from "./molecules/shippingMethodOption.jsx";
@@ -26,35 +28,26 @@ const CheckoutForm = ({props}) => {
         isBillingAddressDeviating,
         setBillingAddressDeviating
     } = useContext(CheckoutContext);
+
     const [tempSelectedShippingMethodId, setTempSelectedShippingMethodId] = useState("");
+    const [_addressFormData, _setAddressFormData] = useState({
+        ...addressFormData,
+        email: cart?.email && cart?.email !== "anonymous@example.com" ? cart.email : addressFormData.email
+    });
+    const addressFormDataDebounced = useDebounce(_addressFormData, 750);
+    const [_billingAddress, _setBillingAddress] = useState({
+        billingAddress,
+        email: cart?.email && cart?.email !== "anonymous@example.com" ? cart.email : addressFormData.email
+    });
+    const billingAddressDebounced = useDebounce(_billingAddress, 750);
 
     useEffect(() => {
-        let updateAddressFormData = {
-            ...addressFormData
-        };
-        if (cart?.email && cart?.email !== "anonymous@example.com") {
-            updateAddressFormData.email = cart.email;
-        }
-        if (cart?.shippingAddress && cart?.requiresShipping) {
-            let adressData = {
-                firstName: cart?.shippingAddress?.firstName,
-                lastName: cart?.shippingAddress?.lastName,
-                streetAddress1: cart?.shippingAddress?.streetAddress1,
-                city: cart?.shippingAddress?.city,
-                country: cart?.shippingAddress?.countryCode,
-                company: cart?.shippingAddress?.companyName,
-                state: cart?.shippingAddress?.countryArea,
-                postalCode: cart?.shippingAddress?.postalCode,
-                phone: cart?.shippingAddress?.phone
-            };
-            updateAddressFormData = {
-                ...updateAddressFormData,
-                ...adressData
-            };
-        }
-        console.log("checkoutForm.jsx, setAddressFormData!");
-        setAddressFormData(updateAddressFormData);
-    }, []);
+        setAddressFormData(addressFormDataDebounced);
+    }, [addressFormDataDebounced]);
+
+    useEffect(() => {
+        setBillingAddress(billingAddressDebounced);
+    }, [billingAddressDebounced]);
 
     const onChangeDeliveryMethod = async (deliveryMethodId) => {
         if (cart?.shippingMethod?.id !== deliveryMethodId) {
@@ -87,9 +80,9 @@ const CheckoutForm = ({props}) => {
                             name="email-address"
                             autoComplete="email"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.email}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.email}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 email: e.target.value
                             })}
                         />
@@ -100,8 +93,8 @@ const CheckoutForm = ({props}) => {
             <div className="mt-10 border-t border-gray-200 pt-10">
                 <AddressForm
                     heading="Lieferadresse"
-                    addressFormData={addressFormData}
-                    setAddressFormData={setAddressFormData}
+                    addressFormData={_addressFormData}
+                    setAddressFormData={_setAddressFormData}
                 />
             </div>
 
@@ -114,8 +107,8 @@ const CheckoutForm = ({props}) => {
                 {isBillingAddressDeviating && (
                     <AddressForm
                         heading="Rechnungsadresse"
-                        addressFormData={billingAddress}
-                        setAddressFormData={setBillingAddress}
+                        addressFormData={_billingAddress}
+                        setAddressFormData={_setBillingAddress}
                     />
                 )}
             </div>
