@@ -73,10 +73,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [cart, _setCart] = useState(null);
 
     const setCart = (cart) => {
-        console.log("setCart called", JSON.stringify(cart));
         _setCart((previousCart) => {
-            console.log("_setCart, previousCart:", JSON.stringify(previousCart), (JSON.stringify(cart) !== JSON.stringify(previousCart)));
-            return cart;
+            console.log("_setCart, carts different?", (JSON.stringify(cart) !== JSON.stringify(previousCart)));
+            return JSON.parse(JSON.stringify(cart));
         });
     }
 
