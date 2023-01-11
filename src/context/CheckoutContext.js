@@ -73,8 +73,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [cart, _setCart] = useState(null);
 
     const setCart = (cart) => {
-        console.log("setCart called", cart);
-        _setCart(cart);
+        console.log("setCart called", cart, "what if we just skip state update?");
+        // _setCart(cart);
     }
 
     const [displayState, setDisplayState] = useState("widget");
