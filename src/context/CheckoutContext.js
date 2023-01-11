@@ -242,24 +242,25 @@ export const CheckoutContextProvider = ({children, channel}) => {
             return;
         }
 
-        setLoadingShippingMethods(true);
-        try {
-            const shippingAddressCart = await shippingAddressUpdate({
-                checkoutToken,
-                cartId,
-                address,
-                totalQuantity: cart.totalQuantity
-            });
-            setCart({
-                ...(cart || {}),
-                ...(shippingAddressCart || {}),
-            });
-        } catch (e) {
-            console.log("catch setCartAddress");
-            console.log(e);
-            getCartById();
-        }
-        setLoadingShippingMethods(false);
+        console.log("shippingAddressUpdate call is blocked..");
+        // setLoadingShippingMethods(true);
+        // try {
+        //     const shippingAddressCart = await shippingAddressUpdate({
+        //         checkoutToken,
+        //         cartId,
+        //         address,
+        //         totalQuantity: cart.totalQuantity
+        //     });
+        //     setCart({
+        //         ...(cart || {}),
+        //         ...(shippingAddressCart || {}),
+        //     });
+        // } catch (e) {
+        //     console.log("catch setCartAddress");
+        //     console.log(e);
+        //     getCartById();
+        // }
+        // setLoadingShippingMethods(false);
     }
 
     const setCartDeliveryMethod = async (deliveryMethodId) => {
