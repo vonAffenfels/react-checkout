@@ -74,7 +74,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     const setCart = (cart) => {
         console.log("setCart called", cart);
-        _setCart(cart);
+        _setCart((previousCart) => {
+            console.log("_setCart, previousCart:", previousCart);
+            return cart;
+        });
     }
 
     const [displayState, setDisplayState] = useState("widget");
