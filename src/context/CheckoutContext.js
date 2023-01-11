@@ -257,8 +257,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
             });
         } catch (e) {
             console.log("catch setCartAddress");
-            console.log(e);
-            getCartById();
+            console.log("setCartAddress", e.toString());
+            // getCartById();
+        } finally {
+            console.log("finally");
         }
         setLoadingShippingMethods(false);
     }
