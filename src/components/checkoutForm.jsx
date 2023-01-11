@@ -52,6 +52,7 @@ const CheckoutForm = ({props}) => {
                 ...adressData
             };
         }
+        console.log("checkoutForm.jsx, setAddressFormData!");
         setAddressFormData(updateAddressFormData);
     }, []);
 

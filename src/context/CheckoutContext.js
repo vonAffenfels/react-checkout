@@ -488,6 +488,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [checkoutToken]);
 
     useEffect(() => {
+        console.log("USE EFFECT WITH CART ID DEPENDENCY");
         getCartById();
     }, [cartId]);
 
