@@ -73,8 +73,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [cart, _setCart] = useState(null);
 
     const setCart = (cart) => {
-        console.log("setCart called", cart, "what if we just skip state update?");
-        // _setCart(cart);
+        console.log("setCart called", cart);
+        _setCart(cart);
     }
 
     const [displayState, setDisplayState] = useState("widget");
@@ -261,7 +261,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         } catch (e) {
             console.log("catch setCartAddress");
             console.log("setCartAddress", e.toString());
-            getCartById();
+            await getCartById();
         } finally {
             console.log("finally");
         }
@@ -506,6 +506,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [isCartOpen, displayState]);
 
     useEffect(() => {
+        console.log("useEffect, addressFormDataDebounced");
         let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
         // if (isAddressDataValid(addressFormDataDebounced)) {
