@@ -243,12 +243,12 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const setCartAddress = async (address) => {
-        console.log("setCartAddress", address, !!cart);
+        console.log("setCartAddress", address, !!cart, isLoadingShippingMethods);
         if (!cart || !address?.country) {
             return;
         }
 
-        console.log("shippingAddressUpdate call is blocked..");
+        console.log("shippingAddressUpdate call..");
         setLoadingShippingMethods(true);
         try {
             const shippingAddressCart = await shippingAddressUpdate({
@@ -491,7 +491,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [checkoutToken]);
 
     useEffect(() => {
-        console.log("USE EFFECT WITH CART ID DEPENDENCY");
         getCartById();
     }, [cartId]);
 
