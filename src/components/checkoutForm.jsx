@@ -91,50 +91,50 @@ const CheckoutForm = ({props}) => {
                 </div>
             </div>
 
-            {/*<div className="mt-10 border-t border-gray-200 pt-10">*/}
-            {/*    <AddressForm*/}
-            {/*        heading="Lieferadresse"*/}
-            {/*        addressFormData={_addressFormData}*/}
-            {/*        setAddressFormData={_setAddressFormData}*/}
-            {/*    />*/}
-            {/*</div>*/}
+            <div className="mt-10 border-t border-gray-200 pt-10">
+                <AddressForm
+                    heading="Lieferadresse"
+                    addressFormData={_addressFormData}
+                    setAddressFormData={_setAddressFormData}
+                />
+            </div>
 
-            {/*<div className="mt-10 border-t border-gray-200 pt-10">*/}
-            {/*    <Checkbox*/}
-            {/*        id="different_billing_address"*/}
-            {/*        label="Rechnungsadresse weicht ab"*/}
-            {/*        onChange={setBillingAddressDeviating}*/}
-            {/*    />*/}
-            {/*    {isBillingAddressDeviating && (*/}
-            {/*        <AddressForm*/}
-            {/*            heading="Rechnungsadresse"*/}
-            {/*            addressFormData={_billingAddress}*/}
-            {/*            setAddressFormData={_setBillingAddress}*/}
-            {/*        />*/}
-            {/*    )}*/}
-            {/*</div>*/}
+            <div className="mt-10 border-t border-gray-200 pt-10">
+                <Checkbox
+                    id="different_billing_address"
+                    label="Rechnungsadresse weicht ab"
+                    onChange={setBillingAddressDeviating}
+                />
+                {isBillingAddressDeviating && (
+                    <AddressForm
+                        heading="Rechnungsadresse"
+                        addressFormData={_billingAddress}
+                        setAddressFormData={_setBillingAddress}
+                    />
+                )}
+            </div>
 
-            {/*{cart?.requiresShipping !== false && (*/}
-            {/*    <div className="mt-10 border-t border-gray-200 pt-10">*/}
-            {/*        <RadioGroup value={cart?.shippingMethod?.id || ""} onChange={onChangeDeliveryMethod}>*/}
-            {/*            <RadioGroup.Label className="text-lg font-medium text-color-900">Versandart</RadioGroup.Label>*/}
+            {cart?.requiresShipping !== false && (
+                <div className="mt-10 border-t border-gray-200 pt-10">
+                    <RadioGroup value={cart?.shippingMethod?.id || ""} onChange={onChangeDeliveryMethod}>
+                        <RadioGroup.Label className="text-lg font-medium text-color-900">Versandart</RadioGroup.Label>
 
-            {/*            <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">*/}
-            {/*                {cart?.shippingMethods?.map((shippingMethod) => (*/}
-            {/*                    <ShippingMethodOption*/}
-            {/*                        shippingMethod={shippingMethod}*/}
-            {/*                        key={shippingMethod.id}*/}
-            {/*                        loading={(isSettingShippingMethod && (shippingMethod.id === tempSelectedShippingMethodId)) || isDebug}*/}
-            {/*                    />*/}
-            {/*                ))}*/}
-            {/*                {((isLoadingShippingMethods && !cart?.shippingMethods?.length) || isDebug) && <LoadingOption/>}*/}
-            {/*                {!isLoadingShippingMethods && !cart?.shippingMethods?.length && (*/}
-            {/*                    <p>Nach Eingabe der Adresse werden die verfügbaren Versandarten angezeigt</p>*/}
-            {/*                )}*/}
-            {/*            </div>*/}
-            {/*        </RadioGroup>*/}
-            {/*    </div>*/}
-            {/*)}*/}
+                        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                            {cart?.shippingMethods?.map((shippingMethod) => (
+                                <ShippingMethodOption
+                                    shippingMethod={shippingMethod}
+                                    key={shippingMethod.id}
+                                    loading={(isSettingShippingMethod && (shippingMethod.id === tempSelectedShippingMethodId)) || isDebug}
+                                />
+                            ))}
+                            {((isLoadingShippingMethods && !cart?.shippingMethods?.length) || isDebug) && <LoadingOption/>}
+                            {!isLoadingShippingMethods && !cart?.shippingMethods?.length && (
+                                <p>Nach Eingabe der Adresse werden die verfügbaren Versandarten angezeigt</p>
+                            )}
+                        </div>
+                    </RadioGroup>
+                </div>
+            )}
 
             {/*{(cart?.shippingMethod?.id || (cart?.requiresShipping === false)) && (*/}
             {/*    <div className="mt-10 border-t border-gray-200 pt-10">*/}
