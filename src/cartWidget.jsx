@@ -26,9 +26,12 @@ const CartWidget = ({props}) => {
 
     const openFullPage = (e) => {
         e.preventDefault();
+        console.log("openFullPage", cart);
         if (cart) {
             setCartOpen(false);
+            console.log("closed cart");
             setDisplayState("cartFullPage");
+            console.log("switched to full page display");
         }
     };
 

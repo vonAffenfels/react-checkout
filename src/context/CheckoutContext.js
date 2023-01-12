@@ -72,11 +72,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [cartId, setCartId, removeCartId] = useLocalStorage(CONST.CART_KEY);
     const [cart, _setCart] = useState(null);
 
-    const setCart = (cart) => {
-        console.log("setCart", cart);
+    const setCart = (newCart) => {
+        console.log("setCart", newCart);
         _setCart((previousCart) => {
-            console.log("_setCart, carts different?", (JSON.stringify(cart) !== JSON.stringify(previousCart)));
-            return JSON.parse(JSON.stringify(cart));
+            console.log("_setCart, carts different?", (JSON.stringify(newCart) !== JSON.stringify(previousCart)));
+            return JSON.parse(JSON.stringify(newCart));
         });
     }
 
