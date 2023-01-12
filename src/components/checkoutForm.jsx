@@ -41,14 +41,13 @@ const CheckoutForm = ({props}) => {
     });
     const billingAddressDebounced = useDebounce(_billingAddress, 750);
 
-    //TODO wieder rein
-    // useEffect(() => {
-    //     setAddressFormData(addressFormDataDebounced);
-    // }, [addressFormDataDebounced]);
-    //
-    // useEffect(() => {
-    //     setBillingAddress(billingAddressDebounced);
-    // }, [billingAddressDebounced]);
+    useEffect(() => {
+        setAddressFormData(addressFormDataDebounced);
+    }, [addressFormDataDebounced]);
+
+    useEffect(() => {
+        setBillingAddress(billingAddressDebounced);
+    }, [billingAddressDebounced]);
 
     const onChangeDeliveryMethod = async (deliveryMethodId) => {
         if (cart?.shippingMethod?.id !== deliveryMethodId) {

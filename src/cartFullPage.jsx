@@ -37,14 +37,14 @@ const CartFullPage = ({props}) => {
                     <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                         <h2 className="sr-only">Kasse</h2>
 
-                        <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16" onSubmit={onSubmit}>
-                            <CheckoutForm />
+                        {/*<form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16" onSubmit={onSubmit}>*/}
+                        {/*    <CheckoutForm />*/}
 
-                            <div className="mt-10 lg:mt-0">
-                                <h2 className="text-lg font-medium text-color-900">Bestellzusammenfassung</h2>
-                                <CheckoutSummary />
-                            </div>
-                        </form>
+                        {/*    <div className="mt-10 lg:mt-0">*/}
+                        {/*        <h2 className="text-lg font-medium text-color-900">Bestellzusammenfassung</h2>*/}
+                        {/*        <CheckoutSummary />*/}
+                        {/*    </div>*/}
+                        {/*</form>*/}
 
                     </div>
 
