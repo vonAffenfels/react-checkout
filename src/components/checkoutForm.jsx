@@ -147,6 +147,7 @@ const CheckoutForm = ({props}) => {
                                 <PaymentMethodOption
                                     paymentMethod={paymentMethod}
                                     key={paymentMethod.id}
+                                    cart={cart}
                                 />
                             ))}
                         </div>

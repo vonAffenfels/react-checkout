@@ -1,14 +1,12 @@
-import React, {Fragment, useContext} from "react";
+import React, {Fragment} from "react";
 import {RadioGroup} from "@headlessui/react";
 import {CheckCircleIcon} from "@heroicons/react/solid";
-import CheckoutContext from "../../context/CheckoutContext";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-const PaymentMethodOption = ({paymentMethod}) => {
-    const {cart} = useContext(CheckoutContext);
+const PaymentMethodOption = ({paymentMethod, cart}) => {
     const isDisabled = false;//typeof paymentMethod.isDisabled === "function" ? paymentMethod.isDisabled(cart) : false;
     console.log("PaymentMethodOption, isDisabled", isDisabled, "paymentMethod", paymentMethod);
 
