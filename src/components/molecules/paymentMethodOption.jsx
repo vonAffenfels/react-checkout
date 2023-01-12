@@ -9,7 +9,7 @@ function classNames(...classes) {
 
 const PaymentMethodOption = ({paymentMethod}) => {
     const {cart} = useContext(CheckoutContext);
-    const isDisabled = typeof paymentMethod.isDisabled === "function" ? paymentMethod.isDisabled(cart) : false;
+    const isDisabled = false;//typeof paymentMethod.isDisabled === "function" ? paymentMethod.isDisabled(cart) : false;
     console.log("PaymentMethodOption, isDisabled", isDisabled, "paymentMethod", paymentMethod);
 
     return null;
