@@ -136,8 +136,8 @@ const CheckoutForm = ({props}) => {
                 </div>
             )}
 
-            {/*{(cart?.shippingMethod?.id || (cart?.requiresShipping === false)) && (*/}
-            {/*    <div className="mt-10 border-t border-gray-200 pt-10">*/}
+            {(cart?.shippingMethod?.id || (cart?.requiresShipping === false)) && (
+                <div className="mt-10 border-t border-gray-200 pt-10">
             {/*        <RadioGroup value={selectedPaymentGatewayId || ""} onChange={onChangePaymentMethod}>*/}
             {/*            <RadioGroup.Label className="text-lg font-medium text-color-900">Bezahlart</RadioGroup.Label>*/}
 
@@ -150,8 +150,8 @@ const CheckoutForm = ({props}) => {
             {/*                ))}*/}
             {/*            </div>*/}
             {/*        </RadioGroup>*/}
-            {/*    </div>*/}
-            {/*)}*/}
+                </div>
+            )}
         </div>
     );
 }
