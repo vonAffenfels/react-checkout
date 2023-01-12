@@ -182,7 +182,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             });
         } catch (e) {
             console.log("error in addProductLine", e);
-            getCartById();
+            // await getCartById();
         }
         setLoadingLineItems(false);
     };
@@ -222,7 +222,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             });
         } catch (e) {
             console.log("error in updateCartItems", e);
-            getCartById();
+            // await getCartById();
         }
         setLoadingLineItems(false);
     }
@@ -241,7 +241,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             });
         } catch (e) {
             console.log("error in removeItemFromCart", e);
-            getCartById();
+            // await getCartById();
         }
     };
 
@@ -298,7 +298,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         } catch (e) {
             console.log("catch setCartDeliveryMethod");
             console.log(e);
-            getCartById();
+            // await getCartById();
         }
         setSettingShippingMethod(false);
     }
