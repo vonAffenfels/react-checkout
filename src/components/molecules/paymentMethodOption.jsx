@@ -17,21 +17,15 @@ const PaymentMethodOption = ({paymentMethod}) => {
             key={paymentMethod.id}
             value={paymentMethod.id}
             disabled={isDisabled}
-            className={({active, checked}) => {
-                console.log("RadioGroup className CB", active, checked, paymentMethod);
-                console.log("RadioGroup className CB", classNames(
-                    checked ? "border-transparent" : "border-gray-300",
-                    active ? "ring-2 ring-indigo-500" : "",
-                    isDisabled ? "cursor-not-allowed opacity-75" : "cursor-pointer",
-                    "relative bg-white border rounded-lg shadow-sm p-4 flex focus:outline-none"
-                ));
-                return classNames(
-                    checked ? "border-transparent" : "border-gray-300",
-                    active ? "ring-2 ring-indigo-500" : "",
-                    isDisabled ? "cursor-not-allowed opacity-75" : "cursor-pointer",
-                    "relative bg-white border rounded-lg shadow-sm p-4 flex focus:outline-none"
-                )
-            }}
+            className={"relative bg-white border rounded-lg shadow-sm p-4 flex focus:outline-none"}
+            // className={({active, checked}) => {
+            //     return classNames(
+            //         checked ? "border-transparent" : "border-gray-300",
+            //         active ? "ring-2 ring-indigo-500" : "",
+            //         isDisabled ? "cursor-not-allowed opacity-75" : "cursor-pointer",
+            //         "relative bg-white border rounded-lg shadow-sm p-4 flex focus:outline-none"
+            //     )
+            // }}
         >
             {/*{({active, checked}) => (*/}
             {/*    <Fragment>*/}
