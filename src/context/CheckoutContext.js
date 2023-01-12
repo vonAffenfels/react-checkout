@@ -268,7 +268,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         } catch (e) {
             console.log("catch setCartAddress");
             console.log("setCartAddress", e.toString());
-            await getCartById();
+            // await getCartById();
         } finally {
             console.log("finally");
         }
