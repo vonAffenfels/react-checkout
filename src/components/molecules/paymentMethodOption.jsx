@@ -14,6 +14,7 @@ const PaymentMethodOption = ({paymentMethod}) => {
 
     return (
         <RadioGroup.Option
+            key={paymentMethod.id}
             value={paymentMethod.id}
             disabled={isDisabled}
             className={({active, checked}) => {
