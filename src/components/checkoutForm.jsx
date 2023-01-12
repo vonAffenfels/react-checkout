@@ -141,13 +141,14 @@ const CheckoutForm = ({props}) => {
                     <RadioGroup value={selectedPaymentGatewayId || ""} onChange={onChangePaymentMethod}>
                         <RadioGroup.Label className="text-lg font-medium text-color-900">Bezahlart</RadioGroup.Label>
 
+                        {console.log("cart?.availablePaymentGateways", cart?.availablePaymentGateways, "availablePaymentGateways", availablePaymentGateways)}
                         <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-            {/*                {(cart?.availablePaymentGateways || availablePaymentGateways)?.map((paymentMethod) => (*/}
-            {/*                    <PaymentMethodOption*/}
-            {/*                        paymentMethod={paymentMethod}*/}
-            {/*                        key={paymentMethod.id}*/}
-            {/*                    />*/}
-            {/*                ))}*/}
+                            {(cart?.availablePaymentGateways || availablePaymentGateways)?.map((paymentMethod) => (
+                                <PaymentMethodOption
+                                    paymentMethod={paymentMethod}
+                                    key={paymentMethod.id}
+                                />
+                            ))}
                         </div>
                     </RadioGroup>
                 </div>
