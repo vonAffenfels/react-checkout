@@ -25,45 +25,45 @@ const PaymentMethodOption = ({paymentMethod}) => {
                 )
             }
         >
-            {({active, checked}) => (
-                <Fragment>
-                    <span className="flex-1 flex">
-                        <span className="flex flex-col">
-                            <RadioGroup.Label as="span" className={
-                                classNames(
-                                    "block text-sm font-medium",
-                                    isDisabled ? "text-color-500" : "text-color-900"
-                                )
-                            }>
-                                {paymentMethod.name}
-                            </RadioGroup.Label>
-                            <RadioGroup.Description
-                                as="span"
-                                className="mt-1 flex items-center text-sm text-color-500"
-                            >
-                                {paymentMethod.description}
-                            </RadioGroup.Description>
-                            {isDisabled && (
-                                <RadioGroup.Description
-                                    as="span"
-                                    className="mt-1 flex items-center text-sm text-color-500"
-                                >
-                                    Für diese Auswahl an Produkten nicht verfügbar
-                                </RadioGroup.Description>
-                            )}
-                        </span>
-                    </span>
-                    {checked ? <CheckCircleIcon className="h-5 w-5 text-bg-color-600" aria-hidden="true"/> : null}
-                    <span
-                        className={classNames(
-                            active ? "border" : "border-2",
-                            checked ? "border-indigo-500" : "border-transparent",
-                            "absolute -inset-px rounded-lg pointer-events-none"
-                        )}
-                        aria-hidden="true"
-                    />
-                </Fragment>
-            )}
+            {/*{({active, checked}) => (*/}
+            {/*    <Fragment>*/}
+            {/*        <span className="flex-1 flex">*/}
+            {/*            <span className="flex flex-col">*/}
+            {/*                <RadioGroup.Label as="span" className={*/}
+            {/*                    classNames(*/}
+            {/*                        "block text-sm font-medium",*/}
+            {/*                        isDisabled ? "text-color-500" : "text-color-900"*/}
+            {/*                    )*/}
+            {/*                }>*/}
+            {/*                    {paymentMethod.name}*/}
+            {/*                </RadioGroup.Label>*/}
+            {/*                <RadioGroup.Description*/}
+            {/*                    as="span"*/}
+            {/*                    className="mt-1 flex items-center text-sm text-color-500"*/}
+            {/*                >*/}
+            {/*                    {paymentMethod.description}*/}
+            {/*                </RadioGroup.Description>*/}
+            {/*                {isDisabled && (*/}
+            {/*                    <RadioGroup.Description*/}
+            {/*                        as="span"*/}
+            {/*                        className="mt-1 flex items-center text-sm text-color-500"*/}
+            {/*                    >*/}
+            {/*                        Für diese Auswahl an Produkten nicht verfügbar*/}
+            {/*                    </RadioGroup.Description>*/}
+            {/*                )}*/}
+            {/*            </span>*/}
+            {/*        </span>*/}
+            {/*        {checked ? <CheckCircleIcon className="h-5 w-5 text-bg-color-600" aria-hidden="true"/> : null}*/}
+            {/*        <span*/}
+            {/*            className={classNames(*/}
+            {/*                active ? "border" : "border-2",*/}
+            {/*                checked ? "border-indigo-500" : "border-transparent",*/}
+            {/*                "absolute -inset-px rounded-lg pointer-events-none"*/}
+            {/*            )}*/}
+            {/*            aria-hidden="true"*/}
+            {/*        />*/}
+            {/*    </Fragment>*/}
+            {/*)}*/}
         </RadioGroup.Option>
     );
 };
