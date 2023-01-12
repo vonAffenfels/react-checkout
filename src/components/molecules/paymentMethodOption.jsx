@@ -12,8 +12,6 @@ const PaymentMethodOption = ({paymentMethod}) => {
     const isDisabled = false;//typeof paymentMethod.isDisabled === "function" ? paymentMethod.isDisabled(cart) : false;
     console.log("PaymentMethodOption, isDisabled", isDisabled, "paymentMethod", paymentMethod);
 
-    return null;
-
     return (
         <RadioGroup.Option
             value={paymentMethod.id}
