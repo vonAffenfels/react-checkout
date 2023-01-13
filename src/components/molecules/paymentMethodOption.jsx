@@ -11,10 +11,11 @@ const PaymentMethodOption = ({paymentMethod, cart, selectedPaymentGatewayId, onC
     const checked = selectedPaymentGatewayId === paymentMethod?.id;
 
     const onClick = () => {
-        onChange(paymentMethod?.id);
+        if (!isDisabled) {
+            onChange(paymentMethod?.id);
+        }
     };
 
-    console.log("PaymentMethodOption");
     return (
         <div className={classNames(
             "relative bg-white border rounded-lg shadow-sm p-4 flex focus:outline-none",

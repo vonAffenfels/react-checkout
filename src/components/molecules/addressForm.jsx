@@ -1,7 +1,21 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import CONST from "../../lib/const";
+import useDebounce from "../../hooks/useDebounce";
+import CheckoutContext from "../../context/CheckoutContext";
 
 const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
+    const {cart} = useContext(CheckoutContext);
+
+    const [_addressFormData, _setAddressFormData] = useState({
+        ...addressFormData,
+        email: cart?.email && cart?.email !== "anonymous@example.com" ? cart.email : addressFormData.email
+    });
+    const addressFormDataDebounced = useDebounce(_addressFormData, 1000);
+
+    useEffect(() => {
+        setAddressFormData(addressFormDataDebounced);
+    }, [addressFormDataDebounced]);
+    console.log("AddressForm, addressFormData", addressFormData, "_addressFormData", _addressFormData);
 
     return (
         <>
@@ -20,9 +34,9 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             name="first-name"
                             autoComplete="given-name"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.firstName || ""}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.firstName || ""}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 firstName: e.target.value
                             })}
                         />
@@ -41,9 +55,9 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             name="last-name"
                             autoComplete="family-name"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.lastName || ""}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.lastName || ""}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 lastName: e.target.value
                             })}
                         />
@@ -60,9 +74,9 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             name="company"
                             id="company"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.company || ""}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.company || ""}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 company: e.target.value
                             })}
                         />
@@ -81,9 +95,9 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             id="address"
                             autoComplete="street-address"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.streetAddress1 || ""}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.streetAddress1 || ""}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 streetAddress1: e.target.value
                             })}
                         />
@@ -100,9 +114,9 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             name="apartment"
                             id="apartment"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.streetAddress2 || ""}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.streetAddress2 || ""}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 streetAddress2: e.target.value
                             })}
                         />
@@ -121,9 +135,9 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             id="city"
                             autoComplete="address-level2"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.city || ""}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.city || ""}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 city: e.target.value
                             })}
                         />
@@ -141,9 +155,9 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             name="country"
                             autoComplete="country-name"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.country || ""}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.country || ""}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 country: e.target.value
                             })}
                         >
@@ -166,9 +180,9 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             id="region"
                             autoComplete="address-level1"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.state || ""}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.state || ""}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 state: e.target.value
                             })}
                         />
@@ -187,9 +201,9 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             id="postal-code"
                             autoComplete="postal-code"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.postalCode || ""}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.postalCode || ""}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 postalCode: e.target.value
                             })}
                         />
@@ -207,9 +221,9 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             id="phone"
                             autoComplete="tel"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.phone || ""}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
+                            value={_addressFormData.phone || ""}
+                            onChange={(e) => _setAddressFormData({
+                                ..._addressFormData,
                                 phone: e.target.value
                             })}
                         />

@@ -70,15 +70,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [checkout, setCheckout] = useState(null);
 
     const [cartId, setCartId, removeCartId] = useLocalStorage(CONST.CART_KEY);
-    const [cart, _setCart] = useState(null);
-
-    const setCart = (newCart) => {
-        console.log("setCart", newCart);
-        _setCart((previousCart) => {
-            console.log("_setCart, carts different?", (JSON.stringify(newCart) !== JSON.stringify(previousCart)));
-            return JSON.parse(JSON.stringify(newCart));
-        });
-    }
+    const [cart, setCart] = useState(null);
 
     const [displayState, setDisplayState] = useState("widget");
     const [isCartOpen, setCartOpen] = useState(false);
@@ -175,7 +167,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 lines: lines,
                 totalQuantity: cart.totalQuantity,
             });
-            console.log("setCart called addItemToCart");
             setCart({
                 ...(cart || {}),
                 ...cartData
@@ -215,7 +206,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 lines: lines,
                 totalQuantity: cart.totalQuantity,
             });
-            console.log("setCart called updateCartItems");
             setCart({
                 ...(cart || {}),
                 ...cartData
@@ -234,7 +224,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
         try {
             const cartData = await deleteProductLine({checkoutToken, cartId, lineId, totalQuantity: cart.totalQuantity});
-            console.log("setCart called removeItemFromCart");
             setCart({
                 ...(cart || {}),
                 ...cartData
@@ -246,12 +235,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const setCartAddress = async (address) => {
-        console.log("setCartAddress", address, !!cart, isLoadingShippingMethods);
         if (!cart || !address?.country) {
             return;
         }
 
-        console.log("shippingAddressUpdate call..");
         setLoadingShippingMethods(true);
         try {
             const shippingAddressCart = await shippingAddressUpdate({
@@ -260,7 +247,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 address,
                 totalQuantity: cart.totalQuantity
             });
-            console.log("setCart called setCartAddress");
             setCart({
                 ...(cart || {}),
                 ...(shippingAddressCart || {}),
@@ -269,8 +255,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
             console.log("catch setCartAddress");
             console.log("setCartAddress", e.toString());
             await getCartById();
-        } finally {
-            console.log("finally");
         }
         setLoadingShippingMethods(false);
     }
@@ -290,7 +274,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 cart,
                 webhookUri: buyContext.webhookUri,
             });
-            console.log("setCart called setCartDeliveryMethod");
             setCart({
                 ...(cart || {}),
                 ...cartData
@@ -314,7 +297,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 discountCodes: discountCodes,
                 totalQuantity: cart.totalQuantity,
             });
-            console.log("setCart called applyDiscountCode");
             setCart({
                 ...(cart || {}),
                 ...cartData
@@ -338,7 +320,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 {key: "bonus_id", value: line.bonusProduct.aboSku + "_" + line.bonusProduct.variantSku}
             ] : [],
         }));
-        console.log("onBeforePayment, cart:", cart);
         const input = {
             allowPartialAddresses: false,
             lineItems: lineItems,
@@ -413,16 +394,12 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     const getCartById = async () => {
         try {
-            console.log("getCartById", cartId);
             if (cartId) {
                 let data = await cartById(cartId, cart?.totalQuantity);
-                console.log("getCartById, first res", data);
                 if (data?.lines?.length && (data.lines.length < data.totalQuantity)) {
                     data = await cartById(cartId, data.totalQuantity);
-                    console.log("getCartById, second res", data);
                 }
                 const availablePaymentGateways = data?.availablePaymentGateways || buyContext.availablePaymentGateways || [];
-                console.log("getCartById, selectedPaymentGatewayId", selectedPaymentGatewayId);
                 if (selectedPaymentGatewayId) {
                     availablePaymentGateways.forEach(gateway => {
                         if (gateway.id === selectedPaymentGatewayId && gateway?.isDisabled?.(data)) {
@@ -431,10 +408,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
                         }
                     });
                 }
-                console.log("setCart called getCartById");
                 setCart(data);
             } else {
-                console.log("setCart called getCartById BUT NULL");
                 setCart(null);
             }
         } catch (e) {
@@ -516,7 +491,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [isCartOpen, displayState]);
 
     useEffect(() => {
-        console.log("useEffect, addressFormDataDebounced");
         let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
         // if (isAddressDataValid(addressFormDataDebounced)) {
@@ -537,10 +511,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
             }
         // }
     }, [addressFormDataDebounced]);
-
-    useEffect(() => {
-        console.log("useEffect CART!");
-    }, [cart]);
 
     return (
         <CheckoutContext.Provider value={{
