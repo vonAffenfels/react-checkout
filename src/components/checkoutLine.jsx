@@ -11,7 +11,8 @@ const CheckoutLine = ({
     variant,
     quantity,
     totalPrice,
-    bonusProduct
+    bonusProduct,
+    giftedIdentity,
 }) => {
     const {removeItemFromCart} = useContext(CheckoutContext);
 
@@ -70,14 +71,14 @@ const CheckoutLine = ({
                         </span>
                     </div>
                     <div className="w-full border-top-0 border-bottom-1 absolute" />
-                    <BonusLine {...bonusProduct} variantTitle={variantTitle} />
+                    <BonusLine {...bonusProduct} giftedIdentity={giftedIdentity} variantTitle={variantTitle} />
                 </>
             )}
         </>
     );
 };
 
-const BonusLine = ({aboSku, variantSku, product, variantTitle}) => {
+const BonusLine = ({aboSku, variantSku, product, variantTitle, giftedIdentity}) => {
     return (
         <li className="flex py-6" style={{border: "0"}}>
             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
@@ -92,7 +93,11 @@ const BonusLine = ({aboSku, variantSku, product, variantTitle}) => {
                     <div className="flex justify-between text-base font-medium text-color-900">
                         <h3>{variantTitle}</h3>
                     </div>
-                    <p className="mt-1 text-sm text-color-500">Prämie</p>
+                    {giftedIdentity ? (
+                        <p className="mt-1 text-sm text-color-500">{"Beschenkter: " + giftedIdentity.firstName + " " + giftedIdentity.lastName}</p>
+                    ) : (
+                        <p className="mt-1 text-sm text-color-500">Prämie</p>
+                    )}
                 </div>
             </div>
         </li>
@@ -105,6 +110,7 @@ const CheckoutLineDetail = ({
     quantity,
     totalPrice,
     bonusProduct,
+    giftedIdentity,
 }) => {
     const {removeItemFromCart, updateCartItems, isLoadingLineItems} = useContext(CheckoutContext);
 
@@ -219,14 +225,14 @@ const CheckoutLineDetail = ({
                         </span>
                     </div>
                     <div className="w-full border-top-0 border-bottom-1 absolute" />
-                    <BonusLineDetail {...bonusProduct} variantTitle={variantTitle} />
+                    <BonusLineDetail {...bonusProduct} giftedIdentity={giftedIdentity} variantTitle={variantTitle} />
                 </>
             )}
         </>
     );
 };
 
-const BonusLineDetail = ({aboSku, variantSku, product, variantTitle}) => {
+const BonusLineDetail = ({aboSku, variantSku, product, variantTitle, giftedIdentity}) => {
     return (
         <li className="flex py-6 px-4 sm:px-6">
             <div className="flex-shrink-0">
@@ -243,7 +249,17 @@ const BonusLineDetail = ({aboSku, variantSku, product, variantTitle}) => {
                         <h4 className="text-sm font-medium text-color-700 hover:text-color-800">
                             {variantTitle}
                         </h4>
-                        <p className="mt-1 text-sm text-color-500">Prämie</p>
+                        {giftedIdentity ? (
+                            <>
+                                <p className="mt-1 text-sm text-color-500">Beschenkter:</p>
+                                <p className="mt-1 text-sm text-color-500">{giftedIdentity.firstName + " " + giftedIdentity.lastName}</p>
+                                <p className="mt-1 text-sm text-color-500">{giftedIdentity.streetAddress + " " + giftedIdentity.houseNumber}</p>
+                                <p className="mt-1 text-sm text-color-500">{giftedIdentity.city + " " + giftedIdentity.zip}</p>
+                                <p className="mt-1 text-sm text-color-500">{giftedIdentity.country}</p>
+                            </>
+                        ) : (
+                            <p className="mt-1 text-sm text-color-500">Prämie</p>
+                        )}
                     </div>
                 </div>
 

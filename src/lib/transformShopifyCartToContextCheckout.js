@@ -105,7 +105,7 @@ function transformCart(node) {
             }
         }),
         lines: (node.lines?.nodes || []).map(node => {
-            const {cost, id, merchandise, quantity, attribute} = node;
+            const {cost, id, merchandise, quantity, attribute, attributes} = node;
 
             if (!merchandise) {
                 return null;
@@ -150,15 +150,32 @@ function transformCart(node) {
                         amount: amount * quantity,
                         currency: currencyCode
                     }
-                }
+                },
+                customAttributes: (attributes || []).map(attr => ({key: attr.key, value: attr.value}))
             };
 
-            const bonusProduct = attribute?.value?.split?.("_") || [];
-            if (bonusProduct?.length) {
+            let bonusProductAttribute, giftSubscriptionAttribute;
+            (attributes || []).forEach(attr => {
+                if (attr.key === "bonus_id") {
+                    bonusProductAttribute = attr;
+                }
+                if (attr.key === "gift_subscription_recipient_address") {
+                    giftSubscriptionAttribute = attr;
+                }
+            })
+            if (bonusProductAttribute) {
+                const bonusProduct = bonusProductAttribute.value?.split?.("_") || [];
                 retVal.bonusProduct = {
                     aboSku: bonusProduct?.[0],
                     variantSku: bonusProduct?.[1],
                 };
+            }
+            if (giftSubscriptionAttribute) {
+                try {
+                    retVal.giftedIdentity = JSON.parse(giftSubscriptionAttribute.value);
+                } catch (e) {
+                    console.log("giftSubscriptionAttribute is not valid json:", giftSubscriptionAttribute.value);
+                }
             }
 
             return retVal;

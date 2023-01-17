@@ -303,6 +303,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             });
         } catch (e) {
             console.log("catch applyDiscountCode");
+            await getCartById();
             console.log(e);
         }
     }
@@ -316,9 +317,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         const lineItems = cart.lines.map(line => ({
             quantity: line.quantity || 1,
             variantId: "gid://shopify/ProductVariant/" + String(line.variant.id).replace("gid://shopify/ProductVariant/", ""),
-            customAttributes: line.bonusProduct ? [
-                {key: "bonus_id", value: line.bonusProduct.aboSku + "_" + line.bonusProduct.variantSku}
-            ] : [],
+            customAttributes: line.customAttributes,
         }));
         const input = {
             allowPartialAddresses: false,
