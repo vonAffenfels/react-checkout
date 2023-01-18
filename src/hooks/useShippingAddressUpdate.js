@@ -35,12 +35,12 @@ const useShippingAddressUpdate = (shop, client, type) => {
             }
         };
     } else if (shop === "shopify") {
-        const handleCart = async ({cartId, address, totalQuantity}) => {
+        const handleCart = async ({cartId, address, email, totalQuantity}) => {
             const {data} = await client.mutate({
                 mutation: SHOPIFY_CART_SHIPPING_ADDRESS_UPDATE,
                 variables: {
                     cartId,
-                    buyerIdentity: JSON.parse(JSON.stringify(transformBuyerIdentity(address))),
+                    buyerIdentity: JSON.parse(JSON.stringify(transformBuyerIdentity(address, email))),
                     linesCount: (totalQuantity || 0) + 1,
                 }
             });

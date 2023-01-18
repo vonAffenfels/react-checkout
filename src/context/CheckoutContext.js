@@ -80,8 +80,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(null);
     const [loadingDraftOrder, setLoadingDraftOrder] = useState(false);
 
+    const [email, setEmail] = useState("");
+    const [hideEmailInput, setHideEmailInput] = useState(false);
+
     const [addressFormData, setAddressFormData] = useState({
-        email: "",
         firstName: "",
         lastName: "",
         company: "",
@@ -96,7 +98,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const addressFormDataDebounced = useDebounce(addressFormData, 750);
     const [isBillingAddressDeviating, setBillingAddressDeviating] = useState(false);
     const [billingAddress, setBillingAddress] = useState({
-        email: "",
         firstName: "",
         lastName: "",
         company: "",
@@ -245,6 +246,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 checkoutToken,
                 cartId,
                 address,
+                email,
                 totalQuantity: cart.totalQuantity
             });
             setCart({
@@ -341,52 +343,57 @@ export const CheckoutContextProvider = ({children, channel}) => {
             };
         }
         console.log("checkoutCreate, input:", input);
-        let paymentCheckoutToken = await checkoutCreate({channel, input});
-        let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
-        console.log("paymentCheckoutData", paymentCheckoutData);
-        if (paymentCheckoutData.requiresShipping) {
-            paymentCheckoutData.shippingMethods.forEach(rate => {
-                if (rate.name === cart.shippingMethod.name) {
-                    paymentCheckoutData.shippingMethod = {
-                        price: {
-                            amount: rate.price.amount
-                        },
-                        id: rate.id,
-                        name: rate.name
-                    };
-                }
-            });
-        }
+        try {
+            let paymentCheckoutToken = await checkoutCreate({channel, input});
+            let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
+            console.log("paymentCheckoutData", paymentCheckoutData);
+            if (paymentCheckoutData.requiresShipping) {
+                paymentCheckoutData.shippingMethods.forEach(rate => {
+                    if (rate.name === cart.shippingMethod.name) {
+                        paymentCheckoutData.shippingMethod = {
+                            price: {
+                                amount: rate.price.amount
+                            },
+                            id: rate.id,
+                            name: rate.name
+                        };
+                    }
+                });
+            }
 
-        if (cart.discountCodes.length) {
-            for (let i = 0; cart.discountCodes.length > i; i++) {
-                try {
-                    await discountCodeUpdateCheckout({
-                        checkoutToken: paymentCheckoutToken,
-                        discountCode: cart.discountCodes[i].code
-                    });
-                } catch (e) {
-                    console.log("error in discountCodeUpdateCheckout");
-                    console.log(e);
+            if (cart.discountCodes.length) {
+                for (let i = 0; cart.discountCodes.length > i; i++) {
+                    try {
+                        await discountCodeUpdateCheckout({
+                            checkoutToken: paymentCheckoutToken,
+                            discountCode: cart.discountCodes[i].code
+                        });
+                    } catch (e) {
+                        console.log("error in discountCodeUpdateCheckout");
+                        console.log(e);
+                    }
                 }
             }
+
+            const checkoutData = await createDraftOrder({
+                checkoutToken: paymentCheckoutToken,
+                checkout: paymentCheckoutData,
+                webhookUri: buyContext.webhookUri,
+                billingAddress: isBillingAddressDeviating ? {
+                    ...billingAddress,
+                    email: addressFormData.email
+                } : paymentCheckoutData.shippingAddress,
+                selectedPaymentGatewayId: selectedPaymentGatewayId,
+            });
+            setCheckout({
+                ...(checkout || {}),
+                ...checkoutData
+            });
+            setCheckoutToken(paymentCheckoutToken);
+        } catch (e) {
+            console.log("error in onBeforePayment while creating checkout", e);
         }
 
-        const checkoutData = await createDraftOrder({
-            checkoutToken: paymentCheckoutToken,
-            checkout: paymentCheckoutData,
-            webhookUri: buyContext.webhookUri,
-            billingAddress: isBillingAddressDeviating ? {
-                ...billingAddress,
-                email: addressFormData.email
-            } : paymentCheckoutData.shippingAddress,
-            selectedPaymentGatewayId: selectedPaymentGatewayId,
-        });
-        setCheckout({
-            ...(checkout || {}),
-            ...checkoutData
-        });
-        setCheckoutToken(paymentCheckoutToken);
         setLoadingDraftOrder(false);
         setDisplayState("payment");
     };
@@ -490,26 +497,22 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [isCartOpen, displayState]);
 
     useEffect(() => {
-        let {email, firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
+        let {firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
-        // if (isAddressDataValid(addressFormDataDebounced)) {
-            let addressInput = {firstName, lastName, city, country, postalCode, streetAddress1, email};
+        let addressInput = {firstName, lastName, city, country, postalCode, streetAddress1, email};
 
-            if (phone) {
-                addressInput.phone = phone;
-            }
-            if (company) {
-                addressInput.companyName = company;
-            }
-            if (state) {
-                addressInput.countryArea = state;
-            }
+        if (phone) {
+            addressInput.phone = phone;
+        }
+        if (company) {
+            addressInput.companyName = company;
+        }
+        if (state) {
+            addressInput.countryArea = state;
+        }
 
-            if (isInputAddressDifferentFromCheckoutAddress(addressInput)) {
-                setCartAddress(addressInput);
-            }
-        // }
-    }, [addressFormDataDebounced]);
+        setCartAddress(addressInput);
+    }, [addressFormDataDebounced, email]);
 
     return (
         <CheckoutContext.Provider value={{
@@ -535,6 +538,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
             isSettingShippingMethod,
             addressFormData,
             setAddressFormData,
+            email,
+            setEmail,
             selectedPaymentGatewayId,
             setSelectedPaymentGatewayId,
             billingAddress,
@@ -546,7 +551,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
             removeCartId,
             removeCheckoutToken,
             applyDiscountCode,
-            reset
+            reset,
+            hideEmailInput,
+            setHideEmailInput,
         }}>
             {children}
         </CheckoutContext.Provider>

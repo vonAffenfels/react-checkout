@@ -8,12 +8,14 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
 
     const [_addressFormData, _setAddressFormData] = useState({
         ...addressFormData,
-        email: cart?.email && cart?.email !== "anonymous@example.com" ? cart.email : addressFormData.email
     });
     const addressFormDataDebounced = useDebounce(_addressFormData, 1000);
 
     useEffect(() => {
-        setAddressFormData(addressFormDataDebounced);
+        setAddressFormData({
+            ...addressFormDataDebounced,
+            email: cart?.email
+        });
     }, [addressFormDataDebounced]);
     console.log("AddressForm, addressFormData", addressFormData, "_addressFormData", _addressFormData);
 

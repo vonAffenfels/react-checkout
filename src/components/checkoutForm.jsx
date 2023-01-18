@@ -18,6 +18,9 @@ const CheckoutForm = ({props}) => {
         checkout,
         addressFormData,
         setAddressFormData,
+        email,
+        setEmail,
+        hideEmailInput,
         billingAddress,
         setBillingAddress,
         setCartDeliveryMethod,
@@ -51,25 +54,24 @@ const CheckoutForm = ({props}) => {
                 <h2 className="text-lg font-medium text-color-900">Kontaktinformation</h2>
                 {isDebug && <a href={checkout?.webUrl || cart?.webUrl} target="_blank" className="text-lg font-medium text-color-900">Zum Shopify Checkout</a>}
 
-                <div className="mt-4">
-                    <label htmlFor="email-address" className="block text-sm font-medium text-color-700">
-                        Email-Adresse
-                    </label>
-                    <div className="mt-1">
-                        <input
-                            type="email"
-                            id="email-address"
-                            name="email-address"
-                            autoComplete="email"
-                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={addressFormData.email}
-                            onChange={(e) => setAddressFormData({
-                                ...addressFormData,
-                                email: e.target.value
-                            })}
-                        />
+                {!hideEmailInput && (
+                    <div className="mt-4">
+                        <label htmlFor="email-address" className="block text-sm font-medium text-color-700">
+                            Email-Adresse
+                        </label>
+                        <div className="mt-1">
+                            <input
+                                type="email"
+                                id="email-address"
+                                name="email-address"
+                                autoComplete="email"
+                                className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">

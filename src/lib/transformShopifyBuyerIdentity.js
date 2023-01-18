@@ -1,4 +1,4 @@
-function transformBuyerIdentity(address) {
+function transformBuyerIdentity(address, email) {
     const updatedAddress = {
         countryCode: address.country,
         deliveryAddressPreferences: {
@@ -16,8 +16,8 @@ function transformBuyerIdentity(address) {
         },
     };
 
-    if (address.email) {
-        updatedAddress.email = address.email;
+    if (email) {
+        updatedAddress.email = email;
     }
     if (address.streetAddress2) {
         updatedAddress.deliveryAddressPreferences[0].deliveryAddress.address2 = address.streetAddress2;

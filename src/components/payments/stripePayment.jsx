@@ -97,6 +97,7 @@ const StripePayment = ({stripePromise}) => {
                     selectedPaymentGatewayId: selectedPaymentGatewayId,
                 })
             }).then(res => res.json());
+            console.log("paymentIntent", paymentIntent);
 
             if (!paymentIntent || !paymentIntent.client_secret) {
                 return;
