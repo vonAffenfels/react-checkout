@@ -106,24 +106,24 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                     </div>
                 </div>
 
-                <div className="sm:col-span-2">
-                    <label htmlFor="apartment" className="block text-sm font-medium text-color-700">
-                        Apartmentnummer, Eingang, etc.
-                    </label>
-                    <div className="mt-1">
-                        <input
-                            type="text"
-                            name="apartment"
-                            id="apartment"
-                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={_addressFormData.streetAddress2 || ""}
-                            onChange={(e) => _setAddressFormData({
-                                ..._addressFormData,
-                                streetAddress2: e.target.value
-                            })}
-                        />
-                    </div>
-                </div>
+                {/*<div className="sm:col-span-2">*/}
+                {/*    <label htmlFor="apartment" className="block text-sm font-medium text-color-700">*/}
+                {/*        Apartmentnummer, Eingang, etc.*/}
+                {/*    </label>*/}
+                {/*    <div className="mt-1">*/}
+                {/*        <input*/}
+                {/*            type="text"*/}
+                {/*            name="apartment"*/}
+                {/*            id="apartment"*/}
+                {/*            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"*/}
+                {/*            value={_addressFormData.streetAddress2 || ""}*/}
+                {/*            onChange={(e) => _setAddressFormData({*/}
+                {/*                ..._addressFormData,*/}
+                {/*                streetAddress2: e.target.value*/}
+                {/*            })}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*</div>*/}
 
                 <div>
                     <label htmlFor="city" className="block text-sm font-medium text-color-700">
@@ -212,25 +212,25 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                     </div>
                 </div>
 
-                <div className="sm:col-span-2">
-                    <label htmlFor="phone" className="block text-sm font-medium text-color-700">
-                        Telefon
-                    </label>
-                    <div className="mt-1">
-                        <input
-                            type="text"
-                            name="phone"
-                            id="phone"
-                            autoComplete="tel"
-                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={_addressFormData.phone || ""}
-                            onChange={(e) => _setAddressFormData({
-                                ..._addressFormData,
-                                phone: e.target.value
-                            })}
-                        />
-                    </div>
-                </div>
+                {/*<div className="sm:col-span-2">*/}
+                {/*    <label htmlFor="phone" className="block text-sm font-medium text-color-700">*/}
+                {/*        Telefon*/}
+                {/*    </label>*/}
+                {/*    <div className="mt-1">*/}
+                {/*        <input*/}
+                {/*            type="text"*/}
+                {/*            name="phone"*/}
+                {/*            id="phone"*/}
+                {/*            autoComplete="tel"*/}
+                {/*            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"*/}
+                {/*            value={_addressFormData.phone || ""}*/}
+                {/*            onChange={(e) => _setAddressFormData({*/}
+                {/*                ..._addressFormData,*/}
+                {/*                phone: e.target.value*/}
+                {/*            })}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
         </>
     );

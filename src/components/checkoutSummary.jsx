@@ -13,6 +13,7 @@ const CheckoutSummary = ({props}) => {
     const {cart, selectedPaymentGatewayId, loadingDraftOrder, applyDiscountCode} = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
     const [discountCode, setDiscountCode] = useState("");
+    const [isLoadingDiscountCode, setLoadingDiscountCode] = useState(false);
 
     const isInvoice = selectedPaymentGatewayId === "invoice";
 
@@ -23,8 +24,10 @@ const CheckoutSummary = ({props}) => {
         }
     }, [cart?.email, cart?.shippingAddress, cart?.shippingMethod?.id, selectedPaymentGatewayId]);
 
-    const onClickDiscountCode = (e) => {
-        applyDiscountCode([discountCode]);
+    const onClickDiscountCode = async (e) => {
+        setLoadingDiscountCode(true);
+        await applyDiscountCode([discountCode]);
+        setLoadingDiscountCode(false);
     };
 
     return (
@@ -89,10 +92,10 @@ const CheckoutSummary = ({props}) => {
                         className={
                             classNames(
                                 discountCode ? "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
-                                "bg-color-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-base font-medium text-white"
+                                "bg-color-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-base font-medium text-white w-full"
                             )
                         }
-                    >Anwenden</button>
+                    >{isLoadingDiscountCode ? <SpinButton /> : "Anwenden"}</button>
                 </div>
                 {cart?.discountCodes?.length > 0 && (
                     <div className="col-span-4 mt-4">
@@ -125,7 +128,7 @@ const CheckoutSummary = ({props}) => {
                 >
                     {loadingDraftOrder ? (
                         <>
-                            <SpinButton />
+                            <SpinButton className="mr-3" />
                             {isInvoice ? "Bestellung wird übertragen ..." : "Bezahlprozess wird vorbereitet ..."}
                         </>
                     ) : (isInvoice ? "Bestellung abschließen" : "Bestellung bestätigen")}
