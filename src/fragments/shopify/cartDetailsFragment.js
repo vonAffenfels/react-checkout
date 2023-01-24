@@ -54,6 +54,11 @@ export default gql`
                     key
                     value
                 }
+                discountAllocations {
+                    discountedAmount {
+                        ...PriceFragment
+                    }
+                }
                 merchandise {
                     ...on ProductVariant {
                         id

@@ -74,7 +74,7 @@ const CheckoutForm = ({props}) => {
                 )}
             </div>
 
-            <div className="mt-10 border-t border-gray-200 pt-10">
+            <div className={`${hideEmailInput ? "" : "mt-10 border-t"} border-gray-200 pt-10`}>
                 <AddressForm
                     heading="Lieferadresse"
                     addressFormData={addressFormData}

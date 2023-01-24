@@ -9,7 +9,8 @@ function transformCart(node) {
     let hasSubscriptionItem = false;
     let shippingMethod = null;
     let shippingAddress = null;
-    const shippingMethods = [];
+    let totalDiscountAllocations = [...(node.discountAllocations || [])];
+    let shippingMethods = [];
     (node.deliveryGroups?.nodes || []).forEach(deliveryGroup => {
         let foundMethod = null;
 
@@ -98,14 +99,8 @@ function transformCart(node) {
                 code: discount?.code
             }
         }),
-        discountAllocations: (node.discountAllocations || []).map(discount => {
-            return {
-                amount: discount.discountedAmount.amount,
-                currency: discount.discountedAmount.currencyCode
-            }
-        }),
         lines: (node.lines?.nodes || []).map(node => {
-            const {cost, id, merchandise, quantity, attribute, attributes} = node;
+            const {cost, id, merchandise, quantity, discountAllocations, attributes} = node;
 
             if (!merchandise) {
                 return null;
@@ -119,6 +114,10 @@ function transformCart(node) {
 
             if (String(merchandise.product?.productType).toLowerCase() === "abo") {
                 hasSubscriptionItem = true;
+            }
+
+            if (discountAllocations?.length) {
+                totalDiscountAllocations = totalDiscountAllocations.concat([...discountAllocations]);
             }
 
             const {amount, currencyCode} = cost.amountPerQuantity;
@@ -223,6 +222,17 @@ function transformCart(node) {
                 currency: shippingMethod.price.currency
             }
         }
+    }
+
+    if (totalDiscountAllocations?.length) {
+        checkout.discountAllocations = totalDiscountAllocations.reduce((initialVal, currentVal, index) => {
+            return {
+                amount: parseFloat(initialVal?.amount) + parseFloat(currentVal?.discountedAmount?.amount),
+                currency: currentVal?.discountedAmount?.currencyCode || initialVal.currency
+            }
+        }, {amount: 0, currency: "EUR"});
+    } else {
+        checkout.discountAllocations = null;
     }
 
     return checkout;

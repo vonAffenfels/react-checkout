@@ -50,14 +50,14 @@ const CheckoutSummary = ({props}) => {
                         <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
                     </dd>
                 </div>
-                {cart?.discountAllocations?.length > 0 && cart.discountAllocations.map((discount, i) => (
-                    <div className="flex items-center justify-between" key={"discount-allocation-" + i}>
+                {cart?.discountAllocations?.amount > 0 && (
+                    <div className="flex items-center justify-between">
                         <dt className="text-sm">Rabatt</dt>
                         <dd className="text-sm font-medium text-color-900">
-                            -<Price price={discount?.amount}/> {discount?.currency}
+                            -<Price price={cart?.discountAllocations?.amount}/> {cart?.discountAllocations?.currency}
                         </dd>
                     </div>
-                ))}
+                )}
                 {/*<div className="flex items-center justify-between">*/}
                 {/*    <dt className="text-sm">Steuern</dt>*/}
                 {/*    <dd className="text-sm font-medium text-color-900">*/}
