@@ -26,6 +26,7 @@ export const BuyContextProvider = (props) => {
 
     const fetchStripePaymentIntent = async (clientSecret) => {
         let apiKey;
+        console.log("fetchStripePaymentIntent, paymentProviders:", paymentProviders);
         paymentProviders.forEach(provider => {
             if (provider.name === "stripe") {
                 apiKey = provider.config.apiKey;
@@ -51,6 +52,7 @@ export const BuyContextProvider = (props) => {
 
     useEffect(() => {
         const stripePaymentParam = new URLSearchParams(window?.location?.search)?.get("payment_intent_client_secret");
+        console.log("useEffect, stripePaymentParam:", stripePaymentParam);
         if (stripePaymentParam) {
             removeCheckoutToken?.();
             fetchStripePaymentIntent(stripePaymentParam);

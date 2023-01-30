@@ -5,7 +5,7 @@ import CheckoutContext from "../context/CheckoutContext";
 import StripePayment from "./payments/stripePayment.jsx";
 import ManualPayment from "./payments/manualPayment.jsx";
 import PayPalPayment from "./payments/paypalPayment.jsx";
-import Success from "./payments/success.jsx";
+import {Success} from "./payments/success.jsx";
 import BuyContext from "../context/BuyContext";
 
 const PaymentForm = ({}) => {

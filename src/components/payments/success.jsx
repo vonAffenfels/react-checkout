@@ -6,10 +6,17 @@ import {Spin} from "../atoms/animate.jsx";
 
 let timeoutHandle = null;
 
-const Success = () => {
-    const {checkout, removeCartId, removeCheckoutToken, setDisplayState, reset} = useContext(CheckoutContext);
-    const {setBannerMessage} = useContext(BuyContext);
+export const Success = () => {
+    const {checkout} = useContext(CheckoutContext);
+    console.log("checkout", checkout)
     const orderName = checkout?.order?.name;
+
+    return <Banner orderName={orderName} />;
+}
+
+export const Banner = ({orderName}) => {
+    const {reset} = useContext(CheckoutContext);
+    const {setBannerMessage} = useContext(BuyContext);
     const executedRef = useRef(false);
 
     useEffect(() => {
@@ -40,10 +47,8 @@ const Success = () => {
                 Bestellung {orderName} wurde erfolgreich getätigt. Sie werden weitergeleitet.
             </div>
             <div className="mx-auto w-20 mt-20">
-                <Spin w={10} h={10} />
+                <Spin w={10} h={10}/>
             </div>
         </>
     );
 }
-
-export default Success;
