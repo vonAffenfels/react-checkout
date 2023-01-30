@@ -65,11 +65,11 @@ const StripePaymentForm = ({clientSecret}) => {
     );
 };
 
-const StripePayment = ({stripePromise}) => {
+const StripePayment = ({stripePromise, initialClientSecret = null}) => {
     const executedRef = useRef(false);
     const {paymentProviders} = useContext(BuyContext);
     const {checkout, checkoutToken, selectedPaymentGatewayId} = useContext(CheckoutContext);
-    const [clientSecret, setClientSecret] = useState(null);
+    const [clientSecret, setClientSecret] = useState(initialClientSecret);
 
     let apiUri = "";
     paymentProviders.forEach(provider => {

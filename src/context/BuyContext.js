@@ -44,9 +44,13 @@ export const BuyContextProvider = (props) => {
                 method: "GET",
                 headers: {"Content-Type": "application/x-www-form-urlencoded"}
             }).then(res => res.json());
+            console.log("paymentIntent:", result);
 
-            let isError = result.status !== "succeeded";
+            let isError = result.status !== "succeeded" && result.status !== "processing";
             let msg = isError ? "Bei der Bestellung ist etwas schiefgegangen." : "Die Bestellung war erfolgreich!";
+            let nextUrl = window?.location?.origin + (window?.location?.pathname || "");
+            window?.history?.pushState?.({lastPayment: result}, window?.document?.title, nextUrl);
+            setBannerMessage({msg: msg});
         }
     }
 
