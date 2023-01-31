@@ -1,8 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
 
-import ReactCheckout from "react-ez-checkout";
-
 import ProductInput from "../components/ProductInput";
 import ProductList from "../components/ProductList";
 

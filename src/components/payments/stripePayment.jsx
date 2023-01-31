@@ -11,11 +11,13 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-const StripePaymentForm = ({clientSecret}) => {
+export const StripePaymentForm = ({clientSecret}) => {
     const elements = useElements();
     const stripe = useStripe();
+    const [errorMessage, setErrorMessage] = useState("");
 
     const onSubmit = async (e) => {
+        setErrorMessage("");
         e.preventDefault?.();
         e.stopPropagation?.();
 
@@ -29,6 +31,9 @@ const StripePaymentForm = ({clientSecret}) => {
 
         GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
         console.log("confirmPayment", result);
+        if (result?.error?.message) {
+            setErrorMessage(result.error.message);
+        }
     }
 
     const retrievePaymentIntent = async () => {
@@ -47,14 +52,17 @@ const StripePaymentForm = ({clientSecret}) => {
     return (
         <form id="stripe-payment-form" onSubmit={onSubmit}>
             <PaymentElement id="stripe-payment-element" />
+            {errorMessage ? (
+                <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
+            ) : null}
             <div className="border-t border-gray-200 py-6">
                 <button
                     disabled={!elements || !stripe}
                     type="submit"
                     className={
                         classNames(
-                            elements && stripe ? "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
-                            "w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white"
+                            "w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white",
+                            elements && stripe ? "hover:bg-color-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
                         )
                     }
                 >

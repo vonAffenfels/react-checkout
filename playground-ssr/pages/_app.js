@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import ReactCheckout from "react-ez-checkout";
+import ReactCheckout from "react-ez-checkout/dist/index.cjs.js";
 import DebugConfigShopify from "../debug-config-shopify";
 
 function MyApp({Component, pageProps}) {

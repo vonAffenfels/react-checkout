@@ -47,7 +47,7 @@ export const BuyContextProvider = (props) => {
             console.log("paymentIntent:", result);
 
             let isError = result.status !== "succeeded" && result.status !== "processing";
-            let msg = isError ? "Bei der Bestellung ist etwas schiefgegangen." : "Die Bestellung war erfolgreich!";
+            let msg = isError ? "Bei der Bestellung ist etwas schiefgegangen." : "Die Zahlung war erfolgreich!";
             let nextUrl = window?.location?.origin + (window?.location?.pathname || "");
             window?.history?.pushState?.({lastPayment: result}, window?.document?.title, nextUrl);
             setBannerMessage({msg: msg});
@@ -78,7 +78,7 @@ export const BuyContextProvider = (props) => {
         return children;
     }
 
-    console.log("Starting react-checkout for shop type", shop, "..");
+    console.log("Starting react-checkout for shop type", shop, "..", props);
     return (
         <BuyContext.Provider value={{
             ...props,

@@ -516,7 +516,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     return (
         <CheckoutContext.Provider value={{
-            paymentProviders: buyContext.paymentProviders,
             checkout,
             cart,
             createCart,
