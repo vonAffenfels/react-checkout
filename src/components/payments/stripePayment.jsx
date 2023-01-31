@@ -1,9 +1,9 @@
 import React, {Fragment, useContext, useEffect, useState, useRef} from "react";
 import {PaymentElement, Elements, useElements, useStripe} from "@stripe/react-stripe-js";
-import {loadStripe} from "@stripe/stripe-js";
 
 import CheckoutContext from "../../context/CheckoutContext";
 import BuyContext from "../../context/BuyContext";
+import {Spin} from "../atoms/animate.jsx";
 
 let GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
 
@@ -11,10 +11,11 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export const StripePaymentForm = ({clientSecret}) => {
+export const StripePaymentForm = ({clientSecret, isStandalone}) => {
     const elements = useElements();
     const stripe = useStripe();
     const [errorMessage, setErrorMessage] = useState("");
+    const [paymentIntentData, setPaymentIntentData] = useState(null);
 
     const onSubmit = async (e) => {
         setErrorMessage("");
@@ -25,7 +26,7 @@ export const StripePaymentForm = ({clientSecret}) => {
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                return_url: window.location.href,
+                return_url: window.location.origin,
             },
         });
 
@@ -38,7 +39,8 @@ export const StripePaymentForm = ({clientSecret}) => {
 
     const retrievePaymentIntent = async () => {
         const result = await stripe.retrievePaymentIntent(clientSecret);
-        console.log("retrievePaymentIntent", result, result?.paymentIntent?.status);
+        console.log("retrievePaymentIntent", result?.paymentIntent, result?.paymentIntent?.status);
+        setPaymentIntentData(result.paymentIntent);
     };
 
     useEffect(() => {
@@ -49,28 +51,53 @@ export const StripePaymentForm = ({clientSecret}) => {
         retrievePaymentIntent();
     }, [stripe]);
 
-    return (
-        <form id="stripe-payment-form" onSubmit={onSubmit}>
-            <PaymentElement id="stripe-payment-element" />
-            {errorMessage ? (
-                <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
-            ) : null}
-            <div className="border-t border-gray-200 py-6">
-                <button
-                    disabled={!elements || !stripe}
-                    type="submit"
-                    className={
-                        classNames(
-                            "w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white",
-                            elements && stripe ? "hover:bg-color-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
-                        )
-                    }
-                >
-                    Jetzt bezahlen
-                </button>
+    const showAsSuccess = paymentIntentData && (paymentIntentData.status === "succeeded" || paymentIntentData.status === "processing");
+    const showPaymentForm = !isStandalone || !showAsSuccess;
+    const showLoadingAnimation = isStandalone && !paymentIntentData;
+    const showSuccessMessage = isStandalone && showAsSuccess;
+
+    if (showLoadingAnimation) {
+        return (
+            <div className="border-gray-200 py-6 text-base font-medium text-center w-full">
+                <Spin h={6} w={6} style={{margin: "auto"}} />
             </div>
-        </form>
-    );
+        );
+    }
+
+    if (showSuccessMessage) {
+        return (
+            <div className="border-gray-200 py-6 text-base font-medium text-center">
+                Die Zahlung war erfolgreich.
+            </div>
+        );
+    }
+
+    if (showPaymentForm) {
+        return (
+            <form id="stripe-payment-form" onSubmit={onSubmit}>
+                <PaymentElement id="stripe-payment-element" />
+                {errorMessage ? (
+                    <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
+                ) : null}
+                <div className="border-t border-gray-200 py-6">
+                    <button
+                        disabled={!elements || !stripe}
+                        type="submit"
+                        className={
+                            classNames(
+                                "w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white",
+                                elements && stripe ? "hover:bg-color-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
+                            )
+                        }
+                    >
+                        Jetzt bezahlen
+                    </button>
+                </div>
+            </form>
+        );
+    }
+
+    return null;
 };
 
 const StripePayment = ({stripePromise, initialClientSecret = null}) => {

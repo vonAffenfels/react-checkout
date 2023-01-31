@@ -35,7 +35,7 @@ const StandaloneStripePayment = ({}) => {
         <div className="react-ez-checkout-cart-wrapper">
             <div className="absolute z-insane inset-0 bg-white max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <Elements stripe={loadedConfig.stripePromise} options={{clientSecret: loadedConfig.clientSecret}}>
-                    <StripePaymentForm clientSecret={loadedConfig.clientSecret} />
+                    <StripePaymentForm clientSecret={loadedConfig.clientSecret} isStandalone={true} />
                 </Elements>
             </div>
         </div>
