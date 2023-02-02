@@ -43,6 +43,10 @@ export const StripePaymentForm = ({clientSecret, isStandalone}) => {
         setPaymentIntentData(result.paymentIntent);
     };
 
+    const formatPrice = amount => {
+        return String(amount).substring(0, String(amount).length - 2) + "." + String(amount).substring(String(amount).length - 2);
+    }
+
     useEffect(() => {
         if (!stripe || !clientSecret) {
             return;
@@ -74,26 +78,34 @@ export const StripePaymentForm = ({clientSecret, isStandalone}) => {
 
     if (showPaymentForm) {
         return (
-            <form id="stripe-payment-form" onSubmit={onSubmit}>
-                <PaymentElement id="stripe-payment-element" />
-                {errorMessage ? (
-                    <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
-                ) : null}
-                <div className="border-t border-gray-200 py-6">
-                    <button
-                        disabled={!elements || !stripe}
-                        type="submit"
-                        className={
-                            classNames(
-                                "w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white",
-                                elements && stripe ? "hover:bg-color-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
-                            )
-                        }
-                    >
-                        Jetzt bezahlen
-                    </button>
-                </div>
-            </form>
+            <>
+                {isStandalone && (
+                    <div className="border-b border-gray-200 mb-6 text-base font-bold">
+                        {(paymentIntentData?.description ? paymentIntentData.description + ": " : "")}
+                        Zahlung über {formatPrice(paymentIntentData.amount)} {String(paymentIntentData.currency).toUpperCase()} ausstehend
+                    </div>
+                )}
+                <form id="stripe-payment-form" onSubmit={onSubmit}>
+                    <PaymentElement id="stripe-payment-element" />
+                    {errorMessage ? (
+                        <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
+                    ) : null}
+                    <div className="border-t border-gray-200 py-6">
+                        <button
+                            disabled={!elements || !stripe}
+                            type="submit"
+                            className={
+                                classNames(
+                                    "w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white",
+                                    elements && stripe ? "hover:bg-color-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
+                                )
+                            }
+                        >
+                            Jetzt bezahlen
+                        </button>
+                    </div>
+                </form>
+            </>
         );
     }
 

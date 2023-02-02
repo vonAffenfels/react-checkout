@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect} from "react";
 
-import ReactCheckout from "react-ez-checkout";
+import ReactCheckout from "react-ez-checkout/dist/index.cjs.js";
 
 const ProductList = () => {
     const {getProductList, addItemToCart, getProductBySku, getProductById} = useContext(ReactCheckout.API);
