@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-const Checkbox = ({label, id, onChange}) => {
+const Checkbox = ({label, id, onChange, checked}) => {
     return (
         <div className="relative flex items-start mb-10">
             <div className="flex h-5 items-center">
@@ -8,6 +8,7 @@ const Checkbox = ({label, id, onChange}) => {
                     id={id}
                     name={id}
                     type="checkbox"
+                    checked={checked}
                     className="h-4 w-4 rounded border-gray-500 text-color-600 focus:ring-indigo-500"
                     onChange={e => onChange(e.target.checked)}
                 />

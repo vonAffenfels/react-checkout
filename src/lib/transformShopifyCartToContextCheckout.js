@@ -235,6 +235,7 @@ function transformCart(node) {
         checkout.discountAllocations = null;
     }
 
+    console.log("transformedCart", checkout);
     return checkout;
 }
 

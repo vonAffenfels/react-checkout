@@ -1,13 +1,13 @@
 function transformBuyerIdentity(address, email) {
     const updatedAddress = {
-        countryCode: address.country,
+        countryCode: address.countryCode || address.country,
         deliveryAddressPreferences: {
             deliveryAddress: {
                 address1: address.streetAddress1,
                 address2: address.streetAddress2,
                 city: address.city,
                 company: address.companyName,
-                country: address.country,
+                country: address.countryCode || address.country,
                 firstName: address.firstName,
                 lastName: address.lastName,
                 province: address.countryArea,

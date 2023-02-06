@@ -1,20 +1,41 @@
-import React, {Fragment} from "react";
-import {CheckCircleIcon, RefreshIcon} from "@heroicons/react/solid";
+import React, {useState, useEffect} from "react";
+import {CheckCircleIcon} from "@heroicons/react/solid";
 
 import {Spin} from "../atoms/animate.jsx";
-import Price from "../atoms/price.jsx";
+import CONST from "../../lib/const";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-const ShippingMethodOption = ({shippingMethod, selectedShippingMethodId, loading, onChange}) => {
-    const isFree = parseFloat(shippingMethod.price?.amount) === 0;
-    const checked = selectedShippingMethodId === shippingMethod?.id;
+function checkIfAddressIsSame(address, addressFormData) {
+    if (!addressFormData) {
+        return false;
+    }
+    let retVal = true;
+    Object.keys(addressFormData).forEach(key => {
+        if (addressFormData[key] !== address[key]) {
+            retVal = false;
+        }
+    });
+    return retVal;
+}
+
+const AddressOption = ({address, selectedAddressId, onChange}) => {
+    const [loading, setLoading] = useState(false);
+    const checked = address?.id === selectedAddressId;
+    const {firstName, lastName, streetAddress1, houseNumber, city, zip, country} = (address || {});
 
     const onClick = () => {
-        onChange(shippingMethod?.id);
+        if (!checked) {
+            setLoading(true);
+            onChange(address?.id);
+        }
     };
+
+    useEffect(() => {
+        setLoading(false);
+    }, [selectedAddressId]);
 
     return (
         <div
@@ -29,17 +50,16 @@ const ShippingMethodOption = ({shippingMethod, selectedShippingMethodId, loading
             <span className="flex-1 flex">
                 <span className="flex flex-col">
                     <span className="block text-sm font-medium text-color-900">
-                        {shippingMethod.name}
+                        {firstName} {lastName}
                     </span>
                     <span className="mt-1 flex items-center text-sm text-color-500">
-                        {shippingMethod.minimumDeliveryDays && shippingMethod.maximumDeliveryDays && `${shippingMethod.minimumDeliveryDays} - ${shippingMethod.maximumDeliveryDays} Tage`}
+                        {streetAddress1} {houseNumber}
                     </span>
-                    <span className="mt-6 text-sm font-medium text-color-900">
-                        Preis: {isFree ? "kostenlos" : (
-                        <>
-                            <Price price={shippingMethod.price?.amount}/> {shippingMethod.price?.currency}
-                        </>
-                    )}
+                    <span className="mt-1 flex items-center text-sm text-color-500">
+                        {city} {zip}
+                    </span>
+                    <span className="mt-1 flex items-center text-sm text-color-500">
+                        {CONST.COUNTRIES[country] || country}
                     </span>
                 </span>
             </span>
@@ -57,4 +77,4 @@ const ShippingMethodOption = ({shippingMethod, selectedShippingMethodId, loading
 );
 }
 
-export default ShippingMethodOption;
+export default AddressOption;

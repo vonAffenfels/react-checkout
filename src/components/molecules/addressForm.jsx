@@ -17,11 +17,10 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
             email: cart?.email
         });
     }, [addressFormDataDebounced]);
-    console.log("AddressForm, addressFormData", addressFormData, "_addressFormData", _addressFormData);
 
     return (
         <>
-            <h2 className="text-lg font-medium text-color-900">{heading}</h2>
+            {heading && <h2 className="text-lg font-medium text-color-900">{heading}</h2>}
 
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                 <div>

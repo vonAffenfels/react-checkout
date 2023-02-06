@@ -1,5 +1,4 @@
-import React, {Fragment, useState} from "react";
-import {RadioGroup} from "@headlessui/react";
+import React from "react";
 import {CheckCircleIcon} from "@heroicons/react/solid";
 
 function classNames(...classes) {

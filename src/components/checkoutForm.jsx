@@ -1,12 +1,10 @@
-import React, {useContext, useEffect, useState} from "react";
-import {RadioGroup} from "@headlessui/react";
-
-import useDebounce from "../hooks/useDebounce";
+import React, {useContext, useState, useEffect} from "react";
 
 import CheckoutContext from "../context/CheckoutContext";
 import BuyContext from "../context/BuyContext";
 import ShippingMethodOption from "./molecules/shippingMethodOption.jsx";
 import PaymentMethodOption from "./molecules/paymentMethodOption.jsx";
+import AddressOption from "./molecules/addressOption.jsx";
 import {LoadingOption} from "./atoms/animate.jsx";
 import AddressForm from "./molecules/addressForm.jsx";
 import {Checkbox} from "./atoms/checkbox.jsx";
@@ -21,6 +19,16 @@ const CheckoutForm = ({props}) => {
         email,
         setEmail,
         hideEmailInput,
+
+        addressBook,
+        onSelectAddressBookEntry,
+        onSelectBillingAddressBookEntry,
+        selectedShippingAddressId,
+        setSelectedShippingAddressId,
+        selectedBillingAddressId,
+        setSelectedBillingAddressId,
+
+        setCartAddress,
         billingAddress,
         setBillingAddress,
         setCartDeliveryMethod,
@@ -33,6 +41,22 @@ const CheckoutForm = ({props}) => {
     } = useContext(CheckoutContext);
 
     const [tempSelectedShippingMethodId, setTempSelectedShippingMethodId] = useState("");
+    const [createNewShippingAddress, _setNewShippingAddress] = useState(false);
+    const [createNewBillingAddress, _setNewBillingAddress] = useState(false);
+
+    const setNewShippingAddress = (val) => {
+        _setNewShippingAddress(val);
+        if (val) {
+            setSelectedShippingAddressId("");
+        }
+    }
+
+    const setNewBillingAddress = (val) => {
+        _setNewBillingAddress(val);
+        if (val) {
+            setSelectedBillingAddressId("");
+        }
+    }
 
     const onChangeDeliveryMethod = async (deliveryMethodId) => {
         if (cart?.shippingMethod?.id !== deliveryMethodId) {
@@ -47,6 +71,21 @@ const CheckoutForm = ({props}) => {
             setSelectedPaymentGatewayId(paymentGatewayId);
         }
     };
+
+    const shippingAddresses = (addressBook || []).filter(address => address.type === "shipping");
+    const billingAddresses = (addressBook || []).filter(address => address.type === "billing");
+
+    useEffect(() => {
+        if (selectedBillingAddressId) {
+            setNewBillingAddress(false);
+        }
+    }, [selectedBillingAddressId]);
+
+    useEffect(() => {
+        if (selectedShippingAddressId) {
+            setNewShippingAddress(false);
+        }
+    }, [selectedShippingAddressId]);
 
     return (
         <div>
@@ -75,47 +114,104 @@ const CheckoutForm = ({props}) => {
             </div>
 
             <div className={`${hideEmailInput ? "" : "mt-10 border-t"} border-gray-200 pt-10`}>
-                <AddressForm
-                    heading="Lieferadresse"
-                    addressFormData={addressFormData}
-                    setAddressFormData={setAddressFormData}
-                />
+                <h2 className="text-lg font-medium text-color-900">Lieferadresse</h2>
+
+                {shippingAddresses.length > 0 && (
+                    <>
+                        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                            {shippingAddresses.map((address) => (
+                                <AddressOption
+                                    key={address.id}
+                                    selectedAddressId={selectedShippingAddressId}
+                                    address={address}
+                                    onChange={onSelectAddressBookEntry}
+                                />
+                            ))}
+                        </div>
+                        <div className="mt-10">
+                            <Checkbox
+                                id="new_shipping_address"
+                                label="Neue Adresse anlegen"
+                                onChange={setNewShippingAddress}
+                                checked={createNewShippingAddress}
+                            />
+                        </div>
+                    </>
+                )}
+
+                {(createNewShippingAddress || (shippingAddresses.length === 0)) && (
+                    <AddressForm
+                        addressFormData={addressFormData}
+                        setAddressFormData={setAddressFormData}
+                    />
+                )}
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-                <Checkbox
-                    id="different_billing_address"
-                    label="Rechnungsadresse weicht ab"
-                    onChange={setBillingAddressDeviating}
-                />
-                {isBillingAddressDeviating && (
-                    <AddressForm
-                        heading="Rechnungsadresse"
-                        addressFormData={billingAddress}
-                        setAddressFormData={setBillingAddress}
+                <h2 className="text-lg font-medium text-color-900">Rechnungsadresse</h2>
+
+                <div className="mt-10">
+                    <Checkbox
+                        id="different_billing_address"
+                        label="Rechnungsadresse weicht ab"
+                        onChange={setBillingAddressDeviating}
+                        checked={isBillingAddressDeviating}
                     />
+                </div>
+                {isBillingAddressDeviating && (
+                    <>
+                        {billingAddresses.length > 0 && (
+                            <>
+                                <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                                    {billingAddresses.map((address) => (
+                                        <AddressOption
+                                            key={address.id}
+                                            selectedAddressId={selectedBillingAddressId}
+                                            address={address}
+                                            onChange={onSelectBillingAddressBookEntry}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="mt-10">
+                                    <Checkbox
+                                        id="new_billing_address"
+                                        label="Neue Adresse anlegen"
+                                        onChange={setNewBillingAddress}
+                                        checked={createNewBillingAddress}
+                                    />
+                                </div>
+                            </>
+                        )}
+
+                        {(createNewBillingAddress || (billingAddresses.length === 0)) && (
+                            <AddressForm
+                                addressFormData={billingAddress}
+                                setAddressFormData={setBillingAddress}
+                            />
+                        )}
+                    </>
                 )}
             </div>
 
             {cart?.requiresShipping !== false && (
                 <div className="mt-10 border-t border-gray-200 pt-10">
-                    <RadioGroup value={cart?.shippingMethod?.id || ""} onChange={onChangeDeliveryMethod}>
-                        <RadioGroup.Label className="text-lg font-medium text-color-900">Versandart</RadioGroup.Label>
+                    <label className="text-lg font-medium text-color-900">Versandart</label>
 
-                        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                            {cart?.shippingMethods?.map((shippingMethod) => (
-                                <ShippingMethodOption
-                                    shippingMethod={shippingMethod}
-                                    key={shippingMethod.id}
-                                    loading={(isSettingShippingMethod && (shippingMethod.id === tempSelectedShippingMethodId)) || isDebug}
-                                />
-                            ))}
-                            {((isLoadingShippingMethods && !cart?.shippingMethods?.length) || isDebug) && <LoadingOption/>}
-                            {!isLoadingShippingMethods && !cart?.shippingMethods?.length && (
-                                <p>Nach Eingabe der Adresse werden die verfügbaren Versandarten angezeigt</p>
-                            )}
-                        </div>
-                    </RadioGroup>
+                    <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                        {cart?.shippingMethods?.map((shippingMethod) => (
+                            <ShippingMethodOption
+                                shippingMethod={shippingMethod}
+                                selectedShippingMethodId={cart?.shippingMethod?.id}
+                                key={shippingMethod.id}
+                                loading={(isSettingShippingMethod && (shippingMethod.id === tempSelectedShippingMethodId)) || isLoadingShippingMethods}
+                                onChange={onChangeDeliveryMethod}
+                            />
+                        ))}
+                        {((isLoadingShippingMethods && !cart?.shippingMethods?.length) || isDebug) && <LoadingOption/>}
+                        {!isLoadingShippingMethods && !cart?.shippingMethods?.length && (
+                            <p>Nach Eingabe der Adresse werden die verfügbaren Versandarten angezeigt</p>
+                        )}
+                    </div>
                 </div>
             )}
 
@@ -127,9 +223,9 @@ const CheckoutForm = ({props}) => {
                         {(cart?.availablePaymentGateways || availablePaymentGateways)?.map((paymentMethod) => (
                             <PaymentMethodOption
                                 key={paymentMethod.id}
+                                selectedPaymentGatewayId={selectedPaymentGatewayId}
                                 paymentMethod={paymentMethod}
                                 cart={cart}
-                                selectedPaymentGatewayId={selectedPaymentGatewayId}
                                 onChange={onChangePaymentMethod}
                             />
                         ))}

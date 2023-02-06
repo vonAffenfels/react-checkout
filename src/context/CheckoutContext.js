@@ -82,6 +82,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     const [email, setEmail] = useState("");
     const [hideEmailInput, setHideEmailInput] = useState(false);
+    const [addressBook, setAddressBook] = useState([]);
+    const [selectedShippingAddressId, setSelectedShippingAddressId] = useState("");
+    const [selectedBillingAddressId, setSelectedBillingAddressId] = useState("");
 
     const [addressFormData, setAddressFormData] = useState({
         firstName: "",
@@ -375,7 +378,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 }
             }
 
-            const checkoutData = await createDraftOrder({
+            const draftOrderInput = {
                 checkoutToken: paymentCheckoutToken,
                 checkout: paymentCheckoutData,
                 webhookUri: buyContext.webhookUri,
@@ -384,7 +387,27 @@ export const CheckoutContextProvider = ({children, channel}) => {
                     email: addressFormData.email
                 } : paymentCheckoutData.shippingAddress,
                 selectedPaymentGatewayId: selectedPaymentGatewayId,
-            });
+            };
+            if (selectedShippingAddressId) {
+                if (!draftOrderInput.customAttributes) {
+                    draftOrderInput.customAttributes = [];
+                }
+                draftOrderInput.customAttributes.push({
+                    key: "shipping_address_id",
+                    value: selectedShippingAddressId,
+                });
+            }
+            if (selectedBillingAddressId) {
+                if (!draftOrderInput.customAttributes) {
+                    draftOrderInput.customAttributes = [];
+                }
+                draftOrderInput.customAttributes.push({
+                    key: "billing_address_id",
+                    value: selectedBillingAddressId,
+                });
+            }
+
+            const checkoutData = await createDraftOrder(draftOrderInput);
             setCheckout({
                 ...(checkout || {}),
                 ...checkoutData
@@ -468,12 +491,56 @@ export const CheckoutContextProvider = ({children, channel}) => {
         return foundDiff;
     };
 
+    const onSelectAddressBookEntry = async (addressId) => {
+        console.log("onSelectAddressBookEntry", addressId);
+        if (addressBook?.length) {
+            const updateAddress = addressBook.find(address => address.id === addressId);
+            if (updateAddress) {
+                console.log("updateAddress", updateAddress);
+                await setCartAddress({
+                    firstName: updateAddress.firstName,
+                    lastName: updateAddress.lastName,
+                    streetAddress1: updateAddress.streetAddress1,
+                    city: updateAddress.city,
+                    country: updateAddress.country,
+                    postalCode: updateAddress.postalCode,
+                });
+                console.log("onSelectAddressBookEntry, after, now set to:", addressId);
+                setSelectedShippingAddressId(addressId);
+            }
+        }
+    };
+
+    const onSelectBillingAddressBookEntry = (addressId) => {
+        if (addressBook?.length) {
+            const updateAddress = addressBook.find(address => address.id === addressId);
+            if (updateAddress) {
+                setBillingAddress({
+                    firstName: updateAddress.firstName,
+                    lastName: updateAddress.lastName,
+                    streetAddress1: updateAddress.streetAddress1,
+                    city: updateAddress.city,
+                    country: updateAddress.country,
+                    postalCode: updateAddress.postalCode,
+                });
+                setSelectedBillingAddressId(addressId);
+            }
+        }
+    };
+
     const reset = () => {
         setSelectedPaymentGatewayId(null);
         setCartId(null);
         setCheckoutToken(null);
         setDisplayState("widget");
     };
+
+    useEffect(() => {
+        if (email !== cart?.email) {
+            console.log("cart?.shippingAddress", cart?.shippingAddress, "cart", cart);
+            setCartAddress(cart?.shippingAddress);
+        }
+    }, [email]);
 
     useEffect(() => {
         getCheckoutByToken();
@@ -554,6 +621,14 @@ export const CheckoutContextProvider = ({children, channel}) => {
             reset,
             hideEmailInput,
             setHideEmailInput,
+            addressBook,
+            setAddressBook,
+            onSelectAddressBookEntry,
+            onSelectBillingAddressBookEntry,
+            selectedShippingAddressId,
+            setSelectedShippingAddressId,
+            selectedBillingAddressId,
+            setSelectedBillingAddressId,
         }}>
             {children}
         </CheckoutContext.Provider>
