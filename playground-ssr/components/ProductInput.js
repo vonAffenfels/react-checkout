@@ -30,7 +30,7 @@ const ProductInput = ({}) => {
                 "key": "gift_subscription_recipient_address",
                 "value": "{\"salutation\":\"mr\",\"firstName\":\"Julian\",\"lastName\":\"Lindner\",\"streetAddress\":\"test\",\"houseNumber\":\"1234\",\"zip\":\"70176\",\"city\":\"Stuttgart\",\"country\":\"Germany\"}"
             }
-        ]);
+        ], true);
     };
 
     if (!ready) {

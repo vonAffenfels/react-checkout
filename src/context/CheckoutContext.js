@@ -144,8 +144,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
     };
 
-    const addItemToCart = async (variantId, quantity = 1, attributes) => {
-        if (!isCartOpen) {
+    const addItemToCart = async (variantId, quantity = 1, attributes, openCheckoutPage = false) => {
+        if (openCheckoutPage) {
+            setDisplayState("cartFullPage");
+        } else if (!isCartOpen) {
             setCartOpen(true);
         }
 
