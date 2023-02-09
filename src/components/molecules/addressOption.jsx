@@ -63,7 +63,7 @@ const AddressOption = ({address, selectedAddressId, onChange}) => {
                     </span>
                 </span>
             </span>
-            {loading ? <Spin /> : null}
+            {loading ? <Spin className="-ml-1 mr-3" /> : null}
             {checked ? <CheckCircleIcon className="h-5 w-5 text-bg-color-600" aria-hidden="true"/> : null}
             <span
                 className={classNames(

@@ -1,5 +1,4 @@
 import React, {Fragment} from "react";
-import {RadioGroup} from "@headlessui/react";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -7,7 +6,7 @@ function classNames(...classes) {
 
 const Spin = ({w = 5, h = 5, className, style = {}}) => (
     <svg
-        className={`animate-spin -ml-1 mr-3 h-${h} w-${w} text-bg-color-600 ${className || ""}`}
+        className={`animate-spin h-${h} w-${w} text-bg-color-600 ${className || ""}`}
         style={style}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

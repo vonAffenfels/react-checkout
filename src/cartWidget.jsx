@@ -77,18 +77,26 @@ const CartWidget = ({props}) => {
                         </div>
 
                         <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                            <div className="flex justify-between text-base font-medium text-color-900">
-                                <p>Warenkorb inkl. gesetzlicher Mwst.</p>
-                                <p><Price price={cart?.subtotalPrice?.net?.amount}/> {cart?.subtotalPrice?.net?.currency}</p>
+                            {cart?.requiresShipping !== false ? (
+                                <>
+                                    <div className="flex justify-between text-sm font-medium text-color-500">
+                                        <p>Versand inkl. gesetzlicher Mwst.</p>
+                                        {cart?.shippingPrice?.gross?.amount > 0 ? (
+                                            <p className="mb-2">
+                                                <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
+                                            </p>
+                                        ) : (
+                                            <p className="text-sm font-medium text-bg-color-500 mb-2">Gratis Versand!</p>
+                                        )}
+                                    </div>
+                                </>
+                            ) : null}
+                            <div className="flex justify-between text-base text-color-900">
+                                <p className="font-medium">Gesamtsumme inkl. gesetzlicher Mwst.</p>
+                                <p className="font-medium">
+                                    <Price price={cart?.totalPrice?.gross?.amount}/> {cart?.totalPrice?.gross?.currency}
+                                </p>
                             </div>
-                            {!!cart?.shippingPrice?.gross?.amount ? (
-                                <div className="flex justify-between text-base font-small text-color-500">
-                                    <p>Versand inkl. gesetzlicher Mwst.</p>
-                                    <p><Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}</p>
-                                </div>
-                            ) : (
-                                <p className="mt-0.5 text-sm text-color-500">Versandkosten werden an der Kasse berechnet.</p>
-                            )}
                             <div className="mt-6">
                                 <a
                                     onClick={openFullPage}

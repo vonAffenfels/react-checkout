@@ -265,7 +265,7 @@ const PayPalPayment = ({apiUri, apiKey}) => {
             </div>
             {(!isSDKLoaded || isLoading) && (
                 <div className="mx-auto w-20 mt-20">
-                    <Spin w={10} h={10} />
+                    <Spin className="-ml-1 mr-3" w={10} h={10} />
                 </div>
             )}
         </>

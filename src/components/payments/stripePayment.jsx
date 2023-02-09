@@ -63,7 +63,7 @@ export const StripePaymentForm = ({clientSecret, isStandalone}) => {
     if (showLoadingAnimation) {
         return (
             <div className="border-gray-200 py-6 text-base font-medium text-center w-full">
-                <Spin h={6} w={6} style={{margin: "auto"}} />
+                <Spin className="-ml-1 mr-3" h={6} w={6} style={{margin: "auto"}} />
             </div>
         );
     }

@@ -44,12 +44,20 @@ const CheckoutSummary = ({props}) => {
                         <Price price={cart?.subtotalPrice?.net?.amount}/> {cart?.subtotalPrice?.net?.currency}
                     </dd>
                 </div>
-                <div className="flex items-center justify-between">
-                    <dt className="text-sm">Versand inkl. gesetzlicher Mwst.</dt>
-                    <dd className="text-sm font-medium text-color-900">
-                        <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
-                    </dd>
-                </div>
+                {cart?.requiresShipping !== false ? (
+                    <div className="flex items-center justify-between">
+                        <dt className="text-sm">Versand inkl. gesetzlicher Mwst.</dt>
+                        <dd className="text-sm font-medium text-color-900">
+                            {cart?.shippingPrice?.gross?.amount > 0 ? (
+                                <>
+                                    <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
+                                </>
+                            ) : (
+                                <span className="text-bg-color-500">Gratis Versand!</span>
+                            )}
+                        </dd>
+                    </div>
+                ) : null}
                 {cart?.discountAllocations?.amount > 0 && (
                     <div className="flex items-center justify-between">
                         <dt className="text-sm">Rabatt</dt>
@@ -65,7 +73,7 @@ const CheckoutSummary = ({props}) => {
                 {/*    </dd>*/}
                 {/*</div>*/}
                 <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-                    <dt className="text-base font-medium">Summe inkl. gesetzlicher Mwst.</dt>
+                    <dt className="text-base font-medium">Gesamtsumme inkl. gesetzlicher Mwst.</dt>
                     <dd className="text-base font-medium text-color-900">
                         <Price price={cart?.totalPrice?.gross?.amount}/> {cart?.totalPrice?.gross?.currency}
                     </dd>

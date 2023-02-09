@@ -75,6 +75,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [displayState, setDisplayState] = useState("widget");
     const [isCartOpen, setCartOpen] = useState(false);
     const [isLoadingLineItems, setLoadingLineItems] = useState(false);
+    const [isLoadingLineItemQuantity, setLoadingLineItemQuantity] = useState(false);
     const [isLoadingShippingMethods, setLoadingShippingMethods] = useState(false);
     const [isSettingShippingMethod, setSettingShippingMethod] = useState(false);
     const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(null);
@@ -204,7 +205,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             return createCart(lines);
         }
 
-        setLoadingLineItems(true);
+        setLoadingLineItemQuantity(true);
         try {
             const cartData = await updateProductLine({
                 checkoutToken,
@@ -220,7 +221,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             console.log("error in updateCartItems", e);
             await getCartById();
         }
-        setLoadingLineItems(false);
+        setLoadingLineItemQuantity(false);
     }
 
     const removeItemFromCart = async (lineId) => {
@@ -603,6 +604,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             isCartOpen,
             setCartOpen,
             isLoadingLineItems,
+            isLoadingLineItemQuantity,
             isLoadingShippingMethods,
             isSettingShippingMethod,
             addressFormData,

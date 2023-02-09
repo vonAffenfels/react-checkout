@@ -13,7 +13,7 @@ const Price = ({price}) => {
         price[1] = price[1] + "0";
     }
 
-    return <>{price.join(".")}</>;
+    return <>{price.join(",")}</>;
 };
 
 export default Price;
