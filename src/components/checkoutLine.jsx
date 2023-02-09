@@ -1,10 +1,10 @@
 import React, {useContext, useState} from "react";
-import {TrashIcon} from "@heroicons/react/solid";
 
 import CheckoutContext from "../context/CheckoutContext";
 import Price from "./atoms/price.jsx";
 import {CheckMarkIcon, PlusIcon, MinusIcon} from "./atoms/icons.jsx";
 import {Spin} from "./atoms/animate.jsx";
+import BuyContext from "../context/BuyContext";
 
 const CheckoutLine = ({
     id,
@@ -15,6 +15,7 @@ const CheckoutLine = ({
     giftedIdentity,
 }) => {
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
+    const {isDebug} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
 
     const onRemove = async () => {
@@ -92,7 +93,7 @@ const CheckoutLine = ({
                         <div className="mt-1 text-sm text-color-900 grid grid-cols-3">
                             <span className="col-span-1" onClick={onSubtract}><MinusIcon /></span>
                             <span className="col-span-1 text-center">
-                                {isLoadingQuantity ? (
+                                {isLoadingQuantity || isDebug ? (
                                     <Spin w={2} h={2} style={{margin: ".25rem"}} />
                                 ) : quantity}
                             </span>
@@ -152,6 +153,7 @@ const CheckoutLineDetail = ({
     giftedIdentity,
 }) => {
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
+    const {isDebug} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
 
     const onRemove = async () => {
@@ -235,7 +237,7 @@ const CheckoutLineDetail = ({
                         <div className="mt-1 text-sm text-color-900 grid grid-cols-3">
                             <span className="col-span-1" onClick={onSubtract}><MinusIcon /></span>
                             <span className="col-span-1 text-center">
-                                {isLoadingQuantity ? (
+                                {isLoadingQuantity || isDebug ? (
                                     <Spin w={2} h={2} style={{margin: ".25rem"}} />
                                 ) : quantity}
                             </span>
