@@ -57,31 +57,27 @@ const Item = () => (
 );
 
 const LoadingOption = () => (
-    <RadioGroup.Option
-        disabled={true}
+    <div
         className="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none animate-pulse"
     >
         <span className="flex-1 flex">
             <span className="flex flex-col">
-                <RadioGroup.Label as="span" className="block text-sm font-medium text-color-900 rounded-md bg-gray-300 px-2">
+                <span className="block text-sm font-medium text-color-900 rounded-md bg-gray-300 px-2">
                     ...
-                </RadioGroup.Label>
-                <RadioGroup.Description
-                    as="span"
-                    className="mt-1 flex items-center text-sm text-color-500 rounded-md bg-gray-300 px-2"
-                >
+                </span>
+                <span className="mt-1 flex items-center text-sm text-color-500 rounded-md bg-gray-300 px-2">
                     ...
-                </RadioGroup.Description>
-                <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-color-900 rounded-md bg-gray-300 px-2">
+                </span>
+                <span className="mt-6 text-sm font-medium text-color-900 rounded-md bg-gray-300 px-2">
                     ...
-                </RadioGroup.Description>
+                </span>
             </span>
         </span>
         <span
             className="absolute -inset-px rounded-lg pointer-events-none"
             aria-hidden="true"
         />
-    </RadioGroup.Option>
+    </div>
 );
 
 const ButtonBlue = ({text}) => (
