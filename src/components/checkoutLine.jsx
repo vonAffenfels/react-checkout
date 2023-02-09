@@ -94,7 +94,7 @@ const CheckoutLine = ({
                             <span className="col-span-1" onClick={onSubtract}><MinusIcon /></span>
                             <span className="col-span-1 text-center">
                                 {isLoadingQuantity || isDebug ? (
-                                    <Spin w={2} h={2} style={{margin: ".25rem"}} />
+                                    <Spin w={4} h={4} style={{margin: ".25rem"}} />
                                 ) : quantity}
                             </span>
                             <span className="col-span-1" onClick={onAdd}><PlusIcon /></span>
@@ -238,7 +238,7 @@ const CheckoutLineDetail = ({
                             <span className="col-span-1" onClick={onSubtract}><MinusIcon /></span>
                             <span className="col-span-1 text-center">
                                 {isLoadingQuantity || isDebug ? (
-                                    <Spin w={2} h={2} style={{margin: ".25rem"}} />
+                                    <Spin w={4} h={4} style={{margin: ".25rem"}} />
                                 ) : quantity}
                             </span>
                             <span className="col-span-1" onClick={onAdd}><PlusIcon /></span>
