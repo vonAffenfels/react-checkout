@@ -22,6 +22,18 @@ const CheckoutLine = ({
         await removeItemFromCart(id);
     };
 
+    const onChangeQuantity = async (e) => {
+        const updatedQuantity = parseInt(e.target.value);
+        setLoadingQuantity(true);
+        await updateCartItems({
+            lineId: id,
+            variantId: variant.id,
+            quantity: updatedQuantity,
+            bonusProduct: bonusProduct,
+        });
+        setLoadingQuantity(false);
+    }
+
     const onAdd = async () => {
         if (isLoadingLineItemQuantity) {
             return;
@@ -84,20 +96,25 @@ const CheckoutLine = ({
                             <Price price={totalPrice?.gross?.amount}/> {totalPrice?.gross?.currency}
                         </p>
                     </div>
-                    <div className="flex flex-1 items-end justify-between">
-                        <p className="mt-1 text-sm text-color-500" />
-                        <p className="mt-1 text-sm text-color-500 mr-8 text-xs">Menge:</p>
-                    </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
                         <p className="mt-1 text-sm text-color-900">{!bonusProduct ? variantTitle : ""}</p>
-                        <div className="mt-1 text-sm text-color-900 grid grid-cols-3">
-                            <span className="col-span-1" onClick={onSubtract}><MinusIcon /></span>
-                            <span className="col-span-1 text-center">
-                                {isLoadingQuantity || isDebug ? (
-                                    <Spin w={4} h={4} style={{margin: ".25rem"}} />
-                                ) : quantity}
-                            </span>
-                            <span className="col-span-1" onClick={onAdd}><PlusIcon /></span>
+                        <div className="mt-1 text-sm text-color-900">
+                            {isLoadingLineItemQuantity ? (
+                                <div className="rounded-md border border-gray-300 ml-2 pl-2 pr-2 py-2">
+                                    <Spin h={6} w={6} />
+                                </div>
+                            ) : (
+                                <select
+                                    id="quantity"
+                                    name="quantity"
+                                    onChange={onChangeQuantity}
+                                    value={quantity}
+                                    disabled={isLoadingLineItemQuantity}
+                                    className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                >
+                                    <QuantityOptions quantity={quantity} id={id} />
+                                </select>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -159,6 +176,18 @@ const CheckoutLineDetail = ({
     const onRemove = async () => {
         await removeItemFromCart(id);
     };
+
+    const onChangeQuantity = async (e) => {
+        const updatedQuantity = parseInt(e.target.value);
+        setLoadingQuantity(true);
+        await updateCartItems({
+            lineId: id,
+            variantId: variant.id,
+            quantity: updatedQuantity,
+            bonusProduct: bonusProduct,
+        });
+        setLoadingQuantity(false);
+    }
 
     const onAdd = async () => {
         if (isLoadingLineItemQuantity) {
@@ -226,22 +255,25 @@ const CheckoutLineDetail = ({
                             <Price price={totalPrice.gross.amount}/> {totalPrice.gross.currency}
                         </p>
                     </div>
-
-                    <div className="ml-6 flex flex-1 items-end justify-between">
-                        <p className="mt-1 text-sm text-color-500" />
-                        <p className="mt-1 text-sm text-color-500 mr-8 text-xs">Menge:</p>
-                    </div>
-
                     <div className="ml-6 flex flex-1 items-end justify-between">
                         <p className="mt-1 text-sm text-color-500">{!bonusProduct ? variantTitle : ""}</p>
-                        <div className="mt-1 text-sm text-color-900 grid grid-cols-3">
-                            <span className="col-span-1" onClick={onSubtract}><MinusIcon /></span>
-                            <span className="col-span-1 text-center">
-                                {isLoadingQuantity || isDebug ? (
-                                    <Spin w={4} h={4} style={{margin: ".25rem"}} />
-                                ) : quantity}
-                            </span>
-                            <span className="col-span-1" onClick={onAdd}><PlusIcon /></span>
+                        <div className="mt-1 text-sm text-color-900">
+                            {isLoadingLineItemQuantity ? (
+                                <div className="rounded-md border border-gray-300 ml-2 pr-4 pl-4 py-2">
+                                    <Spin h={6} w={6} />
+                                </div>
+                            ) : (
+                                <select
+                                    id="quantity"
+                                    name="quantity"
+                                    onChange={onChangeQuantity}
+                                    value={quantity}
+                                    disabled={isLoadingLineItemQuantity}
+                                    className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                >
+                                    <QuantityOptions quantity={quantity} id={id} />
+                                </select>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -300,6 +332,30 @@ const BonusLineDetail = ({aboSku, variantSku, product, variantTitle, giftedIdent
         </li>
     )
 };
+
+const QuantityOptions = ({quantity, id}) => {
+    const values = [0, quantity];
+
+    let count = 0;
+    while (values.length < 8) {
+        let newLowerVal = quantity - 1 - count;
+        let newUpperVal = quantity + 1 + count;
+        if (newLowerVal > 0) {
+            values.push(newLowerVal);
+        }
+        values.push(newUpperVal);
+        count++;
+    }
+    values.sort((a, b) => {
+        if (a > b) {
+            return 1;
+        } else {
+            return -1;
+        }
+    });
+
+    return values.map(v => <option value={v} key={"checkout-line-option-" + id + v}>{v}</option>);
+}
 
 CheckoutLine.BonusLine = BonusLine;
 CheckoutLine.Detail = CheckoutLineDetail;
