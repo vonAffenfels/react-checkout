@@ -6,7 +6,7 @@ import BuyContext from "./context/BuyContext";
 import CheckoutContext from "./context/CheckoutContext";
 import CheckoutLine from "./components/checkoutLine.jsx";
 import SidePanelLayout from "./components/sidePanelLayout.jsx";
-import {Item} from "./components/atoms/animate.jsx";
+import {Item, Spin} from "./components/atoms/animate.jsx";
 import Price from "./components/atoms/price.jsx";
 
 function classNames(...classes) {
@@ -21,17 +21,15 @@ const CartWidget = ({props}) => {
         isCartOpen,
         setCartOpen,
         setDisplayState,
-        isLoadingLineItems
+        isLoadingLineItems,
+        isLoadingShippingMethods
     } = useContext(CheckoutContext);
 
     const openFullPage = (e) => {
         e.preventDefault();
-        console.log("openFullPage", cart);
         if (cart) {
             setCartOpen(false);
-            console.log("closed cart");
             setDisplayState("cartFullPage");
-            console.log("switched to full page display");
         }
     };
 
@@ -81,12 +79,18 @@ const CartWidget = ({props}) => {
                                 <>
                                     <div className="flex justify-between text-sm font-medium text-color-500">
                                         <p>Versand inkl. gesetzlicher Mwst.</p>
-                                        {cart?.shippingPrice?.gross?.amount > 0 ? (
-                                            <p className="mb-2">
-                                                <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
-                                            </p>
+                                        {isLoadingShippingMethods ? (
+                                            <p className="text-sm font-medium text-bg-color-500 mb-2"><Spin /></p>
                                         ) : (
-                                            <p className="text-sm font-medium text-bg-color-500 mb-2">Gratis Versand!</p>
+                                            <>
+                                                {cart?.shippingPrice?.gross?.amount > 0 ? (
+                                                    <p className="mb-2">
+                                                        <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
+                                                    </p>
+                                                ) : (
+                                                    <p className="text-sm font-medium text-bg-color-500 mb-2">Gratis Versand!</p>
+                                                )}
+                                            </>
                                         )}
                                     </div>
                                 </>

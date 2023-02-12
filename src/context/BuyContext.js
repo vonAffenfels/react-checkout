@@ -78,7 +78,6 @@ export const BuyContextProvider = (props) => {
         return children;
     }
 
-    console.log("Starting react-checkout for shop type", shop, "..", props);
     return (
         <BuyContext.Provider value={{
             ...props,

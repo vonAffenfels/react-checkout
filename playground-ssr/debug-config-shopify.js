@@ -11,7 +11,8 @@ export default {
             description: "Kreditkarte, Lastschrift, SEPA-Überweisung, Giropay",
             isDisabled: function isStripeDisabled (cart) {
                 return false;
-            }
+            },
+            isDefault: true,
         },
         {
             id: "invoice",

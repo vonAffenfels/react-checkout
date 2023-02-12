@@ -193,7 +193,7 @@ const CheckoutForm = ({props}) => {
                 )}
             </div>
 
-            {cart?.requiresShipping !== false && (
+            {(cart?.requiresShipping !== false) && (cart?.shippingMethods?.length > 1) && (
                 <div className="mt-10 border-t border-gray-200 pt-10">
                     <label className="text-lg font-medium text-color-900">Versandart</label>
 

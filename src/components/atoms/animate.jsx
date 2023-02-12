@@ -34,8 +34,8 @@ const SpinButton = ({className}) => (
     </svg>
 );
 
-const Item = () => (
-    <li className="flex py-6 animate-pulse">
+const Item = ({className}) => (
+    <li className={`flex py-6 animate-pulse ${className || ""}`}>
         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
             <img className="h-full w-full object-cover object-center rounded-md bg-gray-300"/>
         </div>

@@ -78,7 +78,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [isLoadingLineItemQuantity, setLoadingLineItemQuantity] = useState(false);
     const [isLoadingShippingMethods, setLoadingShippingMethods] = useState(false);
     const [isSettingShippingMethod, setSettingShippingMethod] = useState(false);
-    const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(null);
+    const defaultPaymentGateway = (buyContext?.availablePaymentGateways || []).find(provider => provider.isDefault);
+    const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(defaultPaymentGateway?.id);
     const [loadingDraftOrder, setLoadingDraftOrder] = useState(false);
 
     const [email, setEmail] = useState("");

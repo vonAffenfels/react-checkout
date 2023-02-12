@@ -34,41 +34,6 @@ const CheckoutLine = ({
         setLoadingQuantity(false);
     }
 
-    const onAdd = async () => {
-        if (isLoadingLineItemQuantity) {
-            return;
-        }
-
-        setLoadingQuantity(true);
-        const updatedQuantity = quantity + 1;
-        await updateCartItems({
-            lineId: id,
-            variantId: variant.id,
-            quantity: updatedQuantity,
-            bonusProduct: bonusProduct,
-        });
-        setLoadingQuantity(false);
-    };
-
-    const onSubtract = async () => {
-        if (isLoadingLineItemQuantity) {
-            return;
-        }
-
-        const updatedQuantity = quantity - 1;
-        if (!quantity) {
-            return onRemove();
-        }
-        setLoadingQuantity(true);
-        await updateCartItems({
-            lineId: id,
-            variantId: variant.id,
-            quantity: updatedQuantity,
-            bonusProduct: bonusProduct,
-        });
-        setLoadingQuantity(false);
-    };
-
     let variantTitle = "";
     if (String(variant?.name).toLowerCase() !== "default title") {
         variantTitle = variant?.name?.charAt(0).toUpperCase() + variant?.name?.substring(1);
@@ -77,11 +42,11 @@ const CheckoutLine = ({
     return (
         <>
             <li className="flex py-6">
-                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md">
                     <img
                         src={variant?.product?.thumbnail?.url}
                         alt={variant?.product?.thumbnail?.alt}
-                        className="h-full object-cover object-center"
+                        className="h-full mx-auto object-cover object-center"
                     />
                 </div>
 
@@ -99,7 +64,7 @@ const CheckoutLine = ({
                     <div className="flex flex-1 items-end justify-between text-sm">
                         <p className="mt-1 text-sm text-color-900">{!bonusProduct ? variantTitle : ""}</p>
                         <div className="mt-1 text-sm text-color-900">
-                            {isLoadingLineItemQuantity ? (
+                            {isLoadingQuantity ? (
                                 <div className="rounded-md border border-gray-300 ml-2 pl-2 pr-2 py-2">
                                     <Spin h={6} w={6} />
                                 </div>
@@ -109,7 +74,7 @@ const CheckoutLine = ({
                                     name="quantity"
                                     onChange={onChangeQuantity}
                                     value={quantity}
-                                    disabled={isLoadingLineItemQuantity}
+                                    disabled={isLoadingQuantity}
                                     className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 >
                                     <QuantityOptions quantity={quantity} id={id} />
@@ -189,41 +154,6 @@ const CheckoutLineDetail = ({
         setLoadingQuantity(false);
     }
 
-    const onAdd = async () => {
-        if (isLoadingLineItemQuantity) {
-            return;
-        }
-
-        setLoadingQuantity(true);
-        const updatedQuantity = quantity + 1;
-        await updateCartItems({
-            lineId: id,
-            variantId: variant.id,
-            quantity: updatedQuantity,
-            bonusProduct: bonusProduct,
-        });
-        setLoadingQuantity(false);
-    };
-
-    const onSubtract = async () => {
-        if (isLoadingLineItemQuantity) {
-            return;
-        }
-
-        const updatedQuantity = quantity - 1;
-        if (!quantity) {
-            return onRemove();
-        }
-        setLoadingQuantity(true);
-        await updateCartItems({
-            lineId: id,
-            variantId: variant.id,
-            quantity: updatedQuantity,
-            bonusProduct: bonusProduct,
-        });
-        setLoadingQuantity(false);
-    };
-
     let variantTitle = "";
     if (String(variant.name).toLowerCase() !== "default title") {
         variantTitle = variant.name.charAt(0).toUpperCase() + variant.name.substring(1);
@@ -236,7 +166,7 @@ const CheckoutLineDetail = ({
                     <img
                         src={variant.product.thumbnail?.url}
                         alt={variant.product.thumbnail?.alt}
-                        className="w-20 rounded-md"
+                        className="w-20 mx-auto rounded-md"
                     />
                 </div>
 
@@ -258,7 +188,7 @@ const CheckoutLineDetail = ({
                     <div className="ml-6 flex flex-1 items-end justify-between">
                         <p className="mt-1 text-sm text-color-500">{!bonusProduct ? variantTitle : ""}</p>
                         <div className="mt-1 text-sm text-color-900">
-                            {isLoadingLineItemQuantity ? (
+                            {isLoadingQuantity ? (
                                 <div className="rounded-md border border-gray-300 ml-2 pr-4 pl-4 py-2">
                                     <Spin h={6} w={6} />
                                 </div>
@@ -268,7 +198,7 @@ const CheckoutLineDetail = ({
                                     name="quantity"
                                     onChange={onChangeQuantity}
                                     value={quantity}
-                                    disabled={isLoadingLineItemQuantity}
+                                    disabled={isLoadingQuantity}
                                     className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 >
                                     <QuantityOptions quantity={quantity} id={id} />

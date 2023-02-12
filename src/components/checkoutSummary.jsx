@@ -3,14 +3,21 @@ import React, {useContext, useState, useEffect} from "react";
 import CheckoutContext from "../context/CheckoutContext";
 import CheckoutLine from "./checkoutLine.jsx";
 import Price from "./atoms/price.jsx";
-import {SpinButton, ButtonBlue} from "./atoms/animate.jsx";
+import {SpinButton, Spin, ButtonBlue, Item} from "./atoms/animate.jsx";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
 const CheckoutSummary = ({props}) => {
-    const {cart, selectedPaymentGatewayId, loadingDraftOrder, applyDiscountCode} = useContext(CheckoutContext);
+    const {
+        cart,
+        selectedPaymentGatewayId,
+        loadingDraftOrder,
+        applyDiscountCode,
+        isLoadingLineItems,
+        isLoadingShippingMethods
+    } = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
     const [discountCode, setDiscountCode] = useState("");
     const [isLoadingDiscountCode, setLoadingDiscountCode] = useState(false);
@@ -36,6 +43,7 @@ const CheckoutSummary = ({props}) => {
                 {cart?.lines?.map((cartItem) => (
                     <CheckoutLine.Detail {...cartItem} key={cartItem.id} />
                 ))}
+                {isLoadingLineItems && <Item className="px-4 sm:px-6" />}
             </ul>
             <dl className="border-t border-gray-200 py-6 px-4 space-y-6 sm:px-6">
                 <div className="flex items-center justify-between">
@@ -48,12 +56,18 @@ const CheckoutSummary = ({props}) => {
                     <div className="flex items-center justify-between">
                         <dt className="text-sm">Versand inkl. gesetzlicher Mwst.</dt>
                         <dd className="text-sm font-medium text-color-900">
-                            {cart?.shippingPrice?.gross?.amount > 0 ? (
-                                <>
-                                    <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
-                                </>
+                            {isLoadingShippingMethods ? (
+                                <span className="text-bg-color-500"><Spin /></span>
                             ) : (
-                                <span className="text-bg-color-500">Gratis Versand!</span>
+                                <>
+                                    {cart?.shippingPrice?.gross?.amount > 0 ? (
+                                        <>
+                                            <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
+                                        </>
+                                    ) : (
+                                        <span className="text-bg-color-500">Gratis Versand!</span>
+                                    )}
+                                </>
                             )}
                         </dd>
                     </div>

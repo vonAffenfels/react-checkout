@@ -72,7 +72,7 @@ export default gql`
                             title
                             productType
                             featuredImage {
-                                url(transform: {maxHeight: 128, maxWidth: 128, crop: CENTER, preferredContentType: WEBP})
+                                url(transform: {maxHeight: 128, maxWidth: 128, preferredContentType: WEBP}) # crop: CENTER
                             }
                         }
                     }
