@@ -6,8 +6,10 @@ import FullPageLayout from "./components/fullPageLayout.jsx"
 import CloseButton from "./components/closeButton.jsx";
 import CheckoutForm from "./components/checkoutForm.jsx";
 import CheckoutSummary from "./components/checkoutSummary.jsx";
+import BuyContext from "./context/BuyContext";
 
 const CartFullPage = ({props}) => {
+    const {texts} = useContext(BuyContext);
     const {
         setDisplayState,
         onBeforePayment,
@@ -43,6 +45,12 @@ const CartFullPage = ({props}) => {
                             <div className="mt-10 lg:mt-0">
                                 <h2 className="text-lg font-medium text-color-900">Bestellzusammenfassung</h2>
                                 <CheckoutSummary />
+                                {texts.subCheckoutSummary && (
+                                    <div
+                                        className="mt-10 text-sm text-color-500"
+                                        dangerouslySetInnerHTML={{__html: texts.subCheckoutSummary}}
+                                    />
+                                )}
                             </div>
                         </form>
 

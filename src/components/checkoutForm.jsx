@@ -41,8 +41,15 @@ const CheckoutForm = ({props}) => {
     } = useContext(CheckoutContext);
 
     const [tempSelectedShippingMethodId, setTempSelectedShippingMethodId] = useState("");
-    const [createNewShippingAddress, _setNewShippingAddress] = useState(false);
-    const [createNewBillingAddress, _setNewBillingAddress] = useState(false);
+    const [createNewShippingAddress, _setNewShippingAddress] = useState(
+        !selectedShippingAddressId &&
+        Object.keys(addressFormData).map(key => addressFormData[key]).filter(Boolean).length
+    );
+    const [createNewBillingAddress, _setNewBillingAddress] = useState(
+        !selectedBillingAddressId &&
+        isBillingAddressDeviating &&
+        Object.keys(addressFormData).map(key => billingAddress[key]).filter(Boolean).length
+    );
 
     const setNewShippingAddress = (val) => {
         _setNewShippingAddress(val);

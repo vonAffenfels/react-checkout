@@ -48,5 +48,13 @@ export default {
                 apiKey: "AZQxQ7RoNULnLO2A6Um5rEOZHfn4L5o33RlkYtrOKKUc0A1vpDyPb57hg6PhqypLFher1dxo7lWPyiAD"
             }
         }
-    ]
+    ],
+    texts: {
+        subCheckoutSummary: "Hinweis: Sie können der Nutzung Ihrer E-Mail-Adresse zu Werbezwecken jederzeit beim " +
+            "Delius Klasing Verlag per <strong><a href='mailto:order@delius-klasing.de'>E-Mail</a></strong> (order@delius-klasing.de) " +
+            "oder <strong><a href='tel:+49521559955'>telefonisch</a></strong> (+49 521 559 955) widersprechen, " +
+            "ohne dass hierfür andere als die Übermittlungskosten nach den Basistarifen entstehen. " +
+            "Hinweise zum <strong><a href='https://shop.delius-klasing.de/datenschutz/' target='_blank'>Datenschutz</a></strong> und " +
+            "<strong><a href='https://shop.delius-klasing.de/widerrufsbelehrung/' target='_blank'>Widerrufsrecht</a></strong>."
+    }
 };

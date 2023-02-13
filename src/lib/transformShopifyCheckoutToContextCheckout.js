@@ -1,6 +1,5 @@
 //takes a graphql checkout node as parameter
 function transformCheckout(node) {
-    console.log("transformCheckout", node)
     const shippingMethods = (node.availableShippingRates?.shippingRates || []).map(rate => {
         return {
             id: rate.handle,
