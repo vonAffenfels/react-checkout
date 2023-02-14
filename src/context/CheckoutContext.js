@@ -249,6 +249,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
         setLoadingShippingMethods(true);
         try {
+            console.log("setCartAddress", address)
             const shippingAddressCart = await shippingAddressUpdate({
                 checkoutToken,
                 cartId,
@@ -353,6 +354,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         try {
             let paymentCheckoutToken = await checkoutCreate({channel, input});
             let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
+            console.log("paymentCheckoutToken", paymentCheckoutToken);
             console.log("paymentCheckoutData", paymentCheckoutData);
             if (paymentCheckoutData.requiresShipping) {
                 paymentCheckoutData.shippingMethods.forEach(rate => {
@@ -392,6 +394,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 } : paymentCheckoutData.shippingAddress,
                 selectedPaymentGatewayId: selectedPaymentGatewayId,
             };
+            console.log("selectedShippingAddressId", selectedShippingAddressId);
             if (selectedShippingAddressId) {
                 if (!draftOrderInput.customAttributes) {
                     draftOrderInput.customAttributes = [];
@@ -401,6 +404,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                     value: selectedShippingAddressId,
                 });
             }
+            console.log("selectedBillingAddressId", selectedBillingAddressId);
             if (selectedBillingAddressId) {
                 if (!draftOrderInput.customAttributes) {
                     draftOrderInput.customAttributes = [];
@@ -410,6 +414,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                     value: selectedBillingAddressId,
                 });
             }
+            console.log("draftOrderInput.customAttributes", draftOrderInput.customAttributes);
 
             const checkoutData = await createDraftOrder(draftOrderInput);
             setCheckout({
@@ -504,7 +509,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 await setCartAddress({
                     firstName: updateAddress.firstName,
                     lastName: updateAddress.lastName,
-                    streetAddress1: updateAddress.streetAddress1,
+                    streetAddress1: updateAddress.streetAddress1 + " " + updateAddress.houseNumber,
                     city: updateAddress.city,
                     country: updateAddress.country,
                     postalCode: updateAddress.postalCode,
@@ -522,7 +527,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 setBillingAddress({
                     firstName: updateAddress.firstName,
                     lastName: updateAddress.lastName,
-                    streetAddress1: updateAddress.streetAddress1,
+                    streetAddress1: updateAddress.streetAddress1 + " " + updateAddress.houseNumber,
                     city: updateAddress.city,
                     country: updateAddress.country,
                     postalCode: updateAddress.postalCode,
