@@ -6,7 +6,7 @@ import {Spin} from "../atoms/animate.jsx";
 
 const PayPalPayment = ({apiUri, apiKey}) => {
     const {checkout, isBillingAddressDeviating, billingAddress, addressFormData, reset} = useContext(CheckoutContext);
-    const {setBannerMessage} = useContext(BuyContext);
+    const {setBannerMessage, successRedirect} = useContext(BuyContext);
     const executedRef = useRef(false);
     const [clientToken, setClientToken] = useState(null);
     const [isSDKLoaded, setSDKLoaded] = useState(false);
@@ -92,6 +92,9 @@ const PayPalPayment = ({apiUri, apiKey}) => {
                 msg: `Bestellung ${res?.order?.name} wurde erfolgreich getätigt.`
             });
             reset();
+            if (successRedirect) {
+                window.location.href = window.location.origin + successRedirect;
+            }
             return res;
         }));
     };

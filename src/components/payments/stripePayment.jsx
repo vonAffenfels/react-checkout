@@ -14,6 +14,7 @@ function classNames(...classes) {
 export const StripePaymentForm = ({clientSecret, isStandalone}) => {
     const elements = useElements();
     const stripe = useStripe();
+    const {successRedirect} = useContext(BuyContext);
     const [errorMessage, setErrorMessage] = useState("");
     const [paymentIntentData, setPaymentIntentData] = useState(null);
 
@@ -26,7 +27,7 @@ export const StripePaymentForm = ({clientSecret, isStandalone}) => {
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                return_url: window.location.origin,
+                return_url: window.location.origin + (successRedirect || ""),
             },
         });
 

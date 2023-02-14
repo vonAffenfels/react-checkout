@@ -12,11 +12,11 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         const list = await getProductList?.();
-        const product = await getProductBySku?.({sku: "2000350", onlyMatchingVariant: true, isAbo: false});
-        const product2 = await getProductBySku?.({sku: "1021934", onlyMatchingVariant: true, isAbo: false});
+        const product = await getProductBySku?.({sku: "2001194", onlyMatchingVariant: true, isAbo: false});
+        const product2 = await getProductBySku?.({sku: "2001004", onlyMatchingVariant: true, isAbo: false});
         console.log("product", product);
         console.log("product2", product2);
-        const productById = await getProductById?.({id: "gid://shopify/Product/7064244781188"});
+        const productById = await getProductById?.({id: "gid://shopify/Product/7058033868932"});
         console.log("productById", productById);
         setProducts(list || []);
     };

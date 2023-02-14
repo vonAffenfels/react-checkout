@@ -31,6 +31,7 @@ const useProductBySku = (shop, client) => {
                         productCursor: productCursor
                     }
                 });
+                console.log("fetchData", tagQuery, data.products, productCursor, variantCursor)
                 return data;
             };
             let data = await fetchData({variantCursor, productCursor});

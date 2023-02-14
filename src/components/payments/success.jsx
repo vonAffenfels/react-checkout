@@ -16,7 +16,7 @@ export const Success = () => {
 
 export const Banner = ({orderName}) => {
     const {reset} = useContext(CheckoutContext);
-    const {setBannerMessage} = useContext(BuyContext);
+    const {setBannerMessage, successRedirect} = useContext(BuyContext);
     const executedRef = useRef(false);
 
     useEffect(() => {
@@ -33,6 +33,9 @@ export const Banner = ({orderName}) => {
                 msg: `Bestellung ${orderName} wurde erfolgreich getätigt.`
             });
             reset();
+            if (successRedirect) {
+                window.location.href = window.location.origin + successRedirect;
+            }
         }, 2000);
 
         return () => {
