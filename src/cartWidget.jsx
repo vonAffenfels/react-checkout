@@ -30,17 +30,14 @@ const CartWidget = ({props}) => {
         e.preventDefault();
         if (cart) {
             setCartOpen(false);
-<<<<<<< Updated upstream
-=======
             console.log("closed cart");
 
-            if(withLogin?.globalFunc && !email) {
+            if (withLogin?.globalFunc && !email) {
                 setDisplayState("loginPage");
                 console.log("switched to login page display");
                 return;
             }
 
->>>>>>> Stashed changes
             setDisplayState("cartFullPage");
         }
     };
@@ -71,7 +68,7 @@ const CartWidget = ({props}) => {
                                         onClick={() => setCartOpen(false)}
                                     >
                                         <span className="sr-only">Schließen</span>
-                                        <XIcon className="h-5 w-5" aria-hidden="true" />
+                                        <XIcon className="h-5 w-5" aria-hidden="true"/>
                                     </button>
                                 </div>
                             </div>
@@ -79,7 +76,7 @@ const CartWidget = ({props}) => {
                             <div className="mt-8">
                                 <div className="flow-root">
                                     <ul role="list" className="-my-6 divide-y divide-gray-200 relative">
-                                        {cart?.lines?.map((cartItem) => <CheckoutLine {...cartItem} key={cartItem.id} />)}
+                                        {cart?.lines?.map((cartItem) => <CheckoutLine {...cartItem} key={cartItem.id}/>)}
                                         {(isLoadingLineItems || isDebug) && <Item/>}
                                     </ul>
                                 </div>
@@ -92,7 +89,7 @@ const CartWidget = ({props}) => {
                                     <div className="flex justify-between text-sm font-medium text-color-500">
                                         <p>Versand inkl. gesetzlicher Mwst.</p>
                                         {isLoadingShippingMethods ? (
-                                            <p className="text-sm font-medium text-bg-color-500 mb-2"><Spin /></p>
+                                            <p className="text-sm font-medium text-bg-color-500 mb-2"><Spin/></p>
                                         ) : (
                                             <>
                                                 {cart?.shippingPrice?.gross?.amount > 0 ? (
