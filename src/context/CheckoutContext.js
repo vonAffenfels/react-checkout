@@ -63,6 +63,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const deliveryMethodUpdateCheckout = useDeliveryMethodUpdate(buyContext.shop, client, "checkout");
     const discountCodeUpdateCheckout = useDiscountCodeUpdate(buyContext.shop, client, "checkout");
 
+    //login
+    const [nextDisplayState, setNextDisplayState, removeNextDisplayState] = useLocalStorage(CONST.NEXT_DISPLAY_STATE_KEY);
+
     //order
     const createDraftOrder = useCreateDraftOrder(buyContext.shop, client);
 
@@ -148,7 +151,13 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     const addItemToCart = async (variantId, quantity = 1, attributes, openCheckoutPage = false) => {
         if (openCheckoutPage) {
-            setDisplayState("cartFullPage");
+
+            if (buyContext?.withLogin?.globalFunc && !email) {
+                setDisplayState("loginPage");
+            } else {
+                setDisplayState("cartFullPage");
+            }
+
         } else if (!isCartOpen) {
             setCartOpen(true);
         }
@@ -548,6 +557,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
         if (email !== cart?.email) {
             console.log("cart?.shippingAddress", cart?.shippingAddress, "cart", cart);
             setCartAddress(cart?.shippingAddress);
+
+            if (email && nextDisplayState) {
+                setDisplayState(nextDisplayState);
+                removeNextDisplayState();
+            }
         }
     }, [email]);
 
@@ -639,6 +653,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setSelectedShippingAddressId,
             selectedBillingAddressId,
             setSelectedBillingAddressId,
+            nextDisplayState,
+            setNextDisplayState,
+            removeNextDisplayState,
         }}>
             {children}
         </CheckoutContext.Provider>

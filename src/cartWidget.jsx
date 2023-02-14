@@ -14,9 +14,10 @@ function classNames(...classes) {
 }
 
 const CartWidget = ({props}) => {
-    const {isDebug, hideDefaultCartButton} = useContext(BuyContext);
+    const {isDebug, hideDefaultCartButton, withLogin} = useContext(BuyContext);
     const {
         cart,
+        email,
         checkout,
         isCartOpen,
         setCartOpen,
@@ -29,6 +30,17 @@ const CartWidget = ({props}) => {
         e.preventDefault();
         if (cart) {
             setCartOpen(false);
+<<<<<<< Updated upstream
+=======
+            console.log("closed cart");
+
+            if(withLogin?.globalFunc && !email) {
+                setDisplayState("loginPage");
+                console.log("switched to login page display");
+                return;
+            }
+
+>>>>>>> Stashed changes
             setDisplayState("cartFullPage");
         }
     };

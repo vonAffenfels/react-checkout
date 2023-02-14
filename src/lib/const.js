@@ -2,6 +2,7 @@ let CONST = {};
 
 CONST.CHECKOUT_KEY = "react-ez-checkout-token";
 CONST.CART_KEY = "react-ez-cart-id";
+CONST.NEXT_DISPLAY_STATE_KEY = "react-ez-next-display-state";
 CONST.ENABLED_SHOPS = [
     "saleor",
     "shopify"
