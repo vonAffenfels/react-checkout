@@ -5,7 +5,7 @@ import React from "react";
 //shopify
 import SHOPIFY_PRODUCT_BY_ID from "../queries/shopify/productById";
 
-const useProductBySku = (shop, client) => {
+const useProductById = (shop, client) => {
     if (!shop || !client) {
         return {};
     }
@@ -27,4 +27,4 @@ const useProductBySku = (shop, client) => {
     }
 }
 
-export default useProductBySku;
+export default useProductById;

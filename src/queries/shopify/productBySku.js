@@ -1,8 +1,8 @@
 import {gql} from "@apollo/client";
 
 export default gql`
-    query ProductBySku($query: String!, $variantLimit: Int!, $variantCursor: String) {
-        products(first: 1, query: $query) {
+    query ProductBySku($query: String!, $variantLimit: Int!, $productCursor: String, $variantCursor: String) {
+        products(first: 1, query: $query, after: $productCursor) {
             nodes {
                 id
                 variants(first: $variantLimit, after: $variantCursor) {
@@ -15,6 +15,10 @@ export default gql`
                         hasNextPage
                     }
                 }
+            }
+            pageInfo {
+                endCursor
+                hasNextPage
             }
         }
     }

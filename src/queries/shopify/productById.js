@@ -5,6 +5,7 @@ export default gql`
         product(id: $id) {
             id
             tags
+            title
             handle
             variants(first: 5) {
                 nodes {
