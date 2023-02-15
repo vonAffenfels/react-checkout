@@ -98,6 +98,9 @@ export default gql`
             countryCodeV2
         }
         requiresShipping
+        order {
+            id
+        }
     }
 `;
 

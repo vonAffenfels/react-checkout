@@ -27,6 +27,9 @@ import useCheckout from "../hooks/useCheckout";
 import useCreateDraftOrder from "../hooks/useCreateDraftOrder";
 import useDiscountCodeUpdate from "../hooks/useDiscountCodeUpdate";
 
+//order
+import useOrder from "../hooks/useOrder";
+
 import BuyContext from "./BuyContext";
 import CONST from "../lib/const";
 
@@ -62,6 +65,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const emailUpdateCheckout = useEmailUpdate(buyContext.shop, client, "checkout");
     const deliveryMethodUpdateCheckout = useDeliveryMethodUpdate(buyContext.shop, client, "checkout");
     const discountCodeUpdateCheckout = useDiscountCodeUpdate(buyContext.shop, client, "checkout");
+
+    //order
+    const orderById = useOrder(buyContext.shop, client);
 
     //login
     const [nextDisplayState, setNextDisplayState, removeNextDisplayState] = useLocalStorage(CONST.NEXT_DISPLAY_STATE_KEY);
@@ -656,6 +662,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             nextDisplayState,
             setNextDisplayState,
             removeNextDisplayState,
+            useOrder,
         }}>
             {children}
         </CheckoutContext.Provider>
