@@ -6,17 +6,17 @@ import React from "react";
 import transformAddress from "../lib/transformShopifyAddressInput";
 import transformLineItems from "../lib/transformShopifyLineItems";
 
-const useDeliveryMethodUpdate = (shop, client) => {
+const useCreateDraftOrder = (shop, client, webhookUri) => {
     if (!shop || !client) {
         return {};
     }
 
     if (shop === "saleor") {
-        return async ({checkoutToken, deliveryMethodId}) => {
+        return async ({checkoutToken}) => {
 
         };
     } else if (shop === "shopify") {
-        return async ({checkoutToken, webhookUri, checkout, billingAddress, selectedPaymentGatewayId, customAttributes}) => {
+        return async ({checkoutToken, checkout, billingAddress, selectedPaymentGatewayId, customAttributes}) => {
             const input = {
                 lineItems: transformLineItems(checkout.lines),
                 email: checkout.email,
@@ -67,4 +67,4 @@ async function createDraftOrder(webhookUri, body) {
     }).then(res => res.json());
 }
 
-export default useDeliveryMethodUpdate;
+export default useCreateDraftOrder;

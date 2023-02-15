@@ -28,6 +28,7 @@ import useCreateDraftOrder from "../hooks/useCreateDraftOrder";
 import useDiscountCodeUpdate from "../hooks/useDiscountCodeUpdate";
 
 //order
+import useDraftOrder from "../hooks/useDraftOrder";
 import useOrder from "../hooks/useOrder";
 
 import BuyContext from "./BuyContext";
@@ -66,14 +67,13 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const deliveryMethodUpdateCheckout = useDeliveryMethodUpdate(buyContext.shop, client, "checkout");
     const discountCodeUpdateCheckout = useDiscountCodeUpdate(buyContext.shop, client, "checkout");
 
-    //order
-    const orderById = useOrder(buyContext.shop, client);
-
     //login
     const [nextDisplayState, setNextDisplayState, removeNextDisplayState] = useLocalStorage(CONST.NEXT_DISPLAY_STATE_KEY);
 
     //order
-    const createDraftOrder = useCreateDraftOrder(buyContext.shop, client);
+    const createDraftOrder = useCreateDraftOrder(buyContext.shop, client, buyContext.webhookUri);
+    const draftOrderById = useDraftOrder(buyContext.shop, client, buyContext.webhookUri);
+    const orderById = useOrder(buyContext.shop, client);
 
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
@@ -369,7 +369,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
         try {
             let paymentCheckoutToken = await checkoutCreate({channel, input});
             let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
-            document.cookie = CONST.CHECKOUT_COOKIE_NAME + "=" + paymentCheckoutToken + ";max-age-in-seconds=" + 60*60*24*7 + ";path=/;SameSite=strict";
             if (paymentCheckoutData.requiresShipping) {
                 paymentCheckoutData.shippingMethods.forEach(rate => {
                     if (rate.name === cart.shippingMethod.name) {
@@ -435,6 +434,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 ...(checkout || {}),
                 ...checkoutData
             });
+            document.cookie = CONST.DRAFT_ORDER_ID_COOKIE_NAME + "=" + checkoutData?.draftOrder?.id + ";max-age-in-seconds=" + 60*60*24*7 + ";path=/;SameSite=strict";
             setCheckoutToken(paymentCheckoutToken);
         } catch (e) {
             console.log("error in onBeforePayment while creating checkout", e);
@@ -662,7 +662,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
             nextDisplayState,
             setNextDisplayState,
             removeNextDisplayState,
-            useOrder,
+            draftOrderById,
+            orderById,
         }}>
             {children}
         </CheckoutContext.Provider>

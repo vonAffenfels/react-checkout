@@ -3,36 +3,34 @@ import React from "react";
 //saleor
 
 //shopify
-import SHOPIFY_ORDER from "../queries/shopify/checkout";
+import SHOPIFY_ORDER from "../queries/shopify/order";
 
-const useCheckout = (shop, client) => {
+const useOrder = (shop, client) => {
     if (!shop || !client) {
         return {};
     }
 
     if (shop === "saleor") {
-        return async (checkoutToken) => {
-            const {data} = await client.query({
-                query: SALEOR_CHECKOUT_BY_TOKEN,
-                variables: {checkoutToken}
-            });
+        return async ({checkoutToken}) => {
 
-            return data?.checkout;
         };
     } else if (shop === "shopify") {
-        return async (checkoutToken) => {
-            const {data} = await client.query({
-                query: SHOPIFY_CHECKOUT,
-                variables: {checkoutToken}
+        return async ({orderId}) => {
+            console.log("variables", {orderId})
+            const data = await client.query({
+                query: SHOPIFY_ORDER,
+                variables: {orderId}
             });
+            console.log("data", data);
 
-            if (data?.node?.__typename !== "Checkout") {
+            if (data.errors?.length) {
+                data.errors.forEach(err => console.warn(err));
                 return null;
             }
 
-            return transformCheckout(data.node);
+            return data?.order;
         };
     }
 }
 
-export default useCheckout;
+export default useOrder;

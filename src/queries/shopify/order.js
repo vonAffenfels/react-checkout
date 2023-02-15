@@ -4,8 +4,8 @@ import OrderDetailsFragment from "../../fragments/shopify/orderDetailsFragment";
 
 export default gql`
     ${OrderDetailsFragment}
-    query Order($id:ID!) {
-        node(id:$id) {
+    query Order($orderId:ID!) {
+        node(id:$orderId) {
             id
             ... on Order {
                 ...OrderDetailsFragment

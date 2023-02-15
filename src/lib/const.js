@@ -3,6 +3,7 @@ let CONST = {};
 CONST.CHECKOUT_KEY = "react-ez-checkout-token";
 CONST.CART_KEY = "react-ez-cart-id";
 CONST.CHECKOUT_COOKIE_NAME = "react-ez-last-made-checkout";
+CONST.DRAFT_ORDER_ID_COOKIE_NAME = "react-ez-last-draft-order-id";
 CONST.NEXT_DISPLAY_STATE_KEY = "react-ez-next-display-state";
 CONST.ENABLED_SHOPS = [
     "saleor",
