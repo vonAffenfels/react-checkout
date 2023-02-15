@@ -1,6 +1,6 @@
 {
     "name": "react-ez-checkout",
-    "version": "1.1.24",
+    "version": "1.1.25",
     "description": "react-component based cart for a shop checkout",
     "main": "dist/index.cjs.js",
     "module": "dist/index.esm.js",
@@ -38,9 +38,9 @@
     "peerDependencies": {
         "@apollo/client": "^3.5.8",
         "graphql": "^16.4.0",
+        "prop-types": "^15.8.1",
         "react": "^18.1.0",
-        "react-dom": "^18.1.0",
-        "prop-types": "^15.8.1"
+        "react-dom": "^18.1.0"
     },
     "devDependencies": {
         "@babel/core": "^7.17.9",

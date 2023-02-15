@@ -363,8 +363,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         try {
             let paymentCheckoutToken = await checkoutCreate({channel, input});
             let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
-            console.log("paymentCheckoutToken", paymentCheckoutToken);
-            console.log("paymentCheckoutData", paymentCheckoutData);
+            document.cookie = CONST.CHECKOUT_COOKIE_NAME + "=" + paymentCheckoutToken + ";max-age-in-seconds=" + 60*60*24*7 + ";path=/;SameSite=strict";
             if (paymentCheckoutData.requiresShipping) {
                 paymentCheckoutData.shippingMethods.forEach(rate => {
                     if (rate.name === cart.shippingMethod.name) {
@@ -608,6 +607,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         <CheckoutContext.Provider value={{
             checkout,
             cart,
+            checkoutByToken,
             createCart,
             createCheckout,
             addItemToCart,
