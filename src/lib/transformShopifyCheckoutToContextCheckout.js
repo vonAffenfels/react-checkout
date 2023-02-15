@@ -122,6 +122,10 @@ function transformCheckout(node) {
         }
     }
 
+    if (node.order) {
+        checkout.order = node.order;
+    }
+
     return checkout;
 }
 
