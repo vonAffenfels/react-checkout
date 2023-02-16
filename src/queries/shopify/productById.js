@@ -7,7 +7,7 @@ export default gql`
             tags
             title
             handle
-            variants(first: 5) {
+            variants(first: 3) {
                 nodes {
                     id
                     sku

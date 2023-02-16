@@ -107,6 +107,7 @@ const CheckoutForm = ({props}) => {
                         </label>
                         <div className="mt-1">
                             <input
+                                required
                                 type="email"
                                 id="email-address"
                                 name="email-address"

@@ -4,6 +4,7 @@ import React from "react";
 
 //shopify
 import SHOPIFY_PRODUCT_BY_ID from "../queries/shopify/productById";
+import SHOPIFY_PRODUCT_BY_ID_WITH_IMAGE from "../queries/shopify/productByIdWithImage";
 
 const useProductById = (shop, client) => {
     if (!shop || !client) {
@@ -16,9 +17,9 @@ const useProductById = (shop, client) => {
             return null;
         };
     } else if (shop === "shopify") {
-        return async ({id}) => {
+        return async ({id, withImage}) => {
             const {data} = await client.query({
-                query: SHOPIFY_PRODUCT_BY_ID,
+                query: withImage ? SHOPIFY_PRODUCT_BY_ID_WITH_IMAGE : SHOPIFY_PRODUCT_BY_ID,
                 variables: {id}
             });
 
