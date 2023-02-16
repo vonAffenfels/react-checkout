@@ -9,9 +9,11 @@ import CheckoutSummary from "./components/checkoutSummary.jsx";
 import BuyContext from "./context/BuyContext";
 
 const CartFullPage = ({props}) => {
-    const {texts} = useContext(BuyContext);
+    const {texts, withLogin} = useContext(BuyContext);
     const {
+        email,
         setDisplayState,
+        setNextDisplayState,
         onBeforePayment,
     } = useContext(CheckoutContext);
 
@@ -21,6 +23,17 @@ const CartFullPage = ({props}) => {
 
         onBeforePayment();
     }
+
+    const login = (e, data) => {
+
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        setNextDisplayState("cartFullPage");
+        globalThis?.window?.[withLogin?.globalFunc]?.(data)
+    };
 
     return (
         <FullPageLayout show={true}>
@@ -34,17 +47,47 @@ const CartFullPage = ({props}) => {
                 leaveTo="translate-x-full"
             >
                 <Dialog.Panel className="pointer-events-auto w-screen overflow-y-auto">
-                    <CloseButton onClick={() => setDisplayState("widget")} />
+                    <CloseButton onClick={() => setDisplayState("widget")}/>
 
                     <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                         <h2 className="sr-only">Kasse</h2>
 
                         <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16" onSubmit={onSubmit}>
-                            <CheckoutForm />
+
+                            <div>
+                                {withLogin?.globalFunc && !email && (
+                                    <>
+                                        <div className="lg:grid lg:grid-cols-2">
+                                            <div className="pt-12 pb-3 lg:py-6 lg:pr-4">
+                                                <button
+                                                    onClick={(e) => login(e, {extraQueryParams: {type: "registration"}})}
+                                                    type="button"
+                                                    className={"w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"}
+                                                >
+                                                    Registrieren
+                                                </button>
+                                            </div>
+                                            <div className="pb-6 lg:py-6 lg:pl-4">
+                                                <button
+                                                    onClick={(e) => login(e)}
+                                                    type="button"
+                                                    className={"w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"}
+                                                >
+                                                    Anmelden
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className={"flex items-center justify-between text-center uppercase pb-7 text-sm text-color-500 before:content-[''] before:inline-block before:h-px before:bg-gray-200 before:grow after:content-[''] after:inline-block after:h-px after:bg-gray-200 after:grow"}>
+                                            <span className={"inline-block px-1"}>ODER ALS GAST BESTELLEN</span>
+                                        </div>
+                                    </>
+                                )}
+                                <CheckoutForm/>
+                            </div>
 
                             <div className="mt-10 lg:mt-0">
                                 <h2 className="text-lg font-medium text-color-900">Bestellzusammenfassung</h2>
-                                <CheckoutSummary />
+                                <CheckoutSummary/>
                                 {texts.subCheckoutSummary && (
                                     <div
                                         className="mt-10 text-sm text-color-500"

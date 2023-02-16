@@ -157,13 +157,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     const addItemToCart = async (variantId, quantity = 1, attributes, openCheckoutPage = false) => {
         if (openCheckoutPage) {
-
-            if (buyContext?.withLogin?.globalFunc && !email) {
-                setDisplayState("loginPage");
-            } else {
-                setDisplayState("cartFullPage");
-            }
-
+            setDisplayState("cartFullPage");
         } else if (!isCartOpen) {
             setCartOpen(true);
         }
@@ -562,12 +556,13 @@ export const CheckoutContextProvider = ({children, channel}) => {
         if (email !== cart?.email) {
             console.log("cart?.shippingAddress", cart?.shippingAddress, "cart", cart);
             setCartAddress(cart?.shippingAddress);
-
-            if (email && nextDisplayState) {
-                setDisplayState(nextDisplayState);
-                removeNextDisplayState();
-            }
         }
+
+        if (email && nextDisplayState) {
+            setDisplayState(nextDisplayState);
+            removeNextDisplayState();
+        }
+
     }, [email]);
 
     useEffect(() => {
