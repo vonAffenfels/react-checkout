@@ -3,7 +3,9 @@ export default {
     uri: "https://delius-klasing.myshopify.com/api/2022-10/graphql.json",
     webhookUri: "https://mmstupicl7.execute-api.eu-central-1.amazonaws.com/shopify",
     storefrontApiKey: "21ec7ad8aceac22f6fbd61e1fec7c27b",
-    channel: "b2c",
+    channel: function channel() {
+        return globalThis?.window?.isRetailer ? "b2b" : "b2c";
+    },
     availablePaymentGateways: [
         {
             id: "stripe",

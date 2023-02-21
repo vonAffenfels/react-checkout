@@ -39,6 +39,7 @@ export const CheckoutContext = createContext({});
 export const CheckoutContextProvider = ({children, channel}) => {
     const buyContext = useContext(BuyContext);
     const client = useApolloClient();
+    const channelName = typeof channel === "function" ? channel() : channel;
 
     //helpers
     const getProductBySku = useProductBySku(buyContext.shop, client);
@@ -404,22 +405,20 @@ export const CheckoutContextProvider = ({children, channel}) => {
                     email: addressFormData.email
                 } : paymentCheckoutData.shippingAddress,
                 selectedPaymentGatewayId: selectedPaymentGatewayId,
+                customAttributes: [
+                    {
+                        key: "channel",
+                        value: channelName
+                    }
+                ]
             };
-            console.log("selectedShippingAddressId", selectedShippingAddressId);
             if (selectedShippingAddressId) {
-                if (!draftOrderInput.customAttributes) {
-                    draftOrderInput.customAttributes = [];
-                }
                 draftOrderInput.customAttributes.push({
                     key: "shipping_address_id",
                     value: selectedShippingAddressId,
                 });
             }
-            console.log("selectedBillingAddressId", selectedBillingAddressId);
             if (selectedBillingAddressId) {
-                if (!draftOrderInput.customAttributes) {
-                    draftOrderInput.customAttributes = [];
-                }
                 draftOrderInput.customAttributes.push({
                     key: "billing_address_id",
                     value: selectedBillingAddressId,
