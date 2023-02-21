@@ -87,7 +87,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const [isLoadingLineItemQuantity, setLoadingLineItemQuantity] = useState(false);
     const [isLoadingShippingMethods, setLoadingShippingMethods] = useState(false);
     const [isSettingShippingMethod, setSettingShippingMethod] = useState(false);
-    const defaultPaymentGateway = (buyContext?.availablePaymentGateways || []).find(provider => provider.isDefault);
+    const defaultPaymentGateway = (buyContext?.availablePaymentGateways || []).find(provider => {
+        const isDisabled = typeof provider.isDisabled === "function" ? provider.isDisabled(cart) : false;
+        const isHidden = typeof provider.isHidden === "function" ? provider.isHidden(cart) : false;
+        return provider.isDefault && !isDisabled && !isHidden;
+    });
     const [selectedPaymentGatewayId, setSelectedPaymentGatewayId] = useState(defaultPaymentGateway?.id);
     const [loadingDraftOrder, setLoadingDraftOrder] = useState(false);
 

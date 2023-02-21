@@ -225,7 +225,7 @@ const CheckoutForm = ({props}) => {
 
             {(cart?.shippingMethod?.id || (cart?.requiresShipping === false)) && (
                 <div className="mt-10 border-t border-gray-200 pt-10">
-                    <label className="text-lg font-medium text-color-900">Bezahlart</label>
+                    <label className="text-lg font-medium text-color-900">Zahlungsmethode</label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                         {(cart?.availablePaymentGateways || availablePaymentGateways)?.map((paymentMethod) => (

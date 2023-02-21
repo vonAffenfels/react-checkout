@@ -7,6 +7,7 @@ function classNames(...classes) {
 
 const PaymentMethodOption = ({paymentMethod, cart, selectedPaymentGatewayId, onChange}) => {
     const isDisabled = typeof paymentMethod.isDisabled === "function" ? paymentMethod.isDisabled(cart) : false;
+    const isHidden = typeof paymentMethod.isHidden === "function" ? paymentMethod.isHidden(cart) : false;
     const checked = selectedPaymentGatewayId === paymentMethod?.id;
 
     const onClick = () => {
@@ -14,6 +15,10 @@ const PaymentMethodOption = ({paymentMethod, cart, selectedPaymentGatewayId, onC
             onChange(paymentMethod?.id);
         }
     };
+
+    if (isHidden) {
+        return null;
+    }
 
     return (
         <div className={classNames(

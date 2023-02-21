@@ -9,25 +9,35 @@ export default {
             id: "stripe",
             name: "Stripe",
             description: "Kreditkarte, Lastschrift, SEPA-Überweisung, Giropay",
-            isDisabled: function isStripeDisabled (cart) {
-                return false;
+            isDisabled: function isStripeDisabled(cart) {
+                return globalThis?.window?.isRetailer;
+            },
+            isHidden: function isStripeHidden(cart) {
+                return globalThis?.window?.isRetailer;
             },
             isDefault: true,
         },
         {
             id: "invoice",
             name: "Rechnung",
-            isDisabled: function isInvoiceDisabled (cart) {
-                return cart.hasDigitalItem;
-            }
+            isDisabled: function isInvoiceDisabled(cart) {
+                return cart?.hasDigitalItem && !globalThis?.window?.isRetailer;
+            },
+            isHidden: function isInvoiceHidden(cart) {
+                return false;
+            },
+            isDefault: true,
         },
         {
             id: "paypal",
             name: "PayPal",
-            isDisabled: function isPayPalDisabled (cart) {
-                return cart.hasSubscriptionItem;
-            }
-        }
+            isDisabled: function isPayPalDisabled(cart) {
+                return cart?.hasSubscriptionItem || globalThis?.window?.isRetailer;
+            },
+            isHidden: function isPayPalHidden(cart) {
+                return globalThis?.window?.isRetailer;
+            },
+        },
     ],
     paymentProviders: [
         {
