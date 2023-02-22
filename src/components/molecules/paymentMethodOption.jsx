@@ -1,11 +1,13 @@
-import React from "react";
+import React, {useContext} from "react";
 import {CheckCircleIcon} from "@heroicons/react/solid";
+import CheckoutContext from "../../context/CheckoutContext";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-const PaymentMethodOption = ({paymentMethod, cart, selectedPaymentGatewayId, onChange}) => {
+const PaymentMethodOption = ({paymentMethod, onChange}) => {
+    const {selectedPaymentGatewayId, cart} = useContext(CheckoutContext);
     const isDisabled = typeof paymentMethod.isDisabled === "function" ? paymentMethod.isDisabled(cart) : false;
     const isHidden = typeof paymentMethod.isHidden === "function" ? paymentMethod.isHidden(cart) : false;
     const checked = selectedPaymentGatewayId === paymentMethod?.id;

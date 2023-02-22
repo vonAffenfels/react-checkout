@@ -231,7 +231,6 @@ const CheckoutForm = ({props}) => {
                         {(cart?.availablePaymentGateways || availablePaymentGateways)?.map((paymentMethod) => (
                             <PaymentMethodOption
                                 key={paymentMethod.id}
-                                selectedPaymentGatewayId={selectedPaymentGatewayId}
                                 paymentMethod={paymentMethod}
                                 cart={cart}
                                 onChange={onChangePaymentMethod}

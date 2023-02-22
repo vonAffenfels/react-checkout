@@ -16,7 +16,9 @@ const CheckoutSummary = ({props}) => {
         loadingDraftOrder,
         applyDiscountCode,
         isLoadingLineItems,
-        isLoadingShippingMethods
+        isLoadingShippingMethods,
+        addressFormData,
+        billingAddress,
     } = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
     const [discountCode, setDiscountCode] = useState("");
@@ -25,11 +27,31 @@ const CheckoutSummary = ({props}) => {
     const isInvoice = selectedPaymentGatewayId === "invoice";
 
     useEffect(() => {
-        const isValidShippingMethod = (cart?.requiresShipping === false) || (cart?.shippingAddress && cart?.shippingMethod?.id);
+        const isValidShippingMethod = (cart?.requiresShipping === false && hasValidAddressSet()) || (cart?.shippingAddress && cart?.shippingMethod?.id);
         if (!enabled && cart?.email && isValidShippingMethod && selectedPaymentGatewayId) {
+            console.log("set enabled to true");
             setEnabled(true);
+        } else {
+            console.log("set enabled to false");
+            setEnabled(false);
         }
     }, [cart?.email, cart?.shippingAddress, cart?.shippingMethod?.id, selectedPaymentGatewayId]);
+
+    const hasValidAddressSet = () => {
+        return isValidAddress(addressFormData) || isValidAddress(billingAddress);
+    };
+
+    const isValidAddress = (address) => {
+        const {
+            firstName,
+            lastName,
+            streetAddress1,
+            city,
+            country,
+            postalCode,
+        } = address;
+        return firstName && lastName && streetAddress1 && city && country && postalCode;
+    };
 
     const onClickDiscountCode = async (e) => {
         setLoadingDiscountCode(true);
@@ -138,6 +160,7 @@ const CheckoutSummary = ({props}) => {
             </div>
 
             <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                {console.log("enabled", enabled, "loadingDraftOrder", loadingDraftOrder)}
                 <button
                     disabled={!enabled || loadingDraftOrder}
                     type="submit"

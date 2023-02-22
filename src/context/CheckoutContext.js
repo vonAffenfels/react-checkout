@@ -351,94 +351,111 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 countryCode: cart.shippingAddress.countryCode || cart.buyerIdentity?.countryCode
             },
         };
-        if (cart.requiresShipping) {
-            input.shippingAddress = {
-                address1: cart.shippingAddress.streetAddress1,
-                address2: cart.shippingAddress.streetAddress2,
-                city: cart.shippingAddress.city,
-                company: cart.shippingAddress.companyName,
-                country: cart.shippingAddress.countryCode,
-                firstName: cart.shippingAddress.firstName,
-                lastName: cart.shippingAddress.lastName,
-                province: cart.shippingAddress.countryArea,
-                zip: cart.shippingAddress.postalCode
-            };
-        }
-        console.log("checkoutCreate, input:", input);
-        try {
-            let paymentCheckoutToken = await checkoutCreate({channel, input});
-            let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
-            if (paymentCheckoutData.requiresShipping) {
-                paymentCheckoutData.shippingMethods.forEach(rate => {
-                    if (rate.name === cart.shippingMethod.name) {
-                        paymentCheckoutData.shippingMethod = {
-                            price: {
-                                amount: rate.price.amount
-                            },
-                            id: rate.id,
-                            name: rate.name
-                        };
-                    }
-                });
-            }
 
-            if (cart.discountCodes.length) {
-                for (let i = 0; cart.discountCodes.length > i; i++) {
-                    try {
-                        await discountCodeUpdateCheckout({
-                            checkoutToken: paymentCheckoutToken,
-                            discountCode: cart.discountCodes[i].code
-                        });
-                    } catch (e) {
-                        console.log("error in discountCodeUpdateCheckout");
-                        console.log(e);
-                    }
+        const foundAddress = getCurrentAddress([cart.shippingAddress, addressFormData, billingAddress]);
+        input.shippingAddress = {
+            address1: foundAddress.streetAddress1,
+            address2: foundAddress.streetAddress2,
+            city: foundAddress.city,
+            company: foundAddress.companyName,
+            country: foundAddress.countryCode || foundAddress.country,
+            firstName: foundAddress.firstName,
+            lastName: foundAddress.lastName,
+            province: foundAddress.countryArea,
+            zip: foundAddress.postalCode
+        };
+
+        let paymentCheckoutToken = await checkoutCreate({channel, input});
+        let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
+        if (paymentCheckoutData.requiresShipping) {
+            paymentCheckoutData.shippingMethods.forEach(rate => {
+                if (rate.name === cart.shippingMethod.name) {
+                    paymentCheckoutData.shippingMethod = {
+                        price: {
+                            amount: rate.price.amount
+                        },
+                        id: rate.id,
+                        name: rate.name
+                    };
+                }
+            });
+        }
+
+        if (cart.discountCodes.length) {
+            for (let i = 0; cart.discountCodes.length > i; i++) {
+                try {
+                    await discountCodeUpdateCheckout({
+                        checkoutToken: paymentCheckoutToken,
+                        discountCode: cart.discountCodes[i].code
+                    });
+                } catch (e) {
+                    console.log("error in discountCodeUpdateCheckout");
+                    console.log(e);
                 }
             }
-
-            const draftOrderInput = {
-                checkoutToken: paymentCheckoutToken,
-                checkout: paymentCheckoutData,
-                webhookUri: buyContext.webhookUri,
-                billingAddress: isBillingAddressDeviating ? {
-                    ...billingAddress,
-                    email: addressFormData.email
-                } : paymentCheckoutData.shippingAddress,
-                selectedPaymentGatewayId: selectedPaymentGatewayId,
-                customAttributes: [
-                    {
-                        key: "channel",
-                        value: channelName
-                    }
-                ]
-            };
-            if (selectedShippingAddressId) {
-                draftOrderInput.customAttributes.push({
-                    key: "shipping_address_id",
-                    value: selectedShippingAddressId,
-                });
-            }
-            if (selectedBillingAddressId) {
-                draftOrderInput.customAttributes.push({
-                    key: "billing_address_id",
-                    value: selectedBillingAddressId,
-                });
-            }
-            console.log("draftOrderInput.customAttributes", draftOrderInput.customAttributes);
-
-            const checkoutData = await createDraftOrder(draftOrderInput);
-            setCheckout({
-                ...(checkout || {}),
-                ...checkoutData
-            });
-            document.cookie = CONST.DRAFT_ORDER_ID_COOKIE_NAME + "=" + checkoutData?.draftOrder?.id + ";max-age-in-seconds=" + 60*60*24*7 + ";path=/;SameSite=strict";
-            setCheckoutToken(paymentCheckoutToken);
-        } catch (e) {
-            console.log("error in onBeforePayment while creating checkout", e);
         }
+
+        const draftOrderInput = {
+            checkoutToken: paymentCheckoutToken,
+            checkout: paymentCheckoutData,
+            webhookUri: buyContext.webhookUri,
+            billingAddress: isBillingAddressDeviating ? {
+                ...billingAddress,
+                email: addressFormData.email
+            } : paymentCheckoutData.shippingAddress,
+            selectedPaymentGatewayId: selectedPaymentGatewayId,
+            customAttributes: [
+                {
+                    key: "channel",
+                    value: channelName
+                }
+            ]
+        };
+        if (selectedShippingAddressId) {
+            draftOrderInput.customAttributes.push({
+                key: "shipping_address_id",
+                value: selectedShippingAddressId,
+            });
+        }
+        if (selectedBillingAddressId) {
+            draftOrderInput.customAttributes.push({
+                key: "billing_address_id",
+                value: selectedBillingAddressId,
+            });
+        }
+        console.log("draftOrderInput.customAttributes", draftOrderInput.customAttributes);
+
+        const checkoutData = await createDraftOrder(draftOrderInput);
+        setCheckout({
+            ...(checkout || {}),
+            ...checkoutData
+        });
+        document.cookie = CONST.DRAFT_ORDER_ID_COOKIE_NAME + "=" + checkoutData?.draftOrder?.id + ";max-age-in-seconds=" + 60*60*24*7 + ";path=/;SameSite=strict";
+        setCheckoutToken(paymentCheckoutToken);
 
         setLoadingDraftOrder(false);
         setDisplayState("payment");
+    };
+
+    const getCurrentAddress = (addresses = []) => {
+        for (let i = 0; i < addresses.length; i++) {
+            const isValid = isValidAddress(addresses[i]);
+            if (isValid) {
+                return addresses[i];
+            }
+        }
+    }
+
+    const isValidAddress = (address) => {
+        const {
+            firstName,
+            lastName,
+            streetAddress1,
+            city,
+            country,
+            postalCode,
+        } = address;
+        return firstName && lastName && streetAddress1 && city && country && postalCode;
     };
 
     const getCartById = async () => {
