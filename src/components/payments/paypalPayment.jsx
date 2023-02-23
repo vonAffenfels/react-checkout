@@ -88,9 +88,9 @@ const PayPalPayment = ({apiUri, apiKey}) => {
         }).then(res => res.json()).then((res => {
             console.log("onApprove, payment captured, res:", res);
             setLoading(false);
-            setBannerMessage({
-                msg: `Bestellung ${res?.order?.name} wurde erfolgreich getätigt.`
-            });
+            // setBannerMessage({
+            //     msg: `Bestellung ${res?.order?.name} wurde erfolgreich getätigt.`
+            // });
             reset();
             if (successRedirect) {
                 window.location.href = window.location.origin + successRedirect;

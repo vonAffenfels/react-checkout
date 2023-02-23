@@ -160,7 +160,6 @@ const CheckoutSummary = ({props}) => {
             </div>
 
             <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                {console.log("enabled", enabled, "loadingDraftOrder", loadingDraftOrder)}
                 <button
                     disabled={!enabled || loadingDraftOrder}
                     type="submit"

@@ -29,9 +29,9 @@ export const Banner = ({orderName}) => {
         clearTimeout(timeoutHandle);
         timeoutHandle = setTimeout(() => {
             timeoutHandle = null;
-            setBannerMessage({
-                msg: `Bestellung ${orderName} wurde erfolgreich getätigt.`
-            });
+            // setBannerMessage({
+            //     msg: `Bestellung ${orderName} wurde erfolgreich getätigt.`
+            // });
             reset();
             if (successRedirect) {
                 window.location.href = window.location.origin + successRedirect;

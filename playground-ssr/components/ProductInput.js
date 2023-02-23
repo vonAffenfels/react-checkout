@@ -10,27 +10,14 @@ const ProductInput = ({}) => {
         setReady(true);
     }, []);
 
-    const [variantId, setVariantId] = useState("41207459545220");
+    const [variantId, setVariantId] = useState("41288295350404");
 
     const onChange = (e) => {
         setVariantId(e.target.value);
     };
 
     const onClick = async () => {
-        await addItemToCart(variantId, 1, [
-            {
-                "key": "bonus_id",
-                "value": "KP0000092_1022230"
-            },
-            {
-                "key": "starting_magazine_id",
-                "value": "BOO-2023-02"
-            },
-            {
-                "key": "gift_subscription_recipient_address",
-                "value": "{\"salutation\":\"mr\",\"firstName\":\"Julian\",\"lastName\":\"Lindner\",\"streetAddress\":\"test\",\"houseNumber\":\"1234\",\"zip\":\"70176\",\"city\":\"Stuttgart\",\"country\":\"Germany\"}"
-            }
-        ], true);
+        await addItemToCart(variantId, 1, null, false);
     };
 
     if (!ready) {

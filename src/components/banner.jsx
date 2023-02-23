@@ -12,7 +12,7 @@ export default function Banner() {
     const {bannerMessage: {msg, isError}, setBannerMessage} = useContext(BuyContext);
 
     const hide = () => {
-        setBannerMessage({msg: "", isError: false});
+        // setBannerMessage({msg: "", isError: false});
     };
 
     useEffect(() => {

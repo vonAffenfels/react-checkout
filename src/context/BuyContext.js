@@ -50,7 +50,7 @@ export const BuyContextProvider = (props) => {
             let msg = isError ? "Bei der Bestellung ist etwas schiefgegangen." : "Die Zahlung war erfolgreich!";
             let nextUrl = window?.location?.origin + (window?.location?.pathname || "");
             window?.history?.pushState?.({lastPayment: result}, window?.document?.title, nextUrl);
-            setBannerMessage({msg: msg});
+            // setBannerMessage({msg: msg});
         }
     }
 
