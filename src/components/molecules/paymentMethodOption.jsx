@@ -34,7 +34,7 @@ const PaymentMethodOption = ({paymentMethod, onChange}) => {
                         "block text-sm font-medium",
                         isDisabled ? "text-color-500" : "text-color-900"
                     )}>
-                        {paymentMethod.name}
+                        {paymentMethod.logo ? paymentMethod.logo : paymentMethod.name}
                     </span>
                     <span className="mt-1 flex items-center text-sm text-color-500">
                         {paymentMethod.description}
