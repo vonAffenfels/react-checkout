@@ -19,6 +19,8 @@ const CheckoutSummary = ({props}) => {
         isLoadingShippingMethods,
         addressFormData,
         billingAddress,
+        selectedShippingAddressId,
+        selectedBillingAddressId,
     } = useContext(CheckoutContext);
     const [enabled, setEnabled] = useState(false);
     const [discountCode, setDiscountCode] = useState("");
@@ -28,6 +30,10 @@ const CheckoutSummary = ({props}) => {
 
     useEffect(() => {
         const isValidShippingMethod = (cart?.requiresShipping === false && hasValidAddressSet()) || (cart?.shippingAddress && cart?.shippingMethod?.id);
+        console.log("cart?.requiresShipping", cart?.requiresShipping);
+        console.log("hasValidAddressSet()", hasValidAddressSet());
+        console.log("cart?.shippingAddress", cart?.shippingAddress);
+        console.log("cart?.shippingMethod?.id", cart?.shippingMethod?.id);
         if (!enabled && cart?.email && isValidShippingMethod && selectedPaymentGatewayId) {
             console.log("set enabled to true");
             setEnabled(true);
@@ -38,7 +44,7 @@ const CheckoutSummary = ({props}) => {
     }, [cart?.email, cart?.shippingAddress, cart?.shippingMethod?.id, selectedPaymentGatewayId]);
 
     const hasValidAddressSet = () => {
-        return isValidAddress(addressFormData) || isValidAddress(billingAddress);
+        return isValidAddress(addressFormData) || isValidAddress(billingAddress)|| selectedShippingAddressId || selectedBillingAddressId;
     };
 
     const isValidAddress = (address) => {
