@@ -81,6 +81,12 @@ const CheckoutForm = ({props}) => {
 
     const shippingAddresses = (addressBook || []).filter(address => address.type === "shipping");
     const billingAddresses = (addressBook || []).filter(address => address.type === "billing");
+    if (shippingAddresses.length && !billingAddresses.length) {
+        billingAddresses.push(shippingAddresses.find(v => v.isDefault));
+    }
+    if (!shippingAddresses.length && billingAddresses.length) {
+        shippingAddresses.push(billingAddresses.find(v => v.isDefault));
+    }
 
     useEffect(() => {
         if (selectedBillingAddressId) {

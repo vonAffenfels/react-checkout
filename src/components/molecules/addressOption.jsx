@@ -24,7 +24,7 @@ function checkIfAddressIsSame(address, addressFormData) {
 const AddressOption = ({address, selectedAddressId, onChange}) => {
     const [loading, setLoading] = useState(false);
     const checked = address?.id === selectedAddressId;
-    const {firstName, lastName, streetAddress1, houseNumber, city, zip, country} = (address || {});
+    const {company, firstName, lastName, streetAddress1, houseNumber, city, zip, country} = (address || {});
 
     const onClick = () => {
         if (!checked) {
@@ -49,6 +49,11 @@ const AddressOption = ({address, selectedAddressId, onChange}) => {
         >
             <span className="flex-1 flex">
                 <span className="flex flex-col">
+                    {company && (
+                        <span className="block text-sm font-medium text-color-900">
+                            {company}
+                        </span>
+                    )}
                     <span className="block text-sm font-medium text-color-900">
                         {firstName} {lastName}
                     </span>

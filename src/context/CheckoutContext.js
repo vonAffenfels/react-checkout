@@ -535,6 +535,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             if (updateAddress) {
                 console.log("updateAddress", updateAddress);
                 await setCartAddress({
+                    company: updateAddress.company,
                     firstName: updateAddress.firstName,
                     lastName: updateAddress.lastName,
                     streetAddress1: updateAddress.streetAddress1 + " " + updateAddress.houseNumber,
@@ -553,6 +554,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             const updateAddress = addressBook.find(address => address.id === addressId);
             if (updateAddress) {
                 setBillingAddress({
+                    company: updateAddress.company,
                     firstName: updateAddress.firstName,
                     lastName: updateAddress.lastName,
                     streetAddress1: updateAddress.streetAddress1 + " " + updateAddress.houseNumber,
@@ -615,7 +617,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             addressInput.phone = phone;
         }
         if (company) {
-            addressInput.companyName = company;
+            addressInput.company = company;
         }
         if (state) {
             addressInput.countryArea = state;
