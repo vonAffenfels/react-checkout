@@ -57,8 +57,8 @@ function transformCheckout(node) {
                         id: variant.product.id,
                         name: variant.product.title,
                         thumbnail: {
-                            url: variant.product.featuredImage?.url,
-                            alt: variant.product.featuredImage?.altText
+                            url: variant.image?.url,
+                            alt: variant.image?.altText
                         }
                     }
                 },

@@ -67,13 +67,14 @@ export default gql`
                         priceV2 {
                             ...PriceFragment
                         }
+                        image {
+                            url(transform: {maxHeight: 128, maxWidth: 128, crop: CENTER, preferredContentType: WEBP})
+                            altText
+                        }
                         product {
                             id
                             title
                             productType
-                            featuredImage {
-                                url(transform: {maxHeight: 128, maxWidth: 128, preferredContentType: WEBP}) # crop: CENTER
-                            }
                         }
                     }
                 }

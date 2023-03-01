@@ -139,8 +139,8 @@ function transformCart(node) {
                         id: merchandise.product.id,
                         name: merchandise.product.title,
                         thumbnail: {
-                            url: merchandise.product.featuredImage?.url,
-                            alt: merchandise.product.featuredImage?.altText
+                            url: merchandise.image?.url,
+                            alt: merchandise.image?.altText
                         }
                     }
                 },
