@@ -10,13 +10,16 @@ const CheckoutLine = ({
     id,
     variant,
     quantity,
+    customAttributes = [],
     totalPrice,
     bonusProduct,
     giftedIdentity,
 }) => {
+    console.log("customAttributes", customAttributes);
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
     const {isDebug} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
+    const overwriteImage = customAttributes.find(v => v.key === "overwrite_product_image_url");
 
     const onRemove = async () => {
         await removeItemFromCart(id);
@@ -44,7 +47,7 @@ const CheckoutLine = ({
             <li className="flex py-6">
                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md">
                     <img
-                        src={variant?.product?.thumbnail?.url}
+                        src={overwriteImage?.value || variant?.product?.thumbnail?.url}
                         alt={variant?.product?.thumbnail?.alt}
                         className="h-full mx-auto object-cover object-center"
                     />
@@ -93,21 +96,28 @@ const CheckoutLine = ({
                         </span>
                     </div>
                     <div className="w-full border-top-0 border-bottom-1 absolute" />
-                    <BonusLine {...bonusProduct} giftedIdentity={giftedIdentity} variantTitle={variantTitle} />
+                    <BonusLine
+                        imageSrc={variant?.product?.thumbnail?.url}
+                        giftedIdentity={giftedIdentity}
+                        variantTitle={variantTitle}
+                    />
                 </>
             )}
         </>
     );
 };
 
-const BonusLine = ({aboSku, variantSku, product, variantTitle, giftedIdentity}) => {
+const BonusLine = ({
+    imageSrc,
+    variantTitle,
+    giftedIdentity,
+}) => {
     return (
         <li className="flex py-6" style={{border: "0"}}>
-            <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+            <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md">
                 <img
-                    src={product?.thumbnail?.url}
-                    alt={product?.thumbnail?.alt}
-                    className="h-full object-cover object-center"
+                    src={imageSrc}
+                    className="h-full mx-auto object-cover object-center"
                 />
             </div>
             <div className="ml-4 flex flex-1 flex-col">
@@ -130,6 +140,7 @@ const CheckoutLineDetail = ({
     id,
     variant,
     quantity,
+    customAttributes = [],
     totalPrice,
     bonusProduct,
     giftedIdentity,
@@ -137,6 +148,7 @@ const CheckoutLineDetail = ({
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
     const {isDebug} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
+    const overwriteImage = customAttributes.find(v => v.key === "overwrite_product_image_url");
 
     const onRemove = async () => {
         await removeItemFromCart(id);
@@ -164,7 +176,7 @@ const CheckoutLineDetail = ({
             <li className="flex py-6 px-4 sm:px-6">
                 <div className="flex-shrink-0">
                     <img
-                        src={variant.product.thumbnail?.url}
+                        src={overwriteImage?.value || variant.product.thumbnail?.url}
                         alt={variant.product.thumbnail?.alt}
                         className="w-20 mx-auto rounded-md"
                     />
@@ -217,21 +229,28 @@ const CheckoutLineDetail = ({
                         </span>
                     </div>
                     <div className="w-full border-top-0 border-bottom-1 absolute" />
-                    <BonusLineDetail {...bonusProduct} giftedIdentity={giftedIdentity} variantTitle={variantTitle} />
+                    <BonusLineDetail
+                        imageSrc={variant.product.thumbnail?.url}
+                        giftedIdentity={giftedIdentity}
+                        variantTitle={variantTitle}
+                    />
                 </>
             )}
         </>
     );
 };
 
-const BonusLineDetail = ({aboSku, variantSku, product, variantTitle, giftedIdentity}) => {
+const BonusLineDetail = ({
+    imageSrc,
+    variantTitle,
+    giftedIdentity
+}) => {
     return (
         <li className="flex py-6 px-4 sm:px-6">
             <div className="flex-shrink-0">
                 <img
-                    src={product?.thumbnail?.url}
-                    alt={product?.thumbnail?.alt}
-                    className="w-20 rounded-md"
+                    src={imageSrc}
+                    className="w-20 mx-auto rounded-md"
                 />
             </div>
 
