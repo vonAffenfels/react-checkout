@@ -548,6 +548,15 @@ export const CheckoutContextProvider = ({children, channel}) => {
                     country: updateAddress.country,
                     postalCode: updateAddress.postalCode,
                 });
+                setAddressFormData({
+                    company: updateAddress.company,
+                    firstName: updateAddress.firstName,
+                    lastName: updateAddress.lastName,
+                    streetAddress1: updateAddress.streetAddress1 + " " + updateAddress.houseNumber,
+                    city: updateAddress.city,
+                    country: updateAddress.country,
+                    postalCode: updateAddress.postalCode,
+                });
                 console.log("onSelectAddressBookEntry, after, now set to:", addressId);
                 setSelectedShippingAddressId(addressId);
             }
