@@ -356,6 +356,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         console.log("input", input);
 
         const foundAddress = getCurrentAddress([cart.shippingAddress, addressFormData, billingAddress]);
+        console.log("foundAddress", foundAddress, "selectedShippingAddressId", selectedShippingAddressId);
         input.shippingAddress = {
             address1: foundAddress.streetAddress1,
             address2: foundAddress.streetAddress2,
@@ -367,7 +368,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
             province: foundAddress.countryArea,
             zip: foundAddress.postalCode
         };
-        console.log("foundAddress", foundAddress);
 
         let paymentCheckoutToken = await checkoutCreate({channel, input});
         let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
@@ -442,6 +442,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const getCurrentAddress = (addresses = []) => {
+        console.log("getCurrentAddress", addresses);
         for (let i = 0; i < addresses.length; i++) {
             const isValid = isValidAddress(addresses[i]);
             if (isValid) {
