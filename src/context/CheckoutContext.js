@@ -333,6 +333,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }
 
     const onBeforePayment = async () => {
+        console.log("onBeforePayment", cart);
         if (!cart || !cart?.lines?.length) {
             return;
         }
@@ -343,6 +344,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             variantId: "gid://shopify/ProductVariant/" + String(line.variant.id).replace("gid://shopify/ProductVariant/", ""),
             customAttributes: line.customAttributes,
         }));
+        console.log("lineItems", lineItems);
         const input = {
             allowPartialAddresses: false,
             lineItems: lineItems,
@@ -351,6 +353,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 countryCode: cart.shippingAddress.countryCode || cart.buyerIdentity?.countryCode
             },
         };
+        console.log("input", input);
 
         const foundAddress = getCurrentAddress([cart.shippingAddress, addressFormData, billingAddress]);
         input.shippingAddress = {
@@ -364,6 +367,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             province: foundAddress.countryArea,
             zip: foundAddress.postalCode
         };
+        console.log("foundAddress", foundAddress);
 
         let paymentCheckoutToken = await checkoutCreate({channel, input});
         let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
