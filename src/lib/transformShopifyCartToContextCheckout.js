@@ -1,4 +1,6 @@
 //takes a graphql cart as parameter
+import React from "react";
+
 function transformCart(node) {
     if (!node) {
         return null;
@@ -171,7 +173,18 @@ function transformCart(node) {
             }
             if (giftSubscriptionAttribute) {
                 try {
-                    retVal.giftedIdentity = JSON.parse(giftSubscriptionAttribute.value);
+                    const parsedAddress = JSON.parse(giftSubscriptionAttribute.value);
+                    if (parsedAddress) {
+                        retVal.giftedIdentity = {
+                            firstName: parsedAddress.name,
+                            lastName: parsedAddress.name2,
+                            streetAddress: parsedAddress.street,
+                            houseNumber: parsedAddress.streetNr,
+                            city: parsedAddress.city,
+                            zip: parsedAddress.zip,
+                            country: String(parsedAddress.country).toUpperCase()
+                        }
+                    }
                 } catch (e) {
                     console.log("giftSubscriptionAttribute is not valid json:", giftSubscriptionAttribute.value);
                 }
