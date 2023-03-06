@@ -123,6 +123,7 @@ function transformCart(node) {
             }
 
             const {amount, currencyCode} = cost.amountPerQuantity;
+            console.log("node.displayMessage", node.displayMessage);
             const retVal = {
                 quantity: quantity,
                 id: id,
@@ -152,7 +153,8 @@ function transformCart(node) {
                         currency: currencyCode
                     }
                 },
-                customAttributes: (attributes || []).map(attr => ({key: attr.key, value: attr.value}))
+                customAttributes: (attributes || []).map(attr => ({key: attr.key, value: attr.value})),
+                displayMessage: node.displayMessage,
             };
 
             let bonusProductAttribute, giftSubscriptionAttribute;

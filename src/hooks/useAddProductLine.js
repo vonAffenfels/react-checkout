@@ -8,6 +8,7 @@ import transformCheckout from "../lib/transformShopifyCheckoutToContextCheckout"
 import transformCart from "../lib/transformShopifyCartToContextCheckout";
 import SHOPIFY_CHECKOUT_ADD_PRODUCT_LINE from "../mutations/shopify/checkoutAddProductLine";
 import SHOPIFY_CART_ADD_PRODUCT_LINE from "../mutations/shopify/cartAddProductLine";
+import checkQuantityMissing from "../lib/checkQuantityMissing";
 
 /*
 type may be "cart" or "checkout"
@@ -40,6 +41,8 @@ const useAddProductLine = (shop, client, type) => {
         };
     } else if (shop === "shopify") {
         const handleCart = async ({cartId, lines, totalQuantity}) => {
+            const updatedVariantId = lines?.[0]?.merchandiseId;
+            const requestedQuantity = lines?.[0]?.quantity;
             const {data} = await client.mutate({
                 mutation: SHOPIFY_CART_ADD_PRODUCT_LINE,
                 variables: {
@@ -54,6 +57,12 @@ const useAddProductLine = (shop, client, type) => {
             }
 
             if (data?.cartLinesAdd?.cart) {
+                checkQuantityMissing({
+                    lines: data.cartLinesAdd.cart.lines.nodes,
+                    requestedQuantity,
+                    updatedVariantId,
+                });
+
                 return transformCart(data.cartLinesAdd.cart);
             }
         };

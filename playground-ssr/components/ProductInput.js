@@ -10,23 +10,14 @@ const ProductInput = ({}) => {
         setReady(true);
     }, []);
 
-    const [variantId, setVariantId] = useState("41314935734404");
+    const [variantId, setVariantId] = useState("41288295350404");
 
     const onChange = (e) => {
         setVariantId(e.target.value);
     };
 
     const onClick = async () => {
-        await addItemToCart(variantId, 1, [
-            {
-                "key": "bonus_id",
-                "value": "KP0005680_1022230"
-            },
-            {
-                "key": "starting_magazine_id",
-                "value": "YAC-2023-05"
-            }
-        ], false);
+        await addItemToCart(variantId, 1, null, false);
     };
 
     if (!ready) {

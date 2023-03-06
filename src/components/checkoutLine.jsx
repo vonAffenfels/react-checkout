@@ -14,8 +14,10 @@ const CheckoutLine = ({
     totalPrice,
     bonusProduct,
     giftedIdentity,
+    displayMessage = "",
 }) => {
-    console.log("customAttributes", customAttributes);
+    console.log("displayMessage", displayMessage);
+    // 3486
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
     const {isDebug} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
@@ -44,49 +46,54 @@ const CheckoutLine = ({
 
     return (
         <>
-            <li className="flex py-6">
-                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md">
-                    <img
-                        src={overwriteImage?.value || variant?.product?.thumbnail?.url}
-                        alt={variant?.product?.thumbnail?.alt}
-                        className="h-full mx-auto object-cover object-center"
-                    />
+            <li className="flex flex-col py-6">
+                <div className="flex flex-row">
+                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md">
+                        <img
+                            src={overwriteImage?.value || variant?.product?.thumbnail?.url}
+                            alt={variant?.product?.thumbnail?.alt}
+                            className="h-full mx-auto object-cover object-center"
+                        />
+                    </div>
+
+                    <div className="ml-4 flex flex-1 flex-col">
+                        <div>
+                            <div className="flex justify-between text-base font-medium text-color-900">
+                                <h3>
+                                    <a href={variant?.product?.href}>{variant?.product?.name}</a>
+                                </h3>
+                            </div>
+                            <p className="text-base font-bold text-color-900">
+                                <Price price={totalPrice?.gross?.amount}/> {totalPrice?.gross?.currency}
+                            </p>
+                        </div>
+                        <div className="flex flex-1 items-end justify-between text-sm">
+                            <p className="mt-1 text-sm text-color-900">{!bonusProduct ? variantTitle : ""}</p>
+                            <div className="mt-1 text-sm text-color-900">
+                                {isLoadingQuantity ? (
+                                    <div className="rounded-md border border-gray-300 ml-2 pl-2 pr-2 py-2">
+                                        <Spin h={6} w={6} />
+                                    </div>
+                                ) : (
+                                    <select
+                                        id="quantity"
+                                        name="quantity"
+                                        onChange={onChangeQuantity}
+                                        value={quantity}
+                                        disabled={isLoadingQuantity}
+                                        className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    >
+                                        <QuantityOptions quantity={quantity} id={id} />
+                                    </select>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="ml-4 flex flex-1 flex-col">
-                    <div>
-                        <div className="flex justify-between text-base font-medium text-color-900">
-                            <h3>
-                                <a href={variant?.product?.href}>{variant?.product?.name}</a>
-                            </h3>
-                        </div>
-                        <p className="text-base font-bold text-color-900">
-                            <Price price={totalPrice?.gross?.amount}/> {totalPrice?.gross?.currency}
-                        </p>
-                    </div>
-                    <div className="flex flex-1 items-end justify-between text-sm">
-                        <p className="mt-1 text-sm text-color-900">{!bonusProduct ? variantTitle : ""}</p>
-                        <div className="mt-1 text-sm text-color-900">
-                            {isLoadingQuantity ? (
-                                <div className="rounded-md border border-gray-300 ml-2 pl-2 pr-2 py-2">
-                                    <Spin h={6} w={6} />
-                                </div>
-                            ) : (
-                                <select
-                                    id="quantity"
-                                    name="quantity"
-                                    onChange={onChangeQuantity}
-                                    value={quantity}
-                                    disabled={isLoadingQuantity}
-                                    className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                >
-                                    <QuantityOptions quantity={quantity} id={id} />
-                                </select>
-                            )}
-                        </div>
-                    </div>
-                </div>
+                <p className="mt-1 text-sm text-red-500 text-end">{displayMessage}</p>
             </li>
+
             {bonusProduct && (
                 <>
                     <div style={{border: "0", marginTop: "-.75rem"}} className="pl-10 absolute z-50 text-color-500">
@@ -144,6 +151,7 @@ const CheckoutLineDetail = ({
     totalPrice,
     bonusProduct,
     giftedIdentity,
+    displayMessage = "",
 }) => {
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
     const {isDebug} = useContext(BuyContext);
@@ -173,52 +181,56 @@ const CheckoutLineDetail = ({
 
     return (
         <>
-            <li className="flex py-6 px-4 sm:px-6">
-                <div className="flex-shrink-0">
-                    <img
-                        src={overwriteImage?.value || variant.product.thumbnail?.url}
-                        alt={variant.product.thumbnail?.alt}
-                        className="w-20 mx-auto rounded-md"
-                    />
+            <li className="flex flex-col py-6 px-4 sm:px-6">
+                <div className="flex flex-row">
+                    <div className="flex-shrink-0">
+                        <img
+                            src={overwriteImage?.value || variant.product.thumbnail?.url}
+                            alt={variant.product.thumbnail?.alt}
+                            className="w-20 mx-auto rounded-md"
+                        />
+                    </div>
+
+                    <div className="flex flex-1 flex-col">
+                        <div className="ml-6 flex flex-1 items-end justify-between">
+                            <div className="min-w-0">
+                                <h4 className="text-sm">
+                                    <a href={variant.product.href} className="font-medium text-color-700 hover:text-color-800">
+                                        {variant.product.name}
+                                    </a>
+                                </h4>
+                            </div>
+                        </div>
+                        <div className="ml-6 flex flex-1 items-end justify-between">
+                            <p className="mt-1 text-sm font-bold text-color-900">
+                                <Price price={totalPrice.gross.amount}/> {totalPrice.gross.currency}
+                            </p>
+                        </div>
+                        <div className="ml-6 flex flex-1 items-end justify-between">
+                            <p className="mt-1 text-sm text-color-500">{!bonusProduct ? variantTitle : ""}</p>
+                            <div className="mt-1 text-sm text-color-900">
+                                {isLoadingQuantity ? (
+                                    <div className="rounded-md border border-gray-300 ml-2 pr-4 pl-4 py-2">
+                                        <Spin h={6} w={6} />
+                                    </div>
+                                ) : (
+                                    <select
+                                        id="quantity"
+                                        name="quantity"
+                                        onChange={onChangeQuantity}
+                                        value={quantity}
+                                        disabled={isLoadingQuantity}
+                                        className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    >
+                                        <QuantityOptions quantity={quantity} id={id} />
+                                    </select>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="flex flex-1 flex-col">
-                    <div className="ml-6 flex flex-1 items-end justify-between">
-                        <div className="min-w-0">
-                            <h4 className="text-sm">
-                                <a href={variant.product.href} className="font-medium text-color-700 hover:text-color-800">
-                                    {variant.product.name}
-                                </a>
-                            </h4>
-                        </div>
-                    </div>
-                    <div className="ml-6 flex flex-1 items-end justify-between">
-                        <p className="mt-1 text-sm font-bold text-color-900">
-                            <Price price={totalPrice.gross.amount}/> {totalPrice.gross.currency}
-                        </p>
-                    </div>
-                    <div className="ml-6 flex flex-1 items-end justify-between">
-                        <p className="mt-1 text-sm text-color-500">{!bonusProduct ? variantTitle : ""}</p>
-                        <div className="mt-1 text-sm text-color-900">
-                            {isLoadingQuantity ? (
-                                <div className="rounded-md border border-gray-300 ml-2 pr-4 pl-4 py-2">
-                                    <Spin h={6} w={6} />
-                                </div>
-                            ) : (
-                                <select
-                                    id="quantity"
-                                    name="quantity"
-                                    onChange={onChangeQuantity}
-                                    value={quantity}
-                                    disabled={isLoadingQuantity}
-                                    className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                >
-                                    <QuantityOptions quantity={quantity} id={id} />
-                                </select>
-                            )}
-                        </div>
-                    </div>
-                </div>
+                <p className="mt-1 text-sm text-red-500 text-end">{displayMessage}</p>
             </li>
             {bonusProduct && (
                 <>
@@ -283,7 +295,10 @@ const BonusLineDetail = ({
 };
 
 const QuantityOptions = ({quantity, id}) => {
-    const values = [0, quantity];
+    const values = [quantity];
+    if (quantity !== 0) {
+        values.push(0);
+    }
 
     let count = 0;
     while (values.length < 8) {
