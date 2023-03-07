@@ -47,6 +47,7 @@ const CartFullPage = ({props}) => {
                 leaveTo="translate-x-full"
             >
                 <Dialog.Panel className="pointer-events-auto w-screen overflow-y-auto">
+                    {texts.branding}
                     <CloseButton onClick={() => setDisplayState("widget")}/>
 
                     <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">

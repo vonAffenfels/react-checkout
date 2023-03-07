@@ -177,7 +177,7 @@ const AddressForm = ({heading, addressFormData, setAddressFormData}) => {
                             name="country"
                             autoComplete="country-name"
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={_addressFormData.country || ""}
+                            value={_addressFormData.country || "DE"}
                             onChange={(e) => _setAddressFormData({
                                 ..._addressFormData,
                                 country: e.target.value
