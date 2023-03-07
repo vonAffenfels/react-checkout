@@ -6,6 +6,7 @@ import AbortButton from "./components/abortButton.jsx";
 import CloseButton from "./components/closeButton.jsx";
 import FullPageLayout from "./components/fullPageLayout.jsx";
 import PaymentForm from "./components/paymentForm.jsx";
+import FullPageFooter from "./components/fullPageFooter.jsx";
 
 const PaymentFullPage = ({}) => {
     const {setDisplayState} = useContext(CheckoutContext);
@@ -33,6 +34,7 @@ const PaymentFullPage = ({}) => {
 
                 <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                     <PaymentForm />
+                    <FullPageFooter />
                 </div>
             </Transition.Child>
         </FullPageLayout>

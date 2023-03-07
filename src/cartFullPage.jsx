@@ -7,6 +7,7 @@ import CloseButton from "./components/closeButton.jsx";
 import CheckoutForm from "./components/checkoutForm.jsx";
 import CheckoutSummary from "./components/checkoutSummary.jsx";
 import BuyContext from "./context/BuyContext";
+import FullPageFooter from "./components/fullPageFooter.jsx";
 
 const CartFullPage = ({props}) => {
     const {texts, withLogin} = useContext(BuyContext);
@@ -50,7 +51,7 @@ const CartFullPage = ({props}) => {
             >
                 <Dialog.Panel className="pointer-events-auto w-screen overflow-y-auto">
                     {hasBranding && (
-                        <div className="bg-opacity-50 flex justify-center items-center absolute top-0 left-0">
+                        <div className="bg-opacity-50">
                             <div className="px-16 py-14 rounded-md text-center">
                                 {texts.branding}
                             </div>
@@ -58,7 +59,7 @@ const CartFullPage = ({props}) => {
                     )}
                     <CloseButton onClick={() => setDisplayState("widget")}/>
 
-                    <div className={`max-w-2xl mx-auto ${hasBranding ? "pt-24" : "pt-16"} pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8`}>
+                    <div className={`max-w-2xl mx-auto ${hasBranding ? "" : "pt-16"} pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8`}>
                         <h2 className="sr-only">Kasse</h2>
 
                         <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16" onSubmit={onSubmit}>
@@ -105,6 +106,8 @@ const CartFullPage = ({props}) => {
                                 )}
                             </div>
                         </form>
+
+                        <FullPageFooter />
 
                     </div>
 
