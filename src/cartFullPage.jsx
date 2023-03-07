@@ -35,6 +35,8 @@ const CartFullPage = ({props}) => {
         globalThis?.window?.[withLogin?.globalFunc]?.(data)
     };
 
+    const hasBranding = !!texts.branding;
+
     return (
         <FullPageLayout show={true}>
             <Transition.Child
@@ -47,14 +49,16 @@ const CartFullPage = ({props}) => {
                 leaveTo="translate-x-full"
             >
                 <Dialog.Panel className="pointer-events-auto w-screen overflow-y-auto">
-                    <div className="bg-opacity-50 flex justify-center items-center absolute top-0 left-0">
-                        <div className="px-16 py-14 rounded-md text-center">
-                            {texts.branding}
+                    {hasBranding && (
+                        <div className="bg-opacity-50 flex justify-center items-center absolute top-0 left-0">
+                            <div className="px-16 py-14 rounded-md text-center">
+                                {texts.branding}
+                            </div>
                         </div>
-                    </div>
+                    )}
                     <CloseButton onClick={() => setDisplayState("widget")}/>
 
-                    <div className="max-w-2xl mx-auto pt-20 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+                    <div className={`max-w-2xl mx-auto ${hasBranding ? "pt-24" : "pt-16"} pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8`}>
                         <h2 className="sr-only">Kasse</h2>
 
                         <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16" onSubmit={onSubmit}>
