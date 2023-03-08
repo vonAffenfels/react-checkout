@@ -113,7 +113,7 @@ const CheckoutForm = ({props}) => {
                     <div className="mt-1">
                         <input
                             required
-                            readOnly={!hideEmailInput}
+                            readOnly={hideEmailInput}
                             type="email"
                             id="email-address"
                             name="email-address"
