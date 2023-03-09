@@ -10,7 +10,7 @@ const ProductInput = ({}) => {
         setReady(true);
     }, []);
 
-    const [variantId, setVariantId] = useState("41288295350404");
+    const [variantId, setVariantId] = useState("41331904479364");
 
     const onChange = (e) => {
         setVariantId(e.target.value);

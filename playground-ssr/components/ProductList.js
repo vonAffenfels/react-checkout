@@ -16,7 +16,7 @@ const ProductList = () => {
         const product2 = await getProductBySku?.({sku: "2000877", onlyMatchingVariant: true, isAbo: false});
         console.log("product", product);
         console.log("product2", product2);
-        const productById = await getProductById?.({id: "gid://shopify/Product/7065469714564"});
+        const productById = await getProductById?.({id: "gid://shopify/Product/7074232172676"});
         console.log("productById", productById);
         setProducts(list || []);
     };

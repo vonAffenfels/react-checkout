@@ -31,6 +31,9 @@ import useDiscountCodeUpdate from "../hooks/useDiscountCodeUpdate";
 import useDraftOrder from "../hooks/useDraftOrder";
 import useOrder from "../hooks/useOrder";
 
+//login
+import useMultiLogin from "../hooks/useMultiLogin";
+
 import BuyContext from "./BuyContext";
 import CONST from "../lib/const";
 
@@ -70,6 +73,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     //login
     const [nextDisplayState, setNextDisplayState, removeNextDisplayState] = useLocalStorage(CONST.NEXT_DISPLAY_STATE_KEY);
+    const multiLogin = useMultiLogin(buyContext.shop, buyContext.multipassUri);
 
     //order
     const createDraftOrder = useCreateDraftOrder(buyContext.shop, client, buyContext.webhookUri);
@@ -171,6 +175,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             {
                 quantity: quantity,
                 merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", ""),
+                sellingPlanId: "gid://shopify/SellingPlan/688447750473"
             }
         ];
         if (attributes?.length) {
@@ -640,6 +645,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
         setCartAddress(addressInput);
     }, [addressFormDataDebounced, email]);
 
+    const multipass = async () => {
+        return await multiLogin({body: {email: email || "lindner@vonaffenfels.de", return_to: cart.webUrl}});
+    };
+
     return (
         <CheckoutContext.Provider value={{
             checkout,
@@ -695,6 +704,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             removeNextDisplayState,
             draftOrderById,
             orderById,
+            multipass,
         }}>
             {children}
         </CheckoutContext.Provider>

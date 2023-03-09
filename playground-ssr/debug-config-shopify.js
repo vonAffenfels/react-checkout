@@ -1,7 +1,8 @@
 export default {
     shop: "shopify",
-    uri: "https://delius-klasing.myshopify.com/api/2022-10/graphql.json",
+    uri: "https://delius-klasing.myshopify.com/api/2023-01/graphql.json",
     webhookUri: "https://mmstupicl7.execute-api.eu-central-1.amazonaws.com/shopify",
+    multipassUri: "https://6e8lbjwzm5.execute-api.eu-central-1.amazonaws.com/generate-token",
     storefrontApiKey: "21ec7ad8aceac22f6fbd61e1fec7c27b",
     channel: function channel() {
         return globalThis?.window?.isRetailer ? "b2b" : "b2c";

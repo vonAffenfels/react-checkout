@@ -14,7 +14,7 @@ function classNames(...classes) {
 }
 
 const CartWidget = ({props}) => {
-    const {isDebug, hideDefaultCartButton} = useContext(BuyContext);
+    const {isDebug, hideDefaultCartButton, multipassUri} = useContext(BuyContext);
     const {
         cart,
         checkout,
@@ -22,17 +22,23 @@ const CartWidget = ({props}) => {
         setCartOpen,
         setDisplayState,
         isLoadingLineItems,
-        isLoadingShippingMethods
+        isLoadingShippingMethods,
+        multipass,
     } = useContext(CheckoutContext);
 
-    const openFullPage = (e) => {
+    const openFullPage = async (e) => {
         e.preventDefault();
         if (cart) {
-            setCartOpen(false);
-            console.log("closed cart");
-            setDisplayState("cartFullPage");
+            if (multipassUri) {
+                const {token, url} = await multipass();
+                window.open(url);
+            } else {
+                setCartOpen(false);
+                setDisplayState("cartFullPage");
+            }
         }
     };
+    console.log("cartWidget.jsx", cart);
 
     return (
         <Fragment>
