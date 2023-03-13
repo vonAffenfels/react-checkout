@@ -175,7 +175,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
             {
                 quantity: quantity,
                 merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", ""),
-                sellingPlanId: "gid://shopify/SellingPlan/688447750473"
+                // sellingPlanId: "gid://shopify/SellingPlan/688447750473"
             }
         ];
         if (attributes?.length) {
