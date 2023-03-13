@@ -20,7 +20,7 @@ const useCheckoutCreate = (shop, client) => {
 
         };
     } else if (shop === "shopify") {
-        return async ({lines}) => {
+        return async ({lines, redirectToMultipass}) => {
             const updatedVariantId = lines?.[0]?.merchandiseId;
             const requestedQuantity = lines?.[0]?.quantity;
             const {data} = await client.mutate({
@@ -44,7 +44,10 @@ const useCheckoutCreate = (shop, client) => {
                     updatedVariantId,
                 });
 
-                return data.cartCreate.cart.id;
+                return {
+                    id: data.cartCreate.cart.id,
+                    webUrl: data.cartCreate.cart.checkoutUrl,
+                };
             }
         };
     }

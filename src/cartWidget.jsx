@@ -31,6 +31,8 @@ const CartWidget = ({props}) => {
         if (cart) {
             if (multipassUri && (globalThis?.window?.location?.search?.indexOf?.("shopify-checkout") !== -1)) {
                 const {token, url} = await multipass();
+                console.log("token", token);
+                console.log("url", url);
                 window.open(url);
             } else {
                 setCartOpen(false);

@@ -134,11 +134,18 @@ export const CheckoutContextProvider = ({children, channel}) => {
     });
     const billingAddressDebounced = useDebounce(billingAddress, 750);
 
-    const createCart = async (lines) => {
+    const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("shopify-checkout") !== -1);
+
+    const createCart = async (lines, openCheckoutPage) => {
         setLoadingLineItems(true);
         try {
-            const createdCartId = await cartCreate({channel, lines});
-            setCartId(createdCartId);
+            const redirectToMultipass = openCheckoutPage && isShopifyCheckout;
+            const {id, webUrl} = await cartCreate({channel, lines, redirectToMultipass});
+            setCartId(id);
+            if (redirectToMultipass) {
+                const {token, url} = await multipass(webUrl);
+                window.open(url);
+            }
         } catch (e) {
             console.log("error in createCart");
             console.log(e);
@@ -165,9 +172,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const addItemToCart = async (variantId, quantity = 1, attributes, openCheckoutPage = false) => {
-        if (openCheckoutPage) {
+        if (openCheckoutPage && isShopifyCheckout) {
             setDisplayState("cartFullPage");
-        } else if (!isCartOpen) {
+        }
+        if (!isCartOpen && !openCheckoutPage) {
             setCartOpen(true);
         }
 
@@ -183,7 +191,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
 
         if (!cart) {
-            return createCart(lines);
+            return createCart(lines, openCheckoutPage);
         }
 
         setLoadingLineItems(true);
@@ -198,6 +206,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 ...(cart || {}),
                 ...cartData
             });
+            if (openCheckoutPage && isShopifyCheckout) {
+                const {token, url} = await multipass();
+                window.open(url);
+            }
         } catch (e) {
             console.log("error in addProductLine", e);
             await getCartById();
@@ -645,8 +657,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
         setCartAddress(addressInput);
     }, [addressFormDataDebounced, email]);
 
-    const multipass = async () => {
-        return await multiLogin({body: {email: email || "lindner@vonaffenfels.de", return_to: cart.webUrl}});
+    const multipass = async (webUrl) => {
+        return await multiLogin({body: {email: email, return_to: webUrl ||cart.webUrl}});
     };
 
     return (
