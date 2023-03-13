@@ -10,7 +10,7 @@ const CheckoutLine = ({
     id,
     variant,
     quantity,
-    customAttributes = [],
+    attributes = [],
     totalPrice,
     bonusProduct,
     giftedIdentity,
@@ -21,7 +21,7 @@ const CheckoutLine = ({
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
     const {isDebug} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
-    const overwriteImage = customAttributes.find(v => v.key === "overwrite_product_image_url");
+    const overwriteImage = attributes.find(v => v.key === "overwrite_product_image_url");
 
     const onRemove = async () => {
         await removeItemFromCart(id);
@@ -147,7 +147,7 @@ const CheckoutLineDetail = ({
     id,
     variant,
     quantity,
-    customAttributes = [],
+    attributes = [],
     totalPrice,
     bonusProduct,
     giftedIdentity,
@@ -156,7 +156,7 @@ const CheckoutLineDetail = ({
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
     const {isDebug} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
-    const overwriteImage = customAttributes.find(v => v.key === "overwrite_product_image_url");
+    const overwriteImage = attributes.find(v => v.key === "overwrite_product_image_url");
 
     const onRemove = async () => {
         await removeItemFromCart(id);

@@ -39,7 +39,7 @@ export default gql`
             edges {
                 node {
                     id
-                    customAttributes {
+                    attributes {
                         key
                         value
                     }

@@ -4,8 +4,8 @@ function transformShopifyLineItems(lines) {
             variantId: line.variant.id,
             quantity: line.quantity
         };
-        if (line.customAttributes) {
-            retVal.customAttributes = line.customAttributes;
+        if (line.attributes) {
+            retVal.attributes = line.attributes;
         }
         return retVal;
     });

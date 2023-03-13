@@ -17,7 +17,7 @@ const ProductInput = ({}) => {
     };
 
     const onClick = async () => {
-        await addItemToCart(variantId, 1, null, false);
+        await addItemToCart(variantId, 1, [{key: "starting_magazine_id", value: "83"}], false);
     };
 
     if (!ready) {

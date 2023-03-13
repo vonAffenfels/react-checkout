@@ -347,7 +347,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         const lineItems = cart.lines.map(line => ({
             quantity: line.quantity || 1,
             variantId: "gid://shopify/ProductVariant/" + String(line.variant.id).replace("gid://shopify/ProductVariant/", ""),
-            customAttributes: line.customAttributes,
+            attributes: line.attributes,
         }));
         console.log("lineItems", lineItems);
         const input = {
@@ -413,7 +413,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 email: addressFormData.email
             } : paymentCheckoutData.shippingAddress,
             selectedPaymentGatewayId: selectedPaymentGatewayId,
-            customAttributes: [
+            attributes: [
                 {
                     key: "channel",
                     value: channelName
@@ -421,18 +421,18 @@ export const CheckoutContextProvider = ({children, channel}) => {
             ]
         };
         if (selectedShippingAddressId) {
-            draftOrderInput.customAttributes.push({
+            draftOrderInput.attributes.push({
                 key: "shipping_address_id",
                 value: selectedShippingAddressId,
             });
         }
         if (selectedBillingAddressId) {
-            draftOrderInput.customAttributes.push({
+            draftOrderInput.attributes.push({
                 key: "billing_address_id",
                 value: selectedBillingAddressId,
             });
         }
-        console.log("draftOrderInput.customAttributes", draftOrderInput.customAttributes);
+        console.log("draftOrderInput.attributes", draftOrderInput.attributes);
 
         const checkoutData = await createDraftOrder(draftOrderInput);
         setCheckout({

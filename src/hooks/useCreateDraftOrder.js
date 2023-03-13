@@ -16,7 +16,7 @@ const useCreateDraftOrder = (shop, client, webhookUri) => {
 
         };
     } else if (shop === "shopify") {
-        return async ({checkoutToken, checkout, billingAddress, selectedPaymentGatewayId, customAttributes}) => {
+        return async ({checkoutToken, checkout, billingAddress, selectedPaymentGatewayId, attributes}) => {
             const input = {
                 lineItems: transformLineItems(checkout.lines),
                 email: checkout.email,
@@ -39,8 +39,8 @@ const useCreateDraftOrder = (shop, client, webhookUri) => {
                     title: shippingMethod.name,
                 };
             }
-            if (customAttributes?.length) {
-                input.customAttributes = customAttributes;
+            if (attributes?.length) {
+                input.attributes = attributes;
             }
             const {draftOrder, order} = await createDraftOrder(webhookUri, JSON.stringify({
                 type: "shopify.draft_order_create",

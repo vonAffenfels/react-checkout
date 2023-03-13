@@ -31,7 +31,7 @@ function transformCheckout(node) {
         webUrl: node.webUrl,
         requiresShipping: node.requiresShipping,
         lines: (node.lineItems?.edges || []).map(edge => {
-            const {quantity, variant, id, customAttributes = []} = edge.node;
+            const {quantity, variant, id, attributes = []} = edge.node;
 
             if (!variant) {
                 return null;
@@ -41,7 +41,7 @@ function transformCheckout(node) {
             return {
                 quantity: quantity,
                 id: id,
-                customAttributes: customAttributes.map(v => ({key: v.key, value: v.value})),
+                attributes: attributes.map(v => ({key: v.key, value: v.value})),
                 variant: {
                     id: variant.id,
                     name: variant.title,

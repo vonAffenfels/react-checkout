@@ -153,7 +153,7 @@ function transformCart(node) {
                         currency: currencyCode
                     }
                 },
-                customAttributes: (attributes || []).map(attr => ({key: attr.key, value: attr.value})),
+                attributes: (attributes || []).map(attr => ({key: attr.key, value: attr.value})),
                 displayMessage: node.displayMessage,
             };
 
