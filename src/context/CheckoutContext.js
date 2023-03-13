@@ -658,12 +658,15 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [addressFormDataDebounced, email]);
 
     const multipass = async (webUrl) => {
+        const returnUrl = String(webUrl || cart.webUrl) + "?channel=" + channelName;
+
         if (!email) {
             return {
-                url: webUrl || cart.webUrl
+                url: returnUrl
             }
         }
-        return await multiLogin({body: {email: email, return_to: webUrl || cart.webUrl}});
+
+        return await multiLogin({body: {email: email, return_to: returnUrl}});
     };
 
     return (
