@@ -172,7 +172,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     };
 
     const addItemToCart = async (variantId, quantity = 1, attributes, openCheckoutPage = false) => {
-        if (openCheckoutPage && isShopifyCheckout) {
+        if (openCheckoutPage && !isShopifyCheckout) {
             setDisplayState("cartFullPage");
         }
         if (!isCartOpen && !openCheckoutPage) {
@@ -658,7 +658,12 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [addressFormDataDebounced, email]);
 
     const multipass = async (webUrl) => {
-        return await multiLogin({body: {email: email, return_to: webUrl ||cart.webUrl}});
+        if (!email) {
+            return {
+                url: webUrl || cart.webUrl
+            }
+        }
+        return await multiLogin({body: {email: email, return_to: webUrl || cart.webUrl}});
     };
 
     return (
