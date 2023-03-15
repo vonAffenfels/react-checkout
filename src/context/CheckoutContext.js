@@ -134,7 +134,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     });
     const billingAddressDebounced = useDebounce(billingAddress, 750);
 
-    const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("shopify-checkout") !== -1);
+    const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
 
     const createCart = async (lines, openCheckoutPage) => {
         setLoadingLineItems(true);
