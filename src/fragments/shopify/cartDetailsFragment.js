@@ -75,6 +75,16 @@ export default gql`
                             id
                             title
                             productType
+                            sellingPlanGroups(first: 1) {
+                                nodes {
+                                    name
+                                    sellingPlans(first: 1) {
+                                        nodes {
+                                            id
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

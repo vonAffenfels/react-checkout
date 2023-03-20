@@ -10,14 +10,19 @@ const ProductInput = ({}) => {
         setReady(true);
     }, []);
 
-    const [variantId, setVariantId] = useState("41331904479364");
+    const [variantId, setVariantId] = useState("41300575387780");
 
     const onChange = (e) => {
         setVariantId(e.target.value);
     };
 
     const onClick = async () => {
-        await addItemToCart(variantId, 1, [{key: "starting_magazine_id", value: "83"}], false);
+        await addItemToCart({
+            variantId: variantId,
+            quantity: 1,
+            attributes: [{key: "starting_magazine_id", value: "83"}],
+            openCheckoutPage: false,
+        });
     };
 
     if (!ready) {

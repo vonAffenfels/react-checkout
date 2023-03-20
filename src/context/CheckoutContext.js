@@ -171,7 +171,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
     };
 
-    const addItemToCart = async (variantId, quantity = 1, attributes, openCheckoutPage = false) => {
+    const addItemToCart = async ({product, variantId, quantity = 1, attributes, openCheckoutPage = false}) => {
         if (openCheckoutPage && !isShopifyCheckout) {
             setDisplayState("cartFullPage");
         }
@@ -179,13 +179,23 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setCartOpen(true);
         }
 
-        const lines = [
-            {
+        const lines = [];
+        if (product) {
+            const line = {
+                quantity: quantity,
+                merchandiseId: product.variants?.nodes?.[0]?.id,
+            };
+            if (product.sellingPlanGroups?.nodes?.[0]?.sellingPlans?.nodes?.[0]?.id) {
+                line.sellingPlanId = product.sellingPlanGroups.nodes[0].sellingPlans.nodes[0].id;
+            }
+            lines.push(line);
+        } else {
+            lines.push({
                 quantity: quantity,
                 merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", ""),
-                // sellingPlanId: "gid://shopify/SellingPlan/688447750473"
-            }
-        ];
+            });
+        }
+
         if (attributes?.length) {
             lines[0].attributes = attributes;
         }
