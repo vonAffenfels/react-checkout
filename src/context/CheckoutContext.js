@@ -237,6 +237,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 id: lineId,
                 quantity: quantity,
                 merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", ""),
+                // sellingPlanId: null
             }
         ];
         if (bonusProduct) {
@@ -668,7 +669,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [addressFormDataDebounced, email]);
 
     const multipass = async (webUrl) => {
-        const returnUrl = String(webUrl || cart.webUrl) + "?channel=" + channelName;
+        const params = new URLSearchParams({
+            channel: channelName,
+            cart: cart.token.replace("gid://shopify/Cart/", "").trim(),
+        });
+        const returnUrl = String(webUrl || cart.webUrl) + "?" + params.toString();
 
         if (!email) {
             return {

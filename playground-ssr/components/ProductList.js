@@ -12,17 +12,17 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         const list = await getProductList?.();
-        const product = await getProductBySku?.({sku: "2001194", onlyMatchingVariant: true, isAbo: false});
-        const product2 = await getProductBySku?.({sku: "KP0006061", onlyMatchingVariant: true, isAbo: true});
+        const product = await getProductBySku?.({sku: "1020297", onlyMatchingVariant: true, isAbo: false});
+        const product2 = await getProductBySku?.({sku: "KP0005844_2001238", onlyMatchingVariant: true, isAbo: true});
         console.log("product", product);
         console.log("product2", product2);
-        const productById = await getProductById?.({id: "gid://shopify/Product/7037652172932"});
+        const productById = await getProductById?.({id: "gid://shopify/Product/7037654171780"});
         console.log("productById", productById);
         setProducts(list || []);
     };
 
     const onClick = async (id) => {
-        await addItemToCart(id);
+        await addItemToCart({variantId: id});
     };
 
     return products.map((product, i) => {

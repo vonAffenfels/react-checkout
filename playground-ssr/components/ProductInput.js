@@ -18,7 +18,36 @@ const ProductInput = ({}) => {
 
     const onClick = async () => {
         await addItemToCart({
-            variantId: variantId,
+            product: {
+                "id": "gid://shopify/Product/8345420497225",
+                "sellingPlanGroups": {
+                    "nodes": [
+                        {
+                            "sellingPlans": {
+                                "nodes": [
+                                    {
+                                        "id": "gid://shopify/SellingPlan/688450601289",
+                                        "__typename": "SellingPlan"
+                                    }
+                                ],
+                                "__typename": "SellingPlanConnection"
+                            },
+                            "__typename": "SellingPlanGroup"
+                        }
+                    ],
+                    "__typename": "SellingPlanGroupConnection"
+                },
+                "variants": {
+                    "nodes": [
+                        {
+                            "id": "gid://shopify/ProductVariant/46381615612233",
+                            "sku": "KP0005844_2001238",
+                            "__typename": "ProductVariant"
+                        }
+                    ]
+                },
+                "__typename": "Product"
+            },
             quantity: 1,
             attributes: [{key: "starting_magazine_id", value: "83"}],
             openCheckoutPage: false,

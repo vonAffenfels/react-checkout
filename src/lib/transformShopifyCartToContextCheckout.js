@@ -250,6 +250,7 @@ function transformCart(node) {
         checkout.discountAllocations = null;
     }
 
+    console.log("cart", checkout);
     return checkout;
 }
 

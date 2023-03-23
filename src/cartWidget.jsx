@@ -28,7 +28,7 @@ const CartWidget = ({props}) => {
 
     const openFullPage = async (e) => {
         e.preventDefault();
-        if (cart) {
+        if (cart?.lines?.length) {
             if (multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1)) {
                 const {token, url} = await multipass();
                 console.log("token", token);

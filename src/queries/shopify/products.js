@@ -5,7 +5,7 @@ import PriceFragment from "../../fragments/shopify/priceFragment";
 export default gql`
     ${PriceFragment}
     query ProductList {
-        products(first: 8) {
+        products(first: 8, query: "variants.price:>0") {
             nodes {
                 id
                 title
