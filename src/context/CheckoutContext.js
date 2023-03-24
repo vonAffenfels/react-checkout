@@ -143,8 +143,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
             const {id, webUrl} = await cartCreate({channel, lines, redirectToMultipass});
             setCartId(id);
             if (redirectToMultipass) {
-                const {token, url} = await multipass(webUrl);
-                window.open(url);
+                const {token, url} = await multipass({webUrl});
+                console.log("token", token);
+                console.log("url", url);
+                //window.open(url);
+                window.location.href = url;
             }
         } catch (e) {
             console.log("error in createCart");
@@ -217,8 +220,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 ...cartData
             });
             if (openCheckoutPage && isShopifyCheckout) {
-                const {token, url} = await multipass();
-                window.open(url);
+                const {token, url} = await multipass({});
+                console.log("token", token);
+                console.log("url", url);
+                //window.open(url);
+                window.location.href = url;
             }
         } catch (e) {
             console.log("error in addProductLine", e);
@@ -618,7 +624,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     useEffect(() => {
         if (email !== cart?.email) {
-            console.log("cart?.shippingAddress", cart?.shippingAddress, "cart", cart);
             setCartAddress(cart?.shippingAddress);
         }
 
@@ -668,20 +673,21 @@ export const CheckoutContextProvider = ({children, channel}) => {
         setCartAddress(addressInput);
     }, [addressFormDataDebounced, email]);
 
-    const multipass = async (webUrl) => {
+    const multipass = async ({webUrl, overwriteEmail}) => {
         const params = new URLSearchParams({
             channel: channelName,
             cart: cart.token.replace("gid://shopify/Cart/", "").trim(),
         });
         const returnUrl = String(webUrl || cart.webUrl) + "?" + params.toString();
+        const cartEmail = overwriteEmail || email;
 
-        if (!email) {
+        if (!cartEmail) {
             return {
                 url: returnUrl
             }
         }
 
-        return await multiLogin({body: {email: email, return_to: returnUrl}});
+        return await multiLogin({body: {email: cartEmail, return_to: returnUrl}});
     };
 
     return (
