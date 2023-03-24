@@ -14,13 +14,15 @@ function classNames(...classes) {
 }
 
 const CartWidget = ({props}) => {
-    const {isDebug, hideDefaultCartButton, multipassUri} = useContext(BuyContext);
+    const {isDebug, hideDefaultCartButton, multipassUri, withLogin} = useContext(BuyContext);
     const {
         cart,
+        email,
         checkout,
         isCartOpen,
         setCartOpen,
         setDisplayState,
+        setNextDisplayState,
         isLoadingLineItems,
         isLoadingShippingMethods,
         multipass,
@@ -40,6 +42,18 @@ const CartWidget = ({props}) => {
             }
         }
     };
+
+    const login = (e, data) => {
+
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        setNextDisplayState("widget");
+        globalThis?.window?.[withLogin?.globalFunc]?.(data)
+    };
+
     console.log("cartWidget.jsx", cart);
 
     return (
@@ -123,6 +137,36 @@ const CartWidget = ({props}) => {
                                     Zur Kasse
                                 </a>
                             </div>
+                            {withLogin?.globalFunc && !email && (
+                                <>
+                                    <div className="mt-6">
+                                        <div
+                                            className={"mb-6 flex items-center justify-between text-center uppercase text-sm text-color-500 before:content-[''] before:inline-block before:h-px before:bg-gray-200 before:grow after:content-[''] after:inline-block after:h-px after:bg-gray-200 after:grow"}>
+                                            <span className={"inline-block px-1"}>ODER ANMELDEN</span>
+                                        </div>
+                                        <div className="lg:grid lg:grid-cols-2">
+                                            <div className="pb-3 lg:pr-4">
+                                                <button
+                                                    onClick={(e) => login(e, {extraQueryParams: {type: "registration"}})}
+                                                    type="button"
+                                                    className={"w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"}
+                                                >
+                                                    Registrieren
+                                                </button>
+                                            </div>
+                                            <div className="pb-3 lg:pl-4">
+                                                <button
+                                                    onClick={(e) => login(e)}
+                                                    type="button"
+                                                    className={"w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"}
+                                                >
+                                                    Anmelden
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
                             <div className="mt-6 flex justify-center text-center text-sm text-color-500">
                                 <p>
                                     oder{' '}
