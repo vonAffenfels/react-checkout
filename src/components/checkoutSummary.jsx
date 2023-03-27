@@ -82,22 +82,30 @@ const CheckoutSummary = ({props}) => {
                 </div>
                 {cart?.requiresShipping !== false ? (
                     <div className="flex items-center justify-between">
-                        <dt className="text-sm">Versand inkl. gesetzlicher Mwst.</dt>
-                        <dd className="text-sm font-medium text-color-900">
-                            {isLoadingShippingMethods ? (
-                                <span className="text-bg-color-500"><Spin /></span>
-                            ) : (
-                                <>
-                                    {cart?.shippingPrice?.gross?.amount > 0 ? (
-                                        <>
-                                            <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
-                                        </>
+                        {cart?.shippingPrice?.gross?.amount === undefined ? (
+                            <dt className="text-sm">Versandkosten werden an der Kasse berechnet</dt>
+                        ) : (
+                            <>
+                                <dt className="text-sm">Versand inkl. gesetzlicher Mwst.</dt>
+                                <dd className="text-sm font-medium text-color-900">
+                                    {isLoadingShippingMethods ? (
+                                        <span className="text-bg-color-500"><Spin /></span>
                                     ) : (
-                                        <span className="text-bg-color-500">Gratis Versand!</span>
+                                        <>
+                                            {cart?.shippingPrice?.gross?.amount > 0 ? (
+                                                <>
+                                                    <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
+                                                </>
+                                            ) : (
+                                                <span className="text-bg-color-500">
+                                                    Gratis Versand!
+                                                </span>
+                                            )}
+                                        </>
                                     )}
-                                </>
-                            )}
-                        </dd>
+                                </dd>
+                            </>
+                        )}
                     </div>
                 ) : null}
                 {cart?.discountAllocations?.amount > 0 && (

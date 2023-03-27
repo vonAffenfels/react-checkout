@@ -55,8 +55,6 @@ const CartWidget = ({props}) => {
         globalThis?.window?.[withLogin?.globalFunc]?.(data)
     };
 
-    console.log("cartWidget.jsx", cart);
-
     return (
         <Fragment>
             {!isCartOpen && !hideDefaultCartButton && (
@@ -102,17 +100,23 @@ const CartWidget = ({props}) => {
                             {cart?.requiresShipping !== false ? (
                                 <>
                                     <div className="flex justify-between text-sm font-medium text-color-500">
-                                        <p>Versand inkl. gesetzlicher Mwst.</p>
-                                        {isLoadingShippingMethods ? (
-                                            <p className="text-sm font-medium text-bg-color-500 mb-2"><Spin/></p>
+                                        {cart?.shippingPrice?.gross?.amount === undefined ? (
+                                            <p className="mb-2">Versandkosten werden an der Kasse berechnet</p>
                                         ) : (
                                             <>
-                                                {cart?.shippingPrice?.gross?.amount > 0 ? (
-                                                    <p className="mb-2">
-                                                        <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
-                                                    </p>
+                                                <p>Versand inkl. gesetzlicher Mwst.</p>
+                                                {isLoadingShippingMethods ? (
+                                                    <p className="text-sm font-medium text-bg-color-500 mb-2"><Spin/></p>
                                                 ) : (
-                                                    <p className="text-sm font-medium text-bg-color-500 mb-2">Gratis Versand!</p>
+                                                    <>
+                                                        {cart?.shippingPrice?.gross?.amount > 0 ? (
+                                                            <p className="mb-2">
+                                                                <Price price={cart?.shippingPrice?.gross?.amount}/> {cart?.shippingPrice?.gross?.currency}
+                                                            </p>
+                                                        ) : (
+                                                            <p className="text-sm font-medium text-bg-color-500 mb-2">Gratis Versand!</p>
+                                                        )}
+                                                    </>
                                                 )}
                                             </>
                                         )}
