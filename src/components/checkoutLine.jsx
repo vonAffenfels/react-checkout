@@ -21,8 +21,7 @@ const CheckoutLine = ({
     const {isDebug, disableMultipleSku} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
     const overwriteImage = attributes.find(v => v.key === "overwrite_product_image_url");
-    const hideQuantitySelection = !disableMultipleSku || !(String(variant?.sku).toUpperCase().startsWith(disableMultipleSku));
-    console.log("hideQuantitySelection", hideQuantitySelection, "disableMultipleSku", disableMultipleSku, "String(variant?.sku)", String(variant?.sku));
+    const hideQuantitySelection = disableMultipleSku && (String(variant?.sku).toUpperCase().startsWith(disableMultipleSku));
 
     const onRemove = async () => {
         await removeItemFromCart(id);
@@ -160,7 +159,7 @@ const CheckoutLineDetail = ({
     const {isDebug, disableMultipleSku} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
     const overwriteImage = attributes.find(v => v.key === "overwrite_product_image_url");
-    const hideQuantitySelection = !disableMultipleSku || !(String(variant?.sku).toUpperCase().startsWith(disableMultipleSku));
+    const hideQuantitySelection = disableMultipleSku && (String(variant?.sku).toUpperCase().startsWith(disableMultipleSku));
 
     const onRemove = async () => {
         await removeItemFromCart(id);
