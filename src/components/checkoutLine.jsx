@@ -69,26 +69,24 @@ const CheckoutLine = ({
                         </div>
                         <div className="flex flex-1 items-end justify-between text-sm">
                             <p className="mt-1 text-sm text-color-900">{!bonusProduct ? variantTitle : ""}</p>
-                            {!hideQuantitySelection && (
                                 <div className="mt-1 text-sm text-color-900">
-                                    {isLoadingQuantity ? (
-                                        <div className="rounded-md border border-gray-300 ml-2 pl-2 pr-2 py-2">
-                                            <Spin h={6} w={6} />
-                                        </div>
-                                    ) : (
-                                        <select
-                                            id="quantity"
-                                            name="quantity"
-                                            onChange={onChangeQuantity}
-                                            value={quantity}
-                                            disabled={isLoadingQuantity}
-                                            className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        >
-                                            <QuantityOptions quantity={quantity} id={id} />
-                                        </select>
-                                    )}
-                                </div>
-                            )}
+                                {isLoadingQuantity ? (
+                                    <div className="rounded-md border border-gray-300 ml-2 pl-2 pr-2 py-2">
+                                        <Spin h={6} w={6} />
+                                    </div>
+                                ) : (
+                                    <select
+                                        id="quantity"
+                                        name="quantity"
+                                        onChange={onChangeQuantity}
+                                        value={quantity}
+                                        disabled={isLoadingQuantity}
+                                        className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    >
+                                        <QuantityOptions hideQuantitySelection={hideQuantitySelection} quantity={quantity} id={id} />
+                                    </select>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -211,26 +209,24 @@ const CheckoutLineDetail = ({
                         </div>
                         <div className="ml-6 flex flex-1 items-end justify-between">
                             <p className="mt-1 text-sm text-color-500">{!bonusProduct ? variantTitle : ""}</p>
-                            {!hideQuantitySelection && (
                                 <div className="mt-1 text-sm text-color-900">
-                                    {isLoadingQuantity ? (
-                                        <div className="rounded-md border border-gray-300 ml-2 pr-4 pl-4 py-2">
-                                            <Spin h={6} w={6} />
-                                        </div>
-                                    ) : (
-                                        <select
-                                            id="quantity"
-                                            name="quantity"
-                                            onChange={onChangeQuantity}
-                                            value={quantity}
-                                            disabled={isLoadingQuantity}
-                                            className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        >
-                                            <QuantityOptions quantity={quantity} id={id} />
-                                        </select>
-                                    )}
-                                </div>
-                            )}
+                                {isLoadingQuantity ? (
+                                    <div className="rounded-md border border-gray-300 ml-2 pr-4 pl-4 py-2">
+                                        <Spin h={6} w={6} />
+                                    </div>
+                                ) : (
+                                    <select
+                                        id="quantity"
+                                        name="quantity"
+                                        onChange={onChangeQuantity}
+                                        value={quantity}
+                                        disabled={isLoadingQuantity}
+                                        className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    >
+                                        <QuantityOptions hideQuantitySelection={hideQuantitySelection} quantity={quantity} id={id} />
+                                    </select>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -299,29 +295,34 @@ const BonusLineDetail = ({
     )
 };
 
-const QuantityOptions = ({quantity, id}) => {
-    const values = [quantity];
-    if (quantity !== 0) {
-        values.push(0);
-    }
+const QuantityOptions = ({quantity, id, hideQuantitySelection}) => {
+    let values = [quantity];
 
-    let count = 0;
-    while (values.length < 8) {
-        let newLowerVal = quantity - 1 - count;
-        let newUpperVal = quantity + 1 + count;
-        if (newLowerVal > 0) {
-            values.push(newLowerVal);
+    if (hideQuantitySelection) {
+        values = [0, 1];
+    } else {
+        if (quantity !== 0) {
+            values.push(0);
         }
-        values.push(newUpperVal);
-        count++;
+
+        let count = 0;
+        while (values.length < 8) {
+            let newLowerVal = quantity - 1 - count;
+            let newUpperVal = quantity + 1 + count;
+            if (newLowerVal > 0) {
+                values.push(newLowerVal);
+            }
+            values.push(newUpperVal);
+            count++;
+        }
+        values.sort((a, b) => {
+            if (a > b) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
     }
-    values.sort((a, b) => {
-        if (a > b) {
-            return 1;
-        } else {
-            return -1;
-        }
-    });
 
     return values.map(v => <option value={v} key={"checkout-line-option-" + id + v}>{v}</option>);
 }
