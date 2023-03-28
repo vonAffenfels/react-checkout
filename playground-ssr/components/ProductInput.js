@@ -21,7 +21,7 @@ const ProductInput = ({}) => {
             variantId: "41297104404612",
             quantity: 1,
             attributes: [{key: "starting_magazine_id", value: "83"}],
-            openCheckoutPage: false,
+            openCheckoutPage: true,
         });
     };
 

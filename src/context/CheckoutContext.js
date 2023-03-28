@@ -143,7 +143,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
             const {id, webUrl} = await cartCreate({channel, lines, redirectToMultipass});
             setCartId(id);
             if (redirectToMultipass) {
-                const {token, url} = await multipass({webUrl});
+                const {token, url} = await multipass({webUrl, overwriteToken: id});
+                console.log("id", id);
                 console.log("token", token);
                 console.log("url", url);
                 //window.open(url);
@@ -673,10 +674,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
         setCartAddress(addressInput);
     }, [addressFormDataDebounced, email]);
 
-    const multipass = async ({webUrl, overwriteEmail}) => {
+    const multipass = async ({webUrl, overwriteEmail, overwriteToken}) => {
         const params = new URLSearchParams({
             channel: channelName,
-            cart: cart.token.replace("gid://shopify/Cart/", "").trim(),
+            cart: (overwriteToken || cart.token).replace("gid://shopify/Cart/", "").trim(),
         });
         const returnUrl = String(webUrl || cart.webUrl) + "?" + params.toString();
         const cartEmail = overwriteEmail || email;
