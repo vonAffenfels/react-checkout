@@ -234,7 +234,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         setLoadingLineItems(false);
     };
 
-    const updateCartItems = async ({lineId, variantId, quantity, bonusProduct}) => {
+    const updateCartItems = async ({lineId, variantId, quantity, attributes, bonusProduct}) => {
         if (!isCartOpen) {
             setCartOpen(true);
         }
@@ -247,7 +247,9 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 // sellingPlanId: null
             }
         ];
-        if (bonusProduct) {
+        if (attributes?.length) {
+            lines[0].attributes = attributes;
+        } else if (bonusProduct) {
             lines[0].attributes = [{key: "bonus_id", value: bonusProduct.aboSku + "_" + bonusProduct.variantSku}];
         }
 

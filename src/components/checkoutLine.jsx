@@ -34,7 +34,7 @@ const CheckoutLine = ({
             lineId: id,
             variantId: variant.id,
             quantity: updatedQuantity,
-            bonusProduct: bonusProduct,
+            attributes: attributes
         });
         setLoadingQuantity(false);
     }
@@ -170,7 +170,7 @@ const CheckoutLineDetail = ({
             lineId: id,
             variantId: variant.id,
             quantity: updatedQuantity,
-            bonusProduct: bonusProduct,
+            attributes: attributes
         });
         setLoadingQuantity(false);
     }
