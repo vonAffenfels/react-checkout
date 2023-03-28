@@ -18,10 +18,10 @@ const ProductInput = ({}) => {
 
     const onClick = async () => {
         await addItemToCart({
-            variantId: "41297104404612",
+            variantId: "41300575387780",
             quantity: 1,
             attributes: [{key: "starting_magazine_id", value: "83"}],
-            openCheckoutPage: true,
+            openCheckoutPage: false,
         });
     };
 

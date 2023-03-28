@@ -123,13 +123,13 @@ function transformCart(node) {
             }
 
             const {amount, currencyCode} = cost.amountPerQuantity;
-            console.log("node.displayMessage", node.displayMessage);
             const retVal = {
                 quantity: quantity,
                 id: id,
                 variant: {
                     id: merchandise.id,
                     name: merchandise.title,
+                    sku: merchandise.sku,
                     pricing: {
                         price: {
                             gross: {

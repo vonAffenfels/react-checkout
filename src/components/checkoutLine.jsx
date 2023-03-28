@@ -15,13 +15,13 @@ const CheckoutLine = ({
     bonusProduct,
     giftedIdentity,
     displayMessage = "",
+    ...props
 }) => {
-    console.log("displayMessage", displayMessage);
-    // 3486
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
-    const {isDebug} = useContext(BuyContext);
+    const {isDebug, disableMultipleSku} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
     const overwriteImage = attributes.find(v => v.key === "overwrite_product_image_url");
+    const hideQuantitySelection = !disableMultipleSku || !(String(variant?.sku).toUpperCase().startsWith(disableMultipleSku));
 
     const onRemove = async () => {
         await removeItemFromCart(id);
@@ -69,24 +69,26 @@ const CheckoutLine = ({
                         </div>
                         <div className="flex flex-1 items-end justify-between text-sm">
                             <p className="mt-1 text-sm text-color-900">{!bonusProduct ? variantTitle : ""}</p>
-                            <div className="mt-1 text-sm text-color-900">
-                                {isLoadingQuantity ? (
-                                    <div className="rounded-md border border-gray-300 ml-2 pl-2 pr-2 py-2">
-                                        <Spin h={6} w={6} />
-                                    </div>
-                                ) : (
-                                    <select
-                                        id="quantity"
-                                        name="quantity"
-                                        onChange={onChangeQuantity}
-                                        value={quantity}
-                                        disabled={isLoadingQuantity}
-                                        className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    >
-                                        <QuantityOptions quantity={quantity} id={id} />
-                                    </select>
-                                )}
-                            </div>
+                            {!hideQuantitySelection && (
+                                <div className="mt-1 text-sm text-color-900">
+                                    {isLoadingQuantity ? (
+                                        <div className="rounded-md border border-gray-300 ml-2 pl-2 pr-2 py-2">
+                                            <Spin h={6} w={6} />
+                                        </div>
+                                    ) : (
+                                        <select
+                                            id="quantity"
+                                            name="quantity"
+                                            onChange={onChangeQuantity}
+                                            value={quantity}
+                                            disabled={isLoadingQuantity}
+                                            className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        >
+                                            <QuantityOptions quantity={quantity} id={id} />
+                                        </select>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -154,9 +156,10 @@ const CheckoutLineDetail = ({
     displayMessage = "",
 }) => {
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
-    const {isDebug} = useContext(BuyContext);
+    const {isDebug, disableMultipleSku} = useContext(BuyContext);
     const {removeItemFromCart, updateCartItems, isLoadingLineItemQuantity} = useContext(CheckoutContext);
     const overwriteImage = attributes.find(v => v.key === "overwrite_product_image_url");
+    const hideQuantitySelection = !disableMultipleSku || !(String(variant?.sku).toUpperCase().startsWith(disableMultipleSku));
 
     const onRemove = async () => {
         await removeItemFromCart(id);
@@ -208,24 +211,26 @@ const CheckoutLineDetail = ({
                         </div>
                         <div className="ml-6 flex flex-1 items-end justify-between">
                             <p className="mt-1 text-sm text-color-500">{!bonusProduct ? variantTitle : ""}</p>
-                            <div className="mt-1 text-sm text-color-900">
-                                {isLoadingQuantity ? (
-                                    <div className="rounded-md border border-gray-300 ml-2 pr-4 pl-4 py-2">
-                                        <Spin h={6} w={6} />
-                                    </div>
-                                ) : (
-                                    <select
-                                        id="quantity"
-                                        name="quantity"
-                                        onChange={onChangeQuantity}
-                                        value={quantity}
-                                        disabled={isLoadingQuantity}
-                                        className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    >
-                                        <QuantityOptions quantity={quantity} id={id} />
-                                    </select>
-                                )}
-                            </div>
+                            {!hideQuantitySelection && (
+                                <div className="mt-1 text-sm text-color-900">
+                                    {isLoadingQuantity ? (
+                                        <div className="rounded-md border border-gray-300 ml-2 pr-4 pl-4 py-2">
+                                            <Spin h={6} w={6} />
+                                        </div>
+                                    ) : (
+                                        <select
+                                            id="quantity"
+                                            name="quantity"
+                                            onChange={onChangeQuantity}
+                                            value={quantity}
+                                            disabled={isLoadingQuantity}
+                                            className="rounded-md border border-gray-300 text-base font-medium text-color-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        >
+                                            <QuantityOptions quantity={quantity} id={id} />
+                                        </select>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

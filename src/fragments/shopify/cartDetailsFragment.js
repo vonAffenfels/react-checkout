@@ -63,6 +63,7 @@ export default gql`
                     ...on ProductVariant {
                         id
                         title
+                        sku
                         requiresShipping
                         priceV2 {
                             ...PriceFragment

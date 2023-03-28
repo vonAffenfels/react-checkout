@@ -4,6 +4,8 @@ export default {
     webhookUri: "https://mmstupicl7.execute-api.eu-central-1.amazonaws.com/shopify",
     multipassUri: "https://6e8lbjwzm5.execute-api.eu-central-1.amazonaws.com/generate-token",
     storefrontApiKey: "21ec7ad8aceac22f6fbd61e1fec7c27b",
+    // Produkte mit folgendem character in sku vom mehrfachkauf ausschliessen
+    disableMultipleSku: "KP",
     channel: function channel() {
         return globalThis?.window?.isRetailer ? "b2b" : "b2c";
     },
