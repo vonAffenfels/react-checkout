@@ -12,6 +12,7 @@ import useProductList from "../hooks/useProductList";
 
 //cart
 import useCartCreate from "../hooks/useCartCreate";
+import useFinishedCart from "../hooks/useFinishedCart";
 import useCart from "../hooks/useCart";
 
 //checkout
@@ -51,6 +52,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     //cart
     const cartById = useCart(buyContext.shop, client);
+    const finishedCartById = useFinishedCart(buyContext.shop, buyContext.cartUri);
     const cartCreate = useCartCreate(buyContext.shop, client);
     const addProductLine = useAddProductLine(buyContext.shop, client, "cart");
     const deleteProductLine = useDeleteProductLine(buyContext.shop, client, "cart");
@@ -136,7 +138,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
 
-    const createCart = async (lines, openCheckoutPage) => {
+    const createCart = async ({lines, openCheckoutPage}) => {
         setLoadingLineItems(true);
         try {
             const redirectToMultipass = openCheckoutPage && isShopifyCheckout;
@@ -144,10 +146,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
             setCartId(id);
             if (redirectToMultipass) {
                 const {token, url} = await multipass({webUrl, overwriteToken: id});
-                console.log("id", id);
-                console.log("token", token);
-                console.log("url", url);
-                //window.open(url);
                 window.location.href = url;
             }
         } catch (e) {
@@ -157,18 +155,15 @@ export const CheckoutContextProvider = ({children, channel}) => {
         setLoadingLineItems(false);
     };
 
-    const createCheckout = async ({variants}) => {
-        if (!Array.isArray(variants)) {
-            variants = [variants];
-        }
-
+    const createCheckout = async ({lines, openCheckoutPage}) => {
         try {
-            const lineItems = variants.map(variant => ({
-                quantity: variant.quantity || 1,
-                variantId: "gid://shopify/ProductVariant/" + String(variant.id).replace("gid://shopify/ProductVariant/", "")
-            }));
-            const checkoutToken = await checkoutCreate({channel, lineItems});
+            const redirectToMultipass = openCheckoutPage && isShopifyCheckout;
+            const {checkoutToken, webUrl} = await checkoutCreate({channel, lineItems: lines});
             setCheckoutToken(checkoutToken);
+            if (redirectToMultipass) {
+                const {token, url} = await multipass({webUrl, overwriteToken: checkoutToken});
+                window.location.href = url;
+            }
         } catch (e) {
             console.log("error in createCheckout");
             console.log(e);
@@ -205,7 +200,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
 
         if (!cart) {
-            return createCart(lines, openCheckoutPage);
+            return createCart({lines, openCheckoutPage});
         }
 
         setLoadingLineItems(true);
@@ -230,6 +225,60 @@ export const CheckoutContextProvider = ({children, channel}) => {
         } catch (e) {
             console.log("error in addProductLine", e);
             await getCartById();
+        }
+        setLoadingLineItems(false);
+    };
+
+    const addItemToCheckout = async ({product, variantId, quantity = 1, attributes, openCheckoutPage = false}) => {
+        if (openCheckoutPage && !isShopifyCheckout) {
+            setDisplayState("cartFullPage");
+        }
+        if (!isCartOpen && !openCheckoutPage) {
+            setCartOpen(true);
+        }
+
+        const lines = [];
+        if (product) {
+            const line = {
+                quantity: quantity,
+                merchandiseId: product.variants?.nodes?.[0]?.id,
+            };
+            if (product.sellingPlanGroups?.nodes?.[0]?.sellingPlans?.nodes?.[0]?.id) {
+                line.sellingPlanId = product.sellingPlanGroups.nodes[0].sellingPlans.nodes[0].id;
+            }
+            lines.push(line);
+        } else {
+            lines.push({
+                quantity: quantity,
+                merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", ""),
+            });
+        }
+
+        if (attributes?.length) {
+            lines[0].attributes = attributes;
+        }
+
+        if (!checkout) {
+            return createCheckout({lines, openCheckoutPage});
+        }
+
+        setLoadingLineItems(true);
+        try {
+            const checkoutData = await addProductLineCheckout({
+                checkoutToken,
+                lines: lines,
+                totalQuantity: cart.totalQuantity,
+            });
+            setCheckout({
+                ...(checkout || {}),
+                ...checkoutData
+            });
+            if (openCheckoutPage && isShopifyCheckout) {
+                const {token, url} = await multipass({});
+                window.location.href = url;
+            }
+        } catch (e) {
+            await getCheckoutByToken();
         }
         setLoadingLineItems(false);
     };
@@ -276,6 +325,10 @@ export const CheckoutContextProvider = ({children, channel}) => {
         setLoadingLineItemQuantity(false);
     }
 
+    const updateCheckoutItems = async ({lineId, variantId, quantity, attributes, bonusProduct}) => {
+
+    };
+
     const removeItemFromCart = async (lineId) => {
         if (!cart) {
             return;
@@ -293,7 +346,15 @@ export const CheckoutContextProvider = ({children, channel}) => {
         }
     };
 
+    const removeItemFromCheckout = async (lineId) => {
+
+    };
+
     const setCartAddress = async (address) => {
+        if (buyContext.cartType === "checkout") {
+            return setCheckoutAddress(address);
+        }
+
         if (!cart || !address?.country) {
             return;
         }
@@ -318,7 +379,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
             await getCartById();
         }
         setLoadingShippingMethods(false);
-    }
+    };
+
+    const setCheckoutAddress = async (address) => {
+
+    };
 
     const setCartDeliveryMethod = async (deliveryMethodId) => {
         if (!cart) {
@@ -345,7 +410,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
             await getCartById();
         }
         setSettingShippingMethod(false);
-    }
+    };
+
+    const setCheckoutDeliveryMethod = async (deliveryMethodId) => {
+
+    };
 
     const applyDiscountCode = async (discountCodes = [""]) => {
         if (!cart) {
@@ -511,7 +580,6 @@ export const CheckoutContextProvider = ({children, channel}) => {
                 if (selectedPaymentGatewayId) {
                     availablePaymentGateways.forEach(gateway => {
                         if (gateway.id === selectedPaymentGatewayId && gateway?.isDisabled?.(data)) {
-                            console.log("getCartById, setting the gateway to null");
                             setSelectedPaymentGatewayId(null);
                         }
                     });
@@ -642,7 +710,15 @@ export const CheckoutContextProvider = ({children, channel}) => {
     }, [checkoutToken]);
 
     useEffect(() => {
-        getCartById();
+        if (cartId) {
+            finishedCartById({cartToken: cartId}).then(cart => {
+                if (!cart) {
+                    getCartById();
+                } else {
+                    removeCartId();
+                }
+            });
+        }
     }, [cartId]);
 
     useEffect(() => {
@@ -700,11 +776,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
             checkoutByToken,
             createCart,
             createCheckout,
-            addItemToCart,
-            removeItemFromCart,
-            updateCartItems,
-            setCartAddress,
-            setCartDeliveryMethod,
+            addItemToCart: buyContext.cartType === "checkout" ? addItemToCheckout : addItemToCart,
+            removeItemFromCart: buyContext.cartType === "checkout" ? removeItemFromCheckout : removeItemFromCart,
+            updateCartItems: buyContext.cartType === "checkout" ? updateCheckoutItems : updateCartItems,
+            setCartAddress: buyContext.cartType === "checkout" ? setCheckoutAddress : setCartAddress,
+            setCartDeliveryMethod: buyContext.cartType === "checkout" ? setCheckoutDeliveryMethod : setCartDeliveryMethod,
             onBeforePayment,
             getProductList,
             getProductBySku,

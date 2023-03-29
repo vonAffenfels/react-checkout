@@ -67,6 +67,7 @@ const useAddProductLine = (shop, client, type) => {
             }
         };
         const handleCheckout = async ({checkoutToken, lines}) => {
+            console.log("handleCheckout", {checkoutToken, lines});
             const {data} = await client.mutate({
                 mutation: SHOPIFY_CHECKOUT_ADD_PRODUCT_LINE,
                 variables: {

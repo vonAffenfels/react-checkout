@@ -50,13 +50,17 @@ const useCheckoutCreate = (shop, client) => {
                 mutation: SHOPIFY_CHECKOUT_CREATE,
                 variables: variables
             });
+            console.log("data", data);
 
             if (data?.checkoutCreate?.checkoutUserErrors?.length) {
                 data.checkoutCreate.checkoutUserErrors.forEach(err => console.warn(err));
             }
 
             if (data?.checkoutCreate?.checkout?.id) {
-                return data.checkoutCreate.checkout.id;
+                return {
+                    checkoutToken: data.checkoutCreate.checkout.id,
+                    webUrl: data.checkoutCreate.checkout.webUrl,
+                };
             }
         };
     }

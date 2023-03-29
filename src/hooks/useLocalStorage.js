@@ -3,16 +3,20 @@ import {useState, useCallback, useEffect} from "react";
 const useLocalStorage = (key, initialValue = "") => {
     const [storedValue, setStoredValue] = useState(() => {
         let result = initialValue;
+        let readVal = initialValue;
 
         if (typeof window === "undefined") {
             return result;
         }
 
         try {
-            const item = window.localStorage.getItem(key);
-            result = JSON.parse(item);
+            readVal = window.localStorage.getItem(key);
+            result = JSON.parse(readVal);
         } catch (e) {
             console.warn(e);
+            if (readVal) {
+                result = readVal;
+            }
         }
 
         return result;

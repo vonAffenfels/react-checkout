@@ -6,7 +6,7 @@ import React from "react";
 import transformCart from "../lib/transformShopifyCartToContextCheckout";
 import SHOPIFY_CART from "../queries/shopify/cart";
 
-const useCart = (shop, client) => {
+const useCart = (shop, client, type) => {
     if (!shop || !client) {
         return {};
     }

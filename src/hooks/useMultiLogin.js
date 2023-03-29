@@ -1,6 +1,6 @@
 import React from "react";
 
-const useCreateDraftOrder = (shop, multipassUri) => {
+const useMultiLogin = (shop, multipassUri) => {
     if (!shop) {
         return {};
     }
@@ -28,4 +28,4 @@ async function doMultiLogin(multipassUri, body) {
     }).then(res => res.json());
 }
 
-export default useCreateDraftOrder;
+export default useMultiLogin;

@@ -8,7 +8,7 @@ import SHOPIFY_CHECKOUT_CREATE from "../mutations/shopify/checkoutCreate";
 import SHOPIFY_CART_CREATE from "../mutations/shopify/cartCreate";
 import checkQuantityMissing from "../lib/checkQuantityMissing";
 
-const useCheckoutCreate = (shop, client) => {
+const useCartCreate = (shop, client) => {
     const {webhookUri} = useContext(BuyContext);
 
     if (!shop || !client) {
@@ -53,4 +53,4 @@ const useCheckoutCreate = (shop, client) => {
     }
 }
 
-export default useCheckoutCreate;
+export default useCartCreate;
