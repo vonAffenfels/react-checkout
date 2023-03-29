@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect, useContext} from "react";
+import React, {createContext, useState, useEffect, useContext, useRef} from "react";
 import {useQuery, useApolloClient} from "@apollo/client";
 
 //misc
@@ -44,6 +44,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
     const buyContext = useContext(BuyContext);
     const client = useApolloClient();
     const channelName = typeof channel === "function" ? channel() : channel;
+    const executedRef = useRef(false);
 
     //helpers
     const getProductBySku = useProductBySku(buyContext.shop, client);
@@ -711,6 +712,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     useEffect(() => {
         if (cartId) {
+            if (executedRef?.current) {
+                return getCartById();;
+            }
+
+            executedRef.current = true;
             finishedCartById({cartToken: cartId}).then(cart => {
                 if (!cart) {
                     getCartById();
