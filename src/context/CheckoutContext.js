@@ -712,11 +712,11 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     useEffect(() => {
         if (cartId) {
-            if (executedRef?.current) {
-                return getCartById();;
-            }
-
-            executedRef.current = true;
+            // if (executedRef?.current) {
+            //     return getCartById();;
+            // }
+            //
+            // executedRef.current = true;
             finishedCartById({cartToken: cartId}).then(cart => {
                 if (!cart) {
                     getCartById();
