@@ -712,12 +712,8 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     useEffect(() => {
         if (cartId) {
-            // if (executedRef?.current) {
-            //     return getCartById();;
-            // }
-            //
-            // executedRef.current = true;
             finishedCartById({cartToken: cartId}).then(cart => {
+                console.log("finishedCart", cart);
                 if (!cart) {
                     getCartById();
                 } else {
