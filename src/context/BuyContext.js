@@ -70,7 +70,25 @@ export const BuyContextProvider = (props) => {
 
         isMountedRef.current = true;
         setMounted(true);
-        return () => isMountedRef.current = false;
+
+        const htmlElement = document.querySelector("html");
+        const observer = new MutationObserver((mutationList, observer) => {
+            for (const mutation of mutationList) {
+                console.log("mutation", mutation);
+                if (mutation.target.style.position === "fixed") {
+                    mutation.target.style.position = null;
+                }
+            }
+        });
+        observer.observe(htmlElement, {attributes: true});
+        if (htmlElement.style.position === "fixed") {
+            htmlElement.style.position = null;
+        }
+
+        return () => {
+            isMountedRef.current = false;
+            observer.disconnect();
+        };
     }, []);
 
     // enable SSR
