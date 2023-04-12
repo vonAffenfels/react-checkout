@@ -1,4 +1,4 @@
-import React, {Fragment, useContext} from "react";
+import React, {Fragment, useContext, useEffect} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import {XIcon} from "@heroicons/react/solid";
 
@@ -14,7 +14,7 @@ function classNames(...classes) {
 }
 
 const CartWidget = ({props}) => {
-    const {isDebug, hideDefaultCartButton, multipassUri, withLogin} = useContext(BuyContext);
+    const {isDebug, hideDefaultCartButton, multipassUri, withLogin, withTracking} = useContext(BuyContext);
     const {
         cart,
         email,
@@ -52,8 +52,13 @@ const CartWidget = ({props}) => {
         }
 
         setNextDisplayState("widget");
-        globalThis?.window?.[withLogin?.globalFunc]?.(data)
+        globalThis?.window?.[withLogin?.globalFunc]?.(data);
     };
+
+    // tracking
+    useEffect(() => {
+        globalThis?.window?.[withTracking?.globalFunc]?.(cart);
+    }, [cart]);
 
     return (
         <Fragment>
