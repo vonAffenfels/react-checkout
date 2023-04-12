@@ -77,7 +77,7 @@ const CartWidget = ({props}) => {
             <SidePanelLayout show={isCartOpen} onClose={setCartOpen}>
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
                     <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-                        <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
+                        <div className="flex-1 py-6 px-4 sm:px-6 lg:overflow-y-auto xl:overflow-y-auto"> {/*overflow-y-auto*/}
                             <div className="flex items-start justify-between">
                                 <Dialog.Title className="text-lg font-medium text-color-900">Warenkorb</Dialog.Title>
                                 <div className="ml-3 flex h-7 items-center">
