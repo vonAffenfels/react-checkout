@@ -72,7 +72,7 @@ const CartFullPage = ({props}) => {
                                                 <button
                                                     onClick={(e) => login(e, {extraQueryParams: {type: "registration"}})}
                                                     type="button"
-                                                    className={"w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"}
+                                                    className={"w-full text-bg-color-600 border border-bg-color-600 rounded-md shadow-sm py-3 px-4 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"}
                                                 >
                                                     Registrieren
                                                 </button>
@@ -87,7 +87,8 @@ const CartFullPage = ({props}) => {
                                                 </button>
                                             </div>
                                         </div>
-                                        <div className={"flex items-center justify-between text-center uppercase pb-7 text-sm text-color-500 before:content-[''] before:inline-block before:h-px before:bg-gray-200 before:grow after:content-[''] after:inline-block after:h-px after:bg-gray-200 after:grow"}>
+                                        <div
+                                            className={"flex items-center justify-between text-center uppercase pb-7 text-sm text-color-500 before:content-[''] before:inline-block before:h-px before:bg-gray-200 before:grow after:content-[''] after:inline-block after:h-px after:bg-gray-200 after:grow"}>
                                             <span className={"inline-block px-1"}>ODER ALS GAST BESTELLEN</span>
                                         </div>
                                     </>
@@ -107,7 +108,7 @@ const CartFullPage = ({props}) => {
                             </div>
                         </form>
 
-                        <FullPageFooter />
+                        <FullPageFooter/>
 
                     </div>
 
