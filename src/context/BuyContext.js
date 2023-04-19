@@ -12,7 +12,7 @@ export const BuyContext = createContext({});
 export const BuyContextProvider = (props) => {
     const isMountedRef = useRef(false);
     const [isMounted, setMounted] = useState(false);
-    const {uri, shop, children, paymentProviders, channel, etfId} = props;
+    const {uri, shop, children, paymentProviders, channel, eftId} = props;
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [bannerMessage, setBannerMessage] = useState({msg: "", isError: false});
 
@@ -104,7 +104,7 @@ export const BuyContextProvider = (props) => {
             isDebug: window?.location?.search?.indexOf?.("isDebug") !== -1
         }}>
             <ApolloContextProvider uri={uri}>
-                <CheckoutContextProvider channel={channel} etfId={etfId}>
+                <CheckoutContextProvider channel={channel} eftId={eftId}>
                     {children}
                     <Cart />
                     <Banner {...bannerMessage} key="banner-message" />
