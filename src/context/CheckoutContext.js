@@ -40,10 +40,11 @@ import CONST from "../lib/const";
 
 export const CheckoutContext = createContext({});
 
-export const CheckoutContextProvider = ({children, channel}) => {
+export const CheckoutContextProvider = ({children, channel, etfId}) => {
     const buyContext = useContext(BuyContext);
     const client = useApolloClient();
     const channelName = typeof channel === "function" ? channel() : channel;
+    const etfIdString = typeof etfId === "function" ? etfId() : etfId;
     const executedRef = useRef(false);
 
     //helpers
@@ -756,6 +757,7 @@ export const CheckoutContextProvider = ({children, channel}) => {
 
     const multipass = async ({webUrl, overwriteEmail, overwriteToken}) => {
         const params = new URLSearchParams({
+            etfid: etfIdString,
             channel: channelName,
             cart: (overwriteToken || cart.token).replace("gid://shopify/Cart/", "").trim(),
         });
