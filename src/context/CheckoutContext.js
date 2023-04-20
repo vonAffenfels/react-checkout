@@ -154,7 +154,6 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
             console.log("error in createCart");
             console.log(e);
         }
-        setLoadingLineItems(false);
     };
 
     const createCheckout = async ({lines, openCheckoutPage}) => {
@@ -720,6 +719,7 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
                 } else {
                     removeCartId();
                 }
+                setLoadingLineItems(false);
             });
         }
     }, [cartId]);
