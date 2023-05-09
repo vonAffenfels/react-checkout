@@ -6,7 +6,7 @@ import CheckoutContext from "../../context/CheckoutContext";
 import {StripePaymentForm, StripeSetupForm} from "./stripePayment.jsx";
 import {loadStripe} from "@stripe/stripe-js";
 
-const StandaloneStripePayment = ({clientSecret, isSetup}) => {
+const StandaloneStripePayment = ({clientSecret, isSetup, className}) => {
     const executedRef = useRef(false);
     const buyContext = useContext(BuyContext);
     const checkoutContext = useContext(CheckoutContext);
@@ -33,7 +33,7 @@ const StandaloneStripePayment = ({clientSecret, isSetup}) => {
 
     return (
         <div className="react-ez-checkout-cart-wrapper">
-            <div className="absolute z-insane inset-0 bg-white max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div className={className || "absolute z-insane inset-0 bg-white max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8"}>
                 <Elements stripe={loadedConfig.stripePromise} options={{clientSecret: loadedConfig.clientSecret}}>
                     {isSetup ? (
                         <StripeSetupForm clientSecret={loadedConfig.clientSecret} isStandalone={true} />

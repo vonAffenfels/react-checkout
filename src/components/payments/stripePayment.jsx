@@ -24,6 +24,7 @@ export const StripeSetupForm = ({clientSecret, isStandalone}) => {
         e.stopPropagation?.();
 
         //TODO confirmation?
+        //  const result = await stripe.confirmSetup({})
     }
 
     return (

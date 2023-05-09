@@ -12,7 +12,7 @@ export const BuyContext = createContext({});
 export const BuyContextProvider = (props) => {
     const isMountedRef = useRef(false);
     const [isMounted, setMounted] = useState(false);
-    const {uri, shop, children, paymentProviders, channel, eftId} = props;
+    const {uri, shop, children, paymentProviders, channel, eftId, useSkeleton} = props;
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [bannerMessage, setBannerMessage] = useState({msg: "", isError: false});
 
@@ -26,7 +26,6 @@ export const BuyContextProvider = (props) => {
 
     const fetchStripePaymentIntent = async (clientSecret) => {
         let apiKey;
-        console.log("fetchStripePaymentIntent, paymentProviders:", paymentProviders);
         paymentProviders.forEach(provider => {
             if (provider.name === "stripe") {
                 apiKey = provider.config.apiKey;
@@ -56,7 +55,6 @@ export const BuyContextProvider = (props) => {
 
     useEffect(() => {
         const stripePaymentParam = new URLSearchParams(window?.location?.search)?.get("payment_intent_client_secret");
-        console.log("useEffect, stripePaymentParam:", stripePaymentParam);
         if (stripePaymentParam) {
             removeCheckoutToken?.();
             fetchStripePaymentIntent(stripePaymentParam);
@@ -74,7 +72,6 @@ export const BuyContextProvider = (props) => {
         const htmlElement = document.querySelector("html");
         const observer = new MutationObserver((mutationList, observer) => {
             for (const mutation of mutationList) {
-                console.log("mutation", mutation);
                 if (mutation.target.style.position === "fixed") {
                     mutation.target.style.position = null;
                 }
@@ -103,13 +100,17 @@ export const BuyContextProvider = (props) => {
             setBannerMessage,
             isDebug: window?.location?.search?.indexOf?.("isDebug") !== -1
         }}>
-            <ApolloContextProvider uri={uri}>
-                <CheckoutContextProvider channel={channel} eftId={eftId}>
-                    {children}
-                    <Cart />
-                    <Banner {...bannerMessage} key="banner-message" />
-                </CheckoutContextProvider>
-            </ApolloContextProvider>
+            {useSkeleton ? (
+                children
+            ) : (
+                <ApolloContextProvider uri={uri}>
+                    <CheckoutContextProvider channel={channel} eftId={eftId}>
+                        {children}
+                        <Cart />
+                        <Banner {...bannerMessage} key="banner-message" />
+                    </CheckoutContextProvider>
+                </ApolloContextProvider>
+            )}
         </BuyContext.Provider>
     );
 };
