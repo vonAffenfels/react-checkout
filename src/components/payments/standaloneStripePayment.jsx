@@ -2,19 +2,18 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {Elements} from "@stripe/react-stripe-js";
 
 import BuyContext from "../../context/BuyContext";
-import CheckoutContext from "../../context/CheckoutContext";
 import {StripePaymentForm, StripeSetupForm} from "./stripePayment.jsx";
 import {loadStripe} from "@stripe/stripe-js";
 
 const StandaloneStripePayment = ({clientSecret, isSetup, className}) => {
     const executedRef = useRef(false);
     const buyContext = useContext(BuyContext);
-    const checkoutContext = useContext(CheckoutContext);
     const paymentProviders = buyContext.paymentProviders;
     const [loadedConfig, setLoadedConfig] = useState(null);
 
     useEffect(() => {
-        if (executedRef.current || !paymentProviders) {
+        console.log("paymentProviders", paymentProviders);
+        if (executedRef.current || !paymentProviders || !clientSecret) {
             return;
         }
 
@@ -25,7 +24,7 @@ const StandaloneStripePayment = ({clientSecret, isSetup, className}) => {
             stripePromise: loadStripe(stripeCfg.config.apiKey),
             clientSecret: clientSecret || new URL(window?.location?.href)?.searchParams?.get?.("client_secret"),
         });
-    }, [paymentProviders]);
+    }, [paymentProviders, clientSecret]);
 
     console.log("StandaloneStripePayment, executedRef", executedRef, "loadedConfig", loadedConfig);
     if (!executedRef?.current || !loadedConfig?.stripePromise || !loadedConfig?.clientSecret) {
