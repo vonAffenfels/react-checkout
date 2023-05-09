@@ -11,6 +11,45 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
+export const StripeSetupForm = ({clientSecret, isStandalone}) => {
+    const elements = useElements();
+    const stripe = useStripe();
+    const [errorMessage, setErrorMessage] = useState("");
+    const [setupIntentData, setSetupIntentData] = useState(null);
+
+    const onSubmit = (e) => {
+        console.log("onSubmit");
+        setErrorMessage("");
+        e.preventDefault?.();
+        e.stopPropagation?.();
+
+        //TODO confirmation?
+    }
+
+    return (
+        <form id="stripe-payment-form" onSubmit={onSubmit}>
+            <PaymentElement id="stripe-payment-element" />
+            {errorMessage ? (
+                <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
+            ) : null}
+            <div className="border-t border-gray-200 py-6">
+                <button
+                    disabled={!elements || !stripe}
+                    type="submit"
+                    className={
+                        classNames(
+                            "w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white",
+                            elements && stripe ? "hover:bg-color-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
+                        )
+                    }
+                >
+                    Speichern
+                </button>
+            </div>
+        </form>
+    )
+}
+
 export const StripePaymentForm = ({clientSecret, isStandalone}) => {
     const elements = useElements();
     const stripe = useStripe();
