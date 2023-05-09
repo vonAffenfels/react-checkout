@@ -27,6 +27,7 @@ const StandaloneStripePayment = ({clientSecret, isSetup, className}) => {
         });
     }, [paymentProviders]);
 
+    console.log("StandaloneStripePayment, executedRef", executedRef, "loadedConfig", loadedConfig);
     if (!executedRef?.current || !loadedConfig?.stripePromise || !loadedConfig?.clientSecret) {
         return null;
     }
