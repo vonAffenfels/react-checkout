@@ -5,7 +5,7 @@ export default {
     multipassUri: "https://6e8lbjwzm5.execute-api.eu-central-1.amazonaws.com/generate-token",
     cartUri: "https://uaeslwxw4a.execute-api.eu-central-1.amazonaws.com/ory/order",
     storefrontApiKey: "21ec7ad8aceac22f6fbd61e1fec7c27b",
-    // Produkte mit folgendem character in sku vom mehrfachkauf ausschliessen
+    // Produkte mit folgendem character/character-collection in sku vom mehrfachkauf ausschliessen
     disableMultipleSku: "KP",
     channel: function channel() {
         return globalThis?.window?.isRetailer ? "b2b" : "b2c";

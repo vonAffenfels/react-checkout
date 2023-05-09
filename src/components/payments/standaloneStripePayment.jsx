@@ -6,7 +6,7 @@ import CheckoutContext from "../../context/CheckoutContext";
 import {StripePaymentForm} from "./stripePayment.jsx";
 import {loadStripe} from "@stripe/stripe-js";
 
-const StandaloneStripePayment = ({}) => {
+const StandaloneStripePayment = ({clientSecret}) => {
     const executedRef = useRef(false);
     const buyContext = useContext(BuyContext);
     const checkoutContext = useContext(CheckoutContext);
@@ -23,7 +23,7 @@ const StandaloneStripePayment = ({}) => {
         setLoadedConfig({
             stripeCfg: stripeCfg,
             stripePromise: loadStripe(stripeCfg.config.apiKey),
-            clientSecret: new URL(window?.location?.href)?.searchParams?.get?.("client_secret"),
+            clientSecret: clientSecret || new URL(window?.location?.href)?.searchParams?.get?.("client_secret"),
         });
     }, [paymentProviders]);
 
