@@ -11,7 +11,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export const StripeSetupForm = ({clientSecret, isStandalone}) => {
+export const StripeSetupForm = ({clientSecret, isStandalone, listeners = {}}) => {
     const elements = useElements();
     const stripe = useStripe();
     const [errorMessage, setErrorMessage] = useState("");
@@ -43,7 +43,7 @@ export const StripeSetupForm = ({clientSecret, isStandalone}) => {
 
     return (
         <form id="stripe-payment-form" onSubmit={onSubmit}>
-            <PaymentElement id="stripe-payment-element"/>
+            <PaymentElement id="stripe-payment-element" {...listeners} />
             {errorMessage ? (
                 <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
             ) : null}
@@ -65,7 +65,7 @@ export const StripeSetupForm = ({clientSecret, isStandalone}) => {
     )
 }
 
-export const StripePaymentForm = ({clientSecret, isStandalone}) => {
+export const StripePaymentForm = ({clientSecret, isStandalone, listeners = {}}) => {
     const elements = useElements();
     const stripe = useStripe();
     const {successRedirect} = useContext(BuyContext);
@@ -142,7 +142,7 @@ export const StripePaymentForm = ({clientSecret, isStandalone}) => {
                     </div>
                 )}
                 <form id="stripe-payment-form" onSubmit={onSubmit}>
-                    <PaymentElement id="stripe-payment-element"/>
+                    <PaymentElement id="stripe-payment-element" {...listeners} />
                     {errorMessage ? (
                         <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
                     ) : null}
