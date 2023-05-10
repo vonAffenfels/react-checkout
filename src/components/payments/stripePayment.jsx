@@ -20,8 +20,8 @@ export const StripeSetupForm = ({clientSecret, isStandalone}) => {
 
     const onSubmit = async (e) => {
         console.log("onSubmit");
-        setActiveConfirmation(true);
-        setErrorMessage("");
+        // setActiveConfirmation(true);
+        // setErrorMessage("");
         e.preventDefault?.();
         e.stopPropagation?.();
 
