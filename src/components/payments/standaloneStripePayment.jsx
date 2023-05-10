@@ -12,8 +12,7 @@ const StandaloneStripePayment = ({clientSecret, isSetup, className}) => {
     const [loadedConfig, setLoadedConfig] = useState(null);
 
     useEffect(() => {
-        console.log("paymentProviders", paymentProviders);
-        if (executedRef.current || !paymentProviders || !clientSecret) {
+        if (executedRef.current || !paymentProviders) {
             return;
         }
 
@@ -24,9 +23,8 @@ const StandaloneStripePayment = ({clientSecret, isSetup, className}) => {
             stripePromise: loadStripe(stripeCfg.config.apiKey),
             clientSecret: clientSecret || new URL(window?.location?.href)?.searchParams?.get?.("client_secret"),
         });
-    }, [paymentProviders, clientSecret]);
+    }, [paymentProviders]);
 
-    console.log("StandaloneStripePayment, executedRef", executedRef, "loadedConfig", loadedConfig);
     if (!executedRef?.current || !loadedConfig?.stripePromise || !loadedConfig?.clientSecret) {
         return null;
     }

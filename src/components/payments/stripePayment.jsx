@@ -17,14 +17,18 @@ export const StripeSetupForm = ({clientSecret, isStandalone}) => {
     const [errorMessage, setErrorMessage] = useState("");
     const [setupIntentData, setSetupIntentData] = useState(null);
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         console.log("onSubmit");
         setErrorMessage("");
         e.preventDefault?.();
         e.stopPropagation?.();
 
-        //TODO confirmation?
-        //  const result = await stripe.confirmSetup({})
+         const result = await stripe.confirmSetup({
+             elements,
+             confirmParams: {
+                 return_url: window.location.href,
+             },
+         });
     }
 
     return (
@@ -66,7 +70,6 @@ export const StripePaymentForm = ({clientSecret, isStandalone}) => {
         const result = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                // Make sure to change this to your payment completion page
                 return_url: window.location.origin + (successRedirect || ""),
             },
         });
