@@ -19,7 +19,6 @@ export const StripeSetupForm = ({clientSecret, isStandalone, listeners = {}}) =>
     const [isActiveConfirmation, setActiveConfirmation] = useState(false);
 
     const onSubmit = async (e) => {
-        console.log("onSubmit");
         setActiveConfirmation(true);
         setErrorMessage("");
         e.preventDefault?.();
@@ -45,7 +44,7 @@ export const StripeSetupForm = ({clientSecret, isStandalone, listeners = {}}) =>
         <form id="stripe-payment-form" onSubmit={onSubmit}>
             <PaymentElement id="stripe-payment-element" {...listeners} />
             {errorMessage ? (
-                <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
+                <div className="border-t border-gray-200 py-6 text-base font-medium red text-red-500">{errorMessage}</div>
             ) : null}
             <div className="border-t border-gray-200 py-6">
                 <button
@@ -144,7 +143,7 @@ export const StripePaymentForm = ({clientSecret, isStandalone, listeners = {}}) 
                 <form id="stripe-payment-form" onSubmit={onSubmit}>
                     <PaymentElement id="stripe-payment-element" {...listeners} />
                     {errorMessage ? (
-                        <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
+                        <div className="border-t border-gray-200 py-6 text-base font-medium red text-red-500">{errorMessage}</div>
                     ) : null}
                     <div className="border-t border-gray-200 py-6">
                         <button
