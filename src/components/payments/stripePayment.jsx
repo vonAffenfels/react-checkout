@@ -32,11 +32,11 @@ export const StripeSetupForm = ({clientSecret, isStandalone}) => {
             },
         });
 
-        setActiveConfirmation(false);
         console.log("confirmSetup", result);
-        if (result?.error?.message) {
-            setErrorMessage(result.error.message);
-        }
+        // setActiveConfirmation(false);
+        // if (result?.error?.message) {
+        //     setErrorMessage(result.error.message);
+        // }
     }
 
     const isDisabled = !elements || !stripe || isActiveConfirmation;
