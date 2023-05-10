@@ -16,35 +16,45 @@ export const StripeSetupForm = ({clientSecret, isStandalone}) => {
     const stripe = useStripe();
     const [errorMessage, setErrorMessage] = useState("");
     const [setupIntentData, setSetupIntentData] = useState(null);
+    const [isActiveConfirmation, setActiveConfirmation] = useState(false);
 
     const onSubmit = async (e) => {
         console.log("onSubmit");
+        setActiveConfirmation(true);
         setErrorMessage("");
         e.preventDefault?.();
         e.stopPropagation?.();
 
-         const result = await stripe.confirmSetup({
-             elements,
-             confirmParams: {
-                 return_url: window.location.href,
-             },
-         });
+        const result = await stripe.confirmSetup({
+            elements,
+            confirmParams: {
+                return_url: window.location.href,
+            },
+        });
+
+        setActiveConfirmation(false);
+        console.log("confirmSetup", result);
+        if (result?.error?.message) {
+            setErrorMessage(result.error.message);
+        }
     }
+
+    const isDisabled = !elements || !stripe || isActiveConfirmation;
 
     return (
         <form id="stripe-payment-form" onSubmit={onSubmit}>
-            <PaymentElement id="stripe-payment-element" />
+            <PaymentElement id="stripe-payment-element"/>
             {errorMessage ? (
                 <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
             ) : null}
             <div className="border-t border-gray-200 py-6">
                 <button
-                    disabled={!elements || !stripe}
+                    disabled={isDisabled}
                     type="submit"
                     className={
                         classNames(
                             "w-full bg-color-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white",
-                            elements && stripe ? "hover:bg-color-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
+                            !isDisabled ? "hover:bg-color-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500" : "cursor-not-allowed",
                         )
                     }
                 >
@@ -74,10 +84,11 @@ export const StripePaymentForm = ({clientSecret, isStandalone}) => {
             },
         });
 
-        GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
         console.log("confirmPayment", result);
         if (result?.error?.message) {
             setErrorMessage(result.error.message);
+        } else {
+            GLOBAL_PAYMENT_INTENT_HANDLED_FLAG = false;
         }
     }
 
@@ -107,7 +118,7 @@ export const StripePaymentForm = ({clientSecret, isStandalone}) => {
     if (showLoadingAnimation) {
         return (
             <div className="border-gray-200 py-6 text-base font-medium text-center w-full">
-                <Spin className="-ml-1 mr-3" h={6} w={6} style={{margin: "auto"}} />
+                <Spin className="-ml-1 mr-3" h={6} w={6} style={{margin: "auto"}}/>
             </div>
         );
     }
@@ -126,11 +137,12 @@ export const StripePaymentForm = ({clientSecret, isStandalone}) => {
                 {isStandalone && (
                     <div className="border-b border-gray-200 mb-6 text-base font-bold dark:text-white">
                         {(paymentIntentData?.description ? paymentIntentData.description + ": " : "")}
-                        Zahlung über {formatPrice(paymentIntentData.amount)} {String(paymentIntentData.currency).toUpperCase()} ausstehend
+                        Zahlung
+                        über {formatPrice(paymentIntentData.amount)} {String(paymentIntentData.currency).toUpperCase()} ausstehend
                     </div>
                 )}
                 <form id="stripe-payment-form" onSubmit={onSubmit}>
-                    <PaymentElement id="stripe-payment-element" />
+                    <PaymentElement id="stripe-payment-element"/>
                     {errorMessage ? (
                         <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
                     ) : null}
@@ -217,7 +229,7 @@ const StripePayment = ({stripePromise, initialClientSecret = null}) => {
     if (clientSecret && apiUri) {
         component = (
             <Elements stripe={stripePromise} options={{clientSecret}}>
-                <StripePaymentForm clientSecret={clientSecret} />
+                <StripePaymentForm clientSecret={clientSecret}/>
             </Elements>
         )
     }
