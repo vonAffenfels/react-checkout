@@ -20,8 +20,8 @@ export const StripeSetupForm = ({clientSecret, isStandalone}) => {
 
     const onSubmit = async (e) => {
         console.log("onSubmit");
-        // setActiveConfirmation(true);
-        // setErrorMessage("");
+        setActiveConfirmation(true);
+        setErrorMessage("");
         e.preventDefault?.();
         e.stopPropagation?.();
 
@@ -32,11 +32,11 @@ export const StripeSetupForm = ({clientSecret, isStandalone}) => {
             },
         });
 
+        setActiveConfirmation(false);
         console.log("confirmSetup", result);
-        // setActiveConfirmation(false);
-        // if (result?.error?.message) {
-        //     setErrorMessage(result.error.message);
-        // }
+        if (result?.error?.message) {
+            setErrorMessage(result.error.message);
+        }
     }
 
     const isDisabled = !elements || !stripe || isActiveConfirmation;
@@ -44,9 +44,9 @@ export const StripeSetupForm = ({clientSecret, isStandalone}) => {
     return (
         <form id="stripe-payment-form" onSubmit={onSubmit}>
             <PaymentElement id="stripe-payment-element"/>
-            {/*{errorMessage ? (*/}
-            {/*    <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>*/}
-            {/*) : null}*/}
+            {errorMessage ? (
+                <div className="border-t border-gray-200 py-6 text-base font-medium red">{errorMessage}</div>
+            ) : null}
             <div className="border-t border-gray-200 py-6">
                 <button
                     disabled={isDisabled}
