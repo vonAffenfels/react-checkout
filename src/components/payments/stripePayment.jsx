@@ -44,7 +44,8 @@ export const StripeSetupForm = ({clientSecret, isStandalone, listeners = {}}) =>
         <form id="stripe-payment-form" onSubmit={onSubmit}>
             <PaymentElement id="stripe-payment-element" {...listeners} />
             {errorMessage ? (
-                <div className="border-t border-gray-200 py-6 text-base font-medium red text-red-500">{errorMessage}</div>
+                // same red as stripe react components
+                <div className="border-t border-gray-200 py-6 text-base font-medium" style={{color: "#df1b41"}}>{errorMessage}</div>
             ) : null}
             <div className="border-t border-gray-200 py-6">
                 <button

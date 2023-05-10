@@ -89,7 +89,6 @@ export const BuyContextProvider = (props) => {
     }, []);
 
     // enable SSR
-    console.log("isMounted", isMounted);
     if (!isMounted) {
         return children;
     }
