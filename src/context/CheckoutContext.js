@@ -758,7 +758,7 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
     const multipass = async ({webUrl, overwriteEmail, overwriteToken}) => {
         const params = new URLSearchParams({
             eftid: eftIdString,
-            channel: channelName,
+            // channel: channelName,
             cart: (overwriteToken || cart.token).replace("gid://shopify/Cart/", "").trim(),
         });
         const returnUrl = String(webUrl || cart.webUrl) + "?" + params.toString();
