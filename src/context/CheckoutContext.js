@@ -138,11 +138,10 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
     });
     const billingAddressDebounced = useDebounce(billingAddress, 750);
 
-    const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
-
     const createCart = async ({lines, openCheckoutPage}) => {
         setLoadingLineItems(true);
         try {
+            const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
             const redirectToMultipass = openCheckoutPage && isShopifyCheckout;
             const {id, webUrl} = await cartCreate({channel, lines, redirectToMultipass});
             setCartId(id);
@@ -158,6 +157,7 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
 
     const createCheckout = async ({lines, openCheckoutPage}) => {
         try {
+            const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
             const redirectToMultipass = openCheckoutPage && isShopifyCheckout;
             const {checkoutToken, webUrl} = await checkoutCreate({channel, lineItems: lines});
             setCheckoutToken(checkoutToken);
@@ -172,6 +172,8 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
     };
 
     const addItemToCart = async ({product, variantId, quantity = 1, attributes, openCheckoutPage = false}) => {
+        const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
+
         if (openCheckoutPage && !isShopifyCheckout) {
             setDisplayState("cartFullPage");
         }
@@ -216,6 +218,7 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
                 ...(cart || {}),
                 ...cartData
             });
+            const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
             if (openCheckoutPage && isShopifyCheckout) {
                 const {token, url} = await multipass({});
                 console.log("token", token);
@@ -231,6 +234,7 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
     };
 
     const addItemToCheckout = async ({product, variantId, quantity = 1, attributes, openCheckoutPage = false}) => {
+        const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
         if (openCheckoutPage && !isShopifyCheckout) {
             setDisplayState("cartFullPage");
         }
@@ -274,6 +278,7 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
                 ...(checkout || {}),
                 ...checkoutData
             });
+            const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
             if (openCheckoutPage && isShopifyCheckout) {
                 const {token, url} = await multipass({});
                 window.location.href = url;
@@ -736,6 +741,8 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
             }
         }
     }, [isCartOpen, displayState]);
+
+    console.log("CheckoutContext.js:740 / CheckoutContextProvider");
 
     useEffect(() => {
         let {firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;

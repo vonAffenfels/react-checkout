@@ -10,9 +10,8 @@ import Banner from "../components/banner.jsx";
 export const BuyContext = createContext({});
 
 export const BuyContextProvider = (props) => {
-    const isMountedRef = useRef(false);
-    const [isMounted, setMounted] = useState(false);
     const {uri, shop, children, paymentProviders, channel, eftId, useSkeleton} = props;
+    const [isDebug, setIsDebug] = useState(false);
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [bannerMessage, setBannerMessage] = useState({msg: "", isError: false});
 
@@ -62,13 +61,6 @@ export const BuyContextProvider = (props) => {
     }, []);
 
     useEffect(() => {
-        if (isMountedRef?.current || isMounted) {
-            return;
-        }
-
-        isMountedRef.current = true;
-        setMounted(true);
-
         const htmlElement = document.querySelector("html");
         const observer = new MutationObserver((mutationList, observer) => {
             for (const mutation of mutationList) {
@@ -83,22 +75,20 @@ export const BuyContextProvider = (props) => {
         }
 
         return () => {
-            isMountedRef.current = false;
             observer.disconnect();
         };
     }, []);
 
-    // enable SSR
-    if (!isMounted) {
-        return children;
-    }
+    useEffect(() => {
+        setIsDebug(window?.location?.search?.indexOf?.("isDebug") !== -1)
+    }, [])
 
     return (
         <BuyContext.Provider value={{
             ...props,
             bannerMessage,
             setBannerMessage,
-            isDebug: window?.location?.search?.indexOf?.("isDebug") !== -1
+            isDebug
         }}>
             {useSkeleton ? (
                 children
