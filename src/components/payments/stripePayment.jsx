@@ -135,7 +135,7 @@ export const StripePaymentForm = ({clientSecret, isStandalone, listeners = {}}) 
         return (
             <>
                 {isStandalone && (
-                    <div className="border-b border-gray-200 mb-6 text-base font-bold dark:text-white">
+                    <div className="border-b border-gray-200 text-base font-bold dark:text-white" style={{marginBottom: "1.5rem"}}>
                         {(paymentIntentData?.description ? paymentIntentData.description + ": " : "")}
                         Zahlung
                         über {formatPrice(paymentIntentData.amount)} {String(paymentIntentData.currency).toUpperCase()} ausstehend
