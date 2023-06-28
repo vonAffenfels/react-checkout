@@ -147,6 +147,7 @@ function transformCart(node) {
                     product: {
                         id: merchandise.product.id,
                         name: merchandise.product.title,
+                        productType: merchandise.product.productType,
                         thumbnail: {
                             url: merchandise.image?.url,
                             alt: merchandise.image?.altText

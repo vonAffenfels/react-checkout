@@ -61,6 +61,7 @@ function transformCheckout(node) {
                     product: {
                         id: variant.product.id,
                         name: variant.product.title,
+                        productType: variant.product.productType,
                         thumbnail: {
                             url: variant.image?.url,
                             alt: variant.image?.altText
