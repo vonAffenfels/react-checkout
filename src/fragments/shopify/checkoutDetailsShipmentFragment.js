@@ -42,6 +42,7 @@ export default gql`
                         product {
                             id
                             title
+                            productType
                             featuredImage {
                                 url(transform: {maxHeight: 128, maxWidth: 128, crop: CENTER, preferredContentType: WEBP})
                                 altText

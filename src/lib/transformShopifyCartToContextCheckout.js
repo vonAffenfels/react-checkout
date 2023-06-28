@@ -6,6 +6,12 @@ function transformCart(node) {
         return null;
     }
 
+    try {
+        console.log("transform cart", JSON.stringify(node, null, 3), node);
+    } catch (e) {
+        console.log("transform cart error");
+    }
+
     let requiresShipping = false;
     let hasDigitalItem = false;
     let hasSubscriptionItem = false;

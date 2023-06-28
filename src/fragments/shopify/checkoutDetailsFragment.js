@@ -57,6 +57,7 @@ export default gql`
                         product {
                             id
                             title
+                            productType
                         }
                     }
                 }
