@@ -57,7 +57,7 @@ const CartWidget = ({props}) => {
 
     // tracking
     useEffect(() => {
-        console.debug("onCartUpdate", withTracking, cart);
+        console.debug("cartWidget :: onCartUpdate", cart);
         globalThis?.window?.[withTracking?.globalFunc]?.(cart);
     }, [cart]);
 
