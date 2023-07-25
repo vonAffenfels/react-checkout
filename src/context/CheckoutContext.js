@@ -768,7 +768,10 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
             va_channel: channelName,
             cart: (overwriteToken || cart.token).replace("gid://shopify/Cart/", "").trim(),
         });
-        const returnUrl = String(webUrl || cart.webUrl) + "?" + params.toString();
+        let returnUrl = String(webUrl || cart.webUrl) + "?" + params.toString();
+        if (buyContext.checkoutDomainReplacement) {
+            returnUrl = returnUrl.replace("https://checkout.delius-klasing.de", buyContext.checkoutDomainReplacement);
+        }
         const cartEmail = overwriteEmail || email;
 
         if (!cartEmail) {
