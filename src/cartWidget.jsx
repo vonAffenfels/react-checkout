@@ -1,5 +1,5 @@
 import React, {Fragment, useContext, useEffect} from "react";
-import {Dialog, Transition} from "@headlessui/react";
+import {Dialog} from "@headlessui/react";
 import {XIcon} from "@heroicons/react/solid";
 
 import BuyContext from "./context/BuyContext";
@@ -8,6 +8,7 @@ import CheckoutLine from "./components/checkoutLine.jsx";
 import SidePanelLayout from "./components/sidePanelLayout.jsx";
 import {Item, Spin} from "./components/atoms/animate.jsx";
 import Price from "./components/atoms/price.jsx";
+import {CartIcon} from "./components/atoms/icons.jsx";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -63,12 +64,13 @@ const CartWidget = ({props}) => {
     return (
         <Fragment>
             {!isCartOpen && !hideDefaultCartButton && (
-                <div className="bg-opacity-50 flex justify-center items-center fixed top-10 right-0 z-50">
+                <div className="bg-opacity-50 flex justify-center items-center fixed top-20 right-0 z-50">
                     <button
                         className="bg-color-500 px-4 py-2 text-md text-white"
                         onClick={() => setCartOpen(true)}
                     >
-                        Warenkorb öffnen
+                        <span className="pb-2 block">{cart?.totalQuantity || 0}</span>
+                        <span><CartIcon /></span>
                     </button>
                 </div>
             )}
