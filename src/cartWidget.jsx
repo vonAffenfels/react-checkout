@@ -64,7 +64,10 @@ const CartWidget = ({props}) => {
     return (
         <Fragment>
             {!isCartOpen && !hideDefaultCartButton && (cart?.totalQuantity > 0) && (
-                <div className="bg-opacity-50 flex justify-center items-center fixed top-20 right-0 z-50">
+                <div className="bg-opacity-50 flex justify-center items-center fixed right-0 z-50" style={{
+                    top: "50%",
+                    transform: "translate(0%, -50%)",
+                }}>
                     <button
                         className="bg-color-500 px-4 py-2 text-md text-white"
                         onClick={() => setCartOpen(true)}
