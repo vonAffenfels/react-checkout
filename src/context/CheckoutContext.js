@@ -40,10 +40,11 @@ import CONST from "../lib/const";
 
 export const CheckoutContext = createContext({});
 
-export const CheckoutContextProvider = ({children, channel, eftId}) => {
+export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
     const buyContext = useContext(BuyContext);
     const client = useApolloClient();
     const channelName = typeof channel === "function" ? channel() : channel;
+    const portalName = typeof portal === "function" ? portal() : (portal || "");
     const eftIdString = typeof eftId === "function" ? eftId() : eftId;
     const executedRef = useRef(false);
 
@@ -768,6 +769,9 @@ export const CheckoutContextProvider = ({children, channel, eftId}) => {
             va_channel: channelName,
             cart: (overwriteToken || cart.token).replace("gid://shopify/Cart/", "").trim(),
         });
+        if (portalName) {
+            params.set("va_portal", portalName);
+        }
         let returnUrl = String(webUrl || cart.webUrl) + "?" + params.toString();
         if (buyContext.checkoutDomainReplacement) {
             returnUrl = returnUrl.replace("https://checkout.delius-klasing.de", buyContext.checkoutDomainReplacement);
