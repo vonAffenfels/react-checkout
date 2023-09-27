@@ -743,8 +743,6 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
         }
     }, [isCartOpen, displayState]);
 
-    console.log("CheckoutContext.js:740 / CheckoutContextProvider");
-
     useEffect(() => {
         let {firstName, lastName, streetAddress1, city, country, postalCode, phone, company, state} = addressFormDataDebounced;
 
