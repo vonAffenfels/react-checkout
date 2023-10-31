@@ -1,6 +1,6 @@
 export default {
     shop: "shopify",
-    uri: "https://delius-klasing.myshopify.com/api/2023-01/graphql.json",
+    uri: "https://delius-klasing.myshopify.com/api/2023-10/graphql.json",
     webhookUri: "https://mmstupicl7.execute-api.eu-central-1.amazonaws.com/shopify",
     multipassUri: "https://6e8lbjwzm5.execute-api.eu-central-1.amazonaws.com/generate-token",
     cartUri: "https://uaeslwxw4a.execute-api.eu-central-1.amazonaws.com/ory/order",

@@ -12,6 +12,7 @@ const CheckoutLine = ({
     quantity,
     attributes = [],
     totalPrice,
+    totalDiscounts,
     bonusProduct,
     giftedIdentity,
     displayMessage = "",
@@ -63,9 +64,25 @@ const CheckoutLine = ({
                                     <a href={variant?.product?.href}>{variant?.product?.name}</a>
                                 </h3>
                             </div>
-                            <p className="text-base font-bold text-color-900">
-                                <Price price={totalPrice?.gross?.amount}/> {totalPrice?.gross?.currency}
-                            </p>
+                            {totalDiscounts?.gross?.amount > 0 ? (
+                                <>
+                                    <p>
+                                        <span className="text-sm line-through text-color-900">
+                                            <Price price={totalPrice?.gross?.amount}/> {totalPrice?.gross?.currency}
+                                        </span>
+                                        <span className="text-base font-bold text-color-900">
+                                            {' '}<Price price={totalPrice?.gross?.amount - totalDiscounts?.gross?.amount}/> {totalPrice?.gross?.currency}
+                                        </span>
+                                    </p>
+                                    <p className="text-sm text-color-500">
+                                        {totalDiscounts.codes} (-<Price price={totalDiscounts?.gross?.amount}/> {totalDiscounts?.gross?.currency})
+                                    </p>
+                                </>
+                            ) : (
+                                <p className="text-base font-bold text-color-900">
+                                    <Price price={totalPrice?.gross?.amount}/> {totalPrice?.gross?.currency}
+                                </p>
+                            )}
                         </div>
                         <div className="flex flex-1 items-end justify-between text-sm">
                             <p className="mt-1 text-sm text-color-900">{!bonusProduct ? variantTitle : ""}</p>
@@ -149,6 +166,7 @@ const CheckoutLineDetail = ({
     quantity,
     attributes = [],
     totalPrice,
+    totalDiscounts,
     bonusProduct,
     giftedIdentity,
     displayMessage = "",
@@ -202,11 +220,31 @@ const CheckoutLineDetail = ({
                                 </h4>
                             </div>
                         </div>
-                        <div className="ml-6 flex flex-1 items-end justify-between">
-                            <p className="mt-1 text-sm font-bold text-color-900">
-                                <Price price={totalPrice.gross.amount}/> {totalPrice.gross.currency}
-                            </p>
-                        </div>
+                        {totalDiscounts?.gross?.amount > 0 ? (
+                            <>
+                                <div className="ml-6 flex flex-1 items-end justify-between">
+                                    <p className="mt-1">
+                                    <span className="text-sm line-through text-color-900">
+                                        <Price price={totalPrice?.gross?.amount}/> {totalPrice?.gross?.currency}
+                                    </span>
+                                        <span className="text-base font-bold text-color-900">
+                                        {' '}<Price price={totalPrice?.gross?.amount - totalDiscounts?.gross?.amount}/> {totalPrice?.gross?.currency}
+                                    </span>
+                                    </p>
+                                </div>
+                                <div className="ml-6 flex flex-1 items-end justify-between">
+                                    <p className="text-sm text-color-500 mt-1">
+                                        {totalDiscounts.codes} (-<Price price={totalDiscounts?.gross?.amount}/> {totalDiscounts?.gross?.currency})
+                                    </p>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="ml-6 flex flex-1 items-end justify-between">
+                                <p className="mt-1 text-sm font-bold text-color-900">
+                                    <Price price={totalPrice.gross.amount}/> {totalPrice.gross.currency}
+                                </p>
+                            </div>
+                        )}
                         <div className="ml-6 flex flex-1 items-end justify-between">
                             <p className="mt-1 text-sm text-color-500">{!bonusProduct ? variantTitle : ""}</p>
                                 <div className="mt-1 text-sm text-color-900">

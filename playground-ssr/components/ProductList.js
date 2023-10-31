@@ -12,12 +12,6 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         const list = await getProductList?.();
-        const product = await getProductBySku?.({sku: "1020297", onlyMatchingVariant: true, isAbo: false});
-        const product2 = await getProductBySku?.({sku: "KP0005844_2001238", onlyMatchingVariant: true, isAbo: true});
-        console.log("product", product);
-        console.log("product2", product2);
-        const productById = await getProductById?.({id: "gid://shopify/Product/7037654171780"});
-        console.log("productById", productById);
         setProducts(list || []);
     };
 

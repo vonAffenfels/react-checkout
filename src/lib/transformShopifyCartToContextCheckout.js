@@ -24,7 +24,7 @@ function transformCart(node) {
                 deliveryGroupId: deliveryGroup.id,
                 active: true,
                 price: {
-                    currency: deliveryOption.estimatedCost.currencyCode,
+                    currency: deliveryOption.estimatedCost.currencyCode.replace("EUR", "€"),
                     amount: deliveryOption.estimatedCost.amount
                 },
                 minimumDeliveryDays: null,
@@ -81,6 +81,7 @@ function transformCart(node) {
         };
     }
 
+    const discountCodes = node.discountCodes;
     const {
         checkoutChargeAmount,
         subtotalAmount,
@@ -90,7 +91,6 @@ function transformCart(node) {
     } = node.cost;
 
     const checkout = {
-        //TODO its variant x quantity, not count of lineItems
         totalQuantity: node.totalQuantity,
         id: node.id,
         token: node.id,
@@ -118,10 +118,6 @@ function transformCart(node) {
                 hasSubscriptionItem = true;
             }
 
-            if (discountAllocations?.length) {
-                totalDiscountAllocations = totalDiscountAllocations.concat([...discountAllocations]);
-            }
-
             const {amount, currencyCode} = cost.amountPerQuantity;
             const retVal = {
                 quantity: quantity,
@@ -134,7 +130,7 @@ function transformCart(node) {
                         price: {
                             gross: {
                                 amount: amount,
-                                currency: currencyCode
+                                currency: currencyCode.replace("EUR", "€")
                             }
                         }
                     },
@@ -151,12 +147,26 @@ function transformCart(node) {
                 totalPrice: {
                     gross: {
                         amount: amount * quantity,
-                        currency: currencyCode
+                        currency: currencyCode.replace("EUR", "€")
                     }
                 },
                 attributes: (attributes || []).map(attr => ({key: attr.key, value: attr.value})),
                 displayMessage: node.displayMessage,
             };
+
+            if (discountAllocations?.length) {
+                totalDiscountAllocations = totalDiscountAllocations.concat([...discountAllocations]);
+                let totalDiscountAmount = discountAllocations.reduce((initialVal, currentVal, i) => {
+                    return initialVal + parseFloat(currentVal?.discountedAmount?.amount || 0);
+                }, 0);
+                retVal.totalDiscounts = {
+                    gross: {
+                        amount: parseFloat(totalDiscountAmount).toFixed(2),
+                        currency: currencyCode.replace("EUR", "€"),
+                    },
+                    codes: discountCodes.map(v => v.code).join(", "),
+                };
+            }
 
             let bonusProductAttribute, giftSubscriptionAttribute;
             (attributes || []).forEach(attr => {
@@ -199,23 +209,23 @@ function transformCart(node) {
         subtotalPrice: {
             net: {
                 amount: subtotalAmount?.amount,
-                currency: subtotalAmount?.currencyCode
+                currency: subtotalAmount?.currencyCode.replace("EUR", "€")
             },
             tax: {
                 amount: totalTaxAmount?.amount,
-                currency: totalTaxAmount?.currencyCode
+                currency: totalTaxAmount?.currencyCode.replace("EUR", "€")
             }
         },
         totalPrice: {
             gross: {
                 amount: parseFloat(parseFloat(totalAmount?.amount).toFixed(2)),
-                currency: totalAmount?.currencyCode
+                currency: totalAmount?.currencyCode.replace("EUR", "€")
             }
         },
         shippingPrice: {
             gross: {
                 amount: shippingMethod?.price?.amount,
-                currency: shippingMethod?.price?.currency
+                currency: shippingMethod?.price?.currency.replace("EUR", "€")
             }
         },
         shippingMethods: shippingMethods,
@@ -235,7 +245,7 @@ function transformCart(node) {
         checkout["shippingPrice"] = {
             gross: {
                 amount: shippingMethod.price.amount,
-                currency: shippingMethod.price.currency
+                currency: shippingMethod.price.currency.replace("EUR", "€")
             }
         }
     }
@@ -244,7 +254,7 @@ function transformCart(node) {
         checkout.discountAllocations = totalDiscountAllocations.reduce((initialVal, currentVal, index) => {
             return {
                 amount: parseFloat(initialVal?.amount) + parseFloat(currentVal?.discountedAmount?.amount),
-                currency: currentVal?.discountedAmount?.currencyCode || initialVal.currency
+                currency: (currentVal?.discountedAmount?.currencyCode || initialVal.currency).replace("EUR", "€")
             }
         }, {amount: 0, currency: "EUR"});
     } else {

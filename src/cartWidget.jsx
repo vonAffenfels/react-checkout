@@ -34,8 +34,6 @@ const CartWidget = ({props}) => {
         if (cart?.lines?.length) {
             if (multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1)) {
                 const {token, url} = await multipass({});
-                console.log("token", token);
-                console.log("url", url);
                 //window.open(url);
                 window.location.href = url;
             } else {
