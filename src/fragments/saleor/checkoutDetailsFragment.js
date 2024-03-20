@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
 
-import PriceFragment from "./PriceFragment";
+import PriceFragment from "./priceFragment";
 import ShippingMethodDetailsFragment from "./shippingMethodDetailsFragment";
 import AddressDetailsFragment from "./addressDetailsFragment";
 

@@ -3,7 +3,7 @@ import React, {useContext} from "react";
 import CheckoutContext from "./context/CheckoutContext";
 import CartWidget from "./cartWidget.jsx";
 import CartFullPage from "./cartFullPage.jsx";
-import PaymentFullPage from "./PaymentFullPage.jsx";
+import PaymentFullPage from "./paymentFullPage.jsx";
 
 const Cart = ({...props}) => {
     let {displayState} = useContext(CheckoutContext);
