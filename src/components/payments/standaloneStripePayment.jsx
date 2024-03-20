@@ -3,7 +3,7 @@ import {Elements} from "@stripe/react-stripe-js";
 
 import BuyContext from "../../context/BuyContext";
 import {StripePaymentForm, StripeSetupForm} from "./stripePayment.jsx";
-import {loadStripe} from "@stripe/stripe-js";
+import {loadStripe} from "@stripe/stripe-js/pure";
 
 const StandaloneStripePayment = ({
     clientSecret,
