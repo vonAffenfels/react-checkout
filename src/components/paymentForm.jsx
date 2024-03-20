@@ -1,5 +1,5 @@
 import React, {Fragment, useContext, useState, useEffect} from "react";
-import {loadStripe} from "@stripe/stripe-js/pure";
+import {loadStripe} from "@stripe/stripe-js/dist/pure.esm";
 
 import CheckoutContext from "../context/CheckoutContext";
 import StripePayment from "./payments/stripePayment.jsx";
