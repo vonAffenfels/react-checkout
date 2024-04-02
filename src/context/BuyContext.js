@@ -10,7 +10,7 @@ import Banner from "../components/banner.jsx";
 export const BuyContext = createContext({});
 
 export const BuyContextProvider = (props) => {
-    const {uri, shop, children, paymentProviders, channel, eftId, useSkeleton} = props;
+    const {uri, shop, children, paymentProviders, eftId, useSkeleton} = props;
     const [isDebug, setIsDebug] = useState(false);
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [bannerMessage, setBannerMessage] = useState({msg: "", isError: false});
@@ -94,7 +94,7 @@ export const BuyContextProvider = (props) => {
                 children
             ) : (
                 <ApolloContextProvider uri={uri}>
-                    <CheckoutContextProvider channel={channel} eftId={eftId}>
+                    <CheckoutContextProvider eftId={eftId}>
                         {children}
                         <Cart />
                         <Banner {...bannerMessage} key="banner-message" />
