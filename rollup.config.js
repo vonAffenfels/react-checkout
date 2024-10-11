@@ -4,6 +4,7 @@ import commonjs from "rollup-plugin-commonjs";
 import postcss from "rollup-plugin-postcss";
 import babel from "rollup-plugin-babel";
 import pkg from "./package.json";
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default [
     {
@@ -49,6 +50,7 @@ export default [
                 ],
                 runtimeHelpers: true
             }),
+            visualizer(),
             // del({targets: ["dist/*"]})
         ],
         external: Object.keys(pkg.peerDependencies || {})
