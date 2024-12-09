@@ -1,8 +1,6 @@
-import {gql} from "@apollo/client";
-
 import OrderDetailsFragment from "../../fragments/shopify/orderDetailsFragment";
 
-export default gql`
+export default `
     ${OrderDetailsFragment}
     query Order($orderId:ID!) {
         node(id:$orderId) {

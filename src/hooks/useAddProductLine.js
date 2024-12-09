@@ -1,7 +1,6 @@
 import React from "react";
 
 //saleor
-import SALEOR_CHECKOUT_ADD_PRODUCT_LINE from "../mutations/saleor/checkoutAddProductLine";
 
 //shopify
 import transformCart from "../lib/transformShopifyCartToContextCheckout";

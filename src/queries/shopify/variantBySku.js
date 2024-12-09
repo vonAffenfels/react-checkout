@@ -1,6 +1,4 @@
-import {gql} from "@apollo/client";
-
-export default gql`
+export default `
     query VariantBySku($query: String!) {
         productVariants (first: 1, query: $query) {
             nodes {

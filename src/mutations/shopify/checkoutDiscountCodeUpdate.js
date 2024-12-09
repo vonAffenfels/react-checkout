@@ -1,6 +1,4 @@
-import {gql} from "@apollo/client";
-
-export default gql`
+export default `
     mutation checkoutDiscountCodeApplyV2($checkoutToken: ID!, $discountCode: String!) {
         checkoutDiscountCodeApplyV2(
             checkoutId: $checkoutToken

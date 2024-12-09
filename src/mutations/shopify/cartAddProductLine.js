@@ -1,8 +1,6 @@
-import {gql} from "@apollo/client";
-
 import cartDetailsFragment from "../../fragments/shopify/cartDetailsFragment";
 
-export default gql`
+export default `
     ${cartDetailsFragment}
     mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!, $linesCount: Int!) {
         cartLinesAdd(cartId: $cartId, lines: $lines) {

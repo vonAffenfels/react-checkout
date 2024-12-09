@@ -1,8 +1,6 @@
-import {gql} from "@apollo/client";
-
 import PriceFragment from "../../fragments/shopify/priceFragment";
 
-export default gql`
+export default `
     ${PriceFragment}
     query ProductList {
         products(first: 8, query: "variants.price:>0") {

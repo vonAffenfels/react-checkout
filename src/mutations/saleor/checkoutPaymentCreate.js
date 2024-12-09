@@ -1,6 +1,4 @@
-import {gql} from "@apollo/client";
-
-export default gql`
+export default `
     mutation CheckoutPaymentCreate($checkoutToken: UUID!, $input: PaymentInput!) {
         checkoutPaymentCreate(
             token: $checkoutToken

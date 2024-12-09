@@ -1,6 +1,4 @@
-import {gql} from "@apollo/client";
-
-export default gql`
+export default `
     mutation CreateCheckout($email: String!, $lines: [CheckoutLineInput!]!, $channel: String!) {
         checkoutCreate(input: {channel: $channel, email: $email, lines: $lines}) {
             checkout {

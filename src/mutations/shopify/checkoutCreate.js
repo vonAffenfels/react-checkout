@@ -1,6 +1,4 @@
-import {gql} from "@apollo/client";
-
-export default gql`
+export default `
     mutation CreateCheckout($input: CheckoutCreateInput!) {
         checkoutCreate(input: $input) {
             checkout {

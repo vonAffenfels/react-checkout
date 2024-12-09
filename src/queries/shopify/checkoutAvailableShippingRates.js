@@ -1,8 +1,6 @@
-import {gql} from "@apollo/client";
-
 import CheckoutDetailsFragment from "../../fragments/shopify/checkoutDetailsFragment";
 
-export default gql`
+export default `
     ${CheckoutDetailsFragment}
     query ($checkoutToken:ID!) {
         node(id:$checkoutToken) {

@@ -1,8 +1,6 @@
-import {gql} from "@apollo/client";
-
 import CheckoutDetailsShipmentFragment from "../../fragments/shopify/checkoutDetailsShipmentFragment";
 
-export default gql`
+export default `
     ${CheckoutDetailsShipmentFragment}
     mutation checkoutShippingAddressUpdateV2($checkoutToken: ID!, $address: MailingAddressInput!) {
         checkoutShippingAddressUpdateV2(

@@ -1,6 +1,4 @@
-import {gql} from "@apollo/client";
-
-export default gql`
+export default `
     query ProductVariantBySku(
         $sku: String!
         $locale: LanguageCodeEnum!
