@@ -1,8 +1,6 @@
-import {gql} from "@apollo/client";
-
 import PriceFragment from "./priceFragment";
 
-export default gql`
+export default `
     ${PriceFragment}
     fragment OrderDetailsFragment on Order {
         currencyCode

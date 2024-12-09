@@ -1,10 +1,8 @@
-import {gql} from "@apollo/client";
-
 import PriceFragment from "./priceFragment";
 import ShippingMethodDetailsFragment from "./shippingMethodDetailsFragment";
 import AddressDetailsFragment from "./addressDetailsFragment";
 
-export default gql`
+export default `
     ${PriceFragment}
     ${ShippingMethodDetailsFragment}
     ${AddressDetailsFragment}

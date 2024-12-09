@@ -1,5 +1,3 @@
-import PriceFragment from "./priceFragment";
-
 export default `
     ${PriceFragment}
     fragment CartDetailsFragment on Cart {
