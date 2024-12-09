@@ -5,8 +5,8 @@ import React from "react";
 //shopify
 import SHOPIFY_PRODUCT_BY_SKU from "../queries/shopify/productBySku";
 
-const useProductBySku = (shop, client) => {
-    if (!shop || !client) {
+const useProductBySku = (shop, uri, apiKey) => {
+    if (!shop) {
         return {};
     }
 
@@ -22,16 +22,22 @@ const useProductBySku = (shop, client) => {
                 tagQuery += " tag_not:Subscription";
             }
             let fetchData = async ({productCursor, variantCursor}) => {
-                let {data} = await client.query({
-                    query: SHOPIFY_PRODUCT_BY_SKU,
-                    variables: {
-                        query: tagQuery,
-                        variantLimit: 3,
-                        variantCursor: variantCursor,
-                        productCursor: productCursor
-                    }
-                });
-                console.log("fetchData", tagQuery, data.products, productCursor, variantCursor)
+                const {data} = await fetch(uri, {
+                    method: "POST",
+                    headers: {
+                        "X-Shopify-Storefront-Access-Token": apiKey,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        query: SHOPIFY_PRODUCT_BY_SKU,
+                        variables: {
+                            query: tagQuery,
+                            variantLimit: 3,
+                            variantCursor: variantCursor,
+                            productCursor: productCursor
+                        },
+                    }),
+                }).then(res => res.json());
                 return data;
             };
             let data = await fetchData({variantCursor, productCursor});

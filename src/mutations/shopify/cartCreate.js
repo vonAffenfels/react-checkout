@@ -1,6 +1,4 @@
-import {gql} from "@apollo/client";
-
-export default gql`
+export default `
     mutation CreateCart($input: CartInput!, $linesCount: Int!) {
         cartCreate(input: $input) {
             cart {

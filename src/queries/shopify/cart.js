@@ -1,8 +1,6 @@
-import {gql} from "@apollo/client";
-
 import CartDetailsFragment from "../../fragments/shopify/cartDetailsFragment";
 
-export default gql`
+export default `
     ${CartDetailsFragment}
     query Cart($cartId:ID!, $country: CountryCode, $linesCount: Int!) @inContext(country: $country) {
         cart(id: $cartId) {

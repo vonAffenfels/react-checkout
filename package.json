@@ -1,6 +1,6 @@
 {
     "name": "react-ez-checkout",
-    "version": "1.2.62",
+    "version": "1.2.63",
     "description": "react-component based cart for a shop checkout",
     "main": "dist/index.cjs.js",
     "module": "dist/index.esm.js",
@@ -41,7 +41,6 @@
         "react-dom": "^18.1.0"
     },
     "devDependencies": {
-        "@apollo/client": "^3.5.8",
         "@babel/core": "^7.17.9",
         "@babel/plugin-transform-async-to-generator": "^7.16.8",
         "@babel/plugin-transform-modules-commonjs": "^7.17.9",
@@ -56,8 +55,6 @@
         "@types/react": "^18.0.8",
         "@types/react-dom": "^18.0.2",
         "autoprefixer": "^9.8.8",
-        "graphql": "^16.4.0",
-        "graphql-tag": "^2.12.6",
         "postcss": "^8.4.13",
         "rollup": "^2.70.2",
         "rollup-plugin-babel": "^4.4.0",
@@ -72,5 +69,6 @@
     "dependencies": {
         "@babel/runtime": "^7.17.9",
         "regenerator-runtime": "^0.13.9"
-    }
+    },
+    "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

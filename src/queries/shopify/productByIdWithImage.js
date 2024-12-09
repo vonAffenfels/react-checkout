@@ -1,6 +1,4 @@
-import {gql} from "@apollo/client";
-
-export default gql`
+export default `
     query ProductByIdWithImage($id: ID!) {
         product(id: $id) {
             id

@@ -1,5 +1,4 @@
-import React, {createContext, useState, useEffect, useContext, useRef} from "react";
-import {useQuery, useApolloClient} from "@apollo/client";
+import React, {createContext, useState, useEffect, useContext} from "react";
 
 //misc
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -8,29 +7,13 @@ import useDebounce from "../hooks/useDebounce";
 //helpers
 import useProductBySku from "../hooks/useProductBySku";
 import useProductById from "../hooks/useProductById";
-import useProductList from "../hooks/useProductList";
+// import useProductList from "../hooks/useProductList";
 
 //cart
 import useCartCreate from "../hooks/useCartCreate";
 import useFinishedCart from "../hooks/useFinishedCart";
 import useCart from "../hooks/useCart";
-
-//checkout
-import useCheckoutCreate from "../hooks/useCheckoutCreate";
 import useAddProductLine from "../hooks/useAddProductLine";
-import useDeleteProductLine from "../hooks/useDeleteProductLine";
-import useUpdateProductLine from "../hooks/useUpdateProductLine";
-import useShippingAddressUpdate from "../hooks/useShippingAddressUpdate";
-import useBillingAddressUpdate from "../hooks/useBillingAddressUpdate";
-import useEmailUpdate from "../hooks/useEmailUpdate";
-import useDeliveryMethodUpdate from "../hooks/useDeliveryMethodUpdate";
-import useCheckout from "../hooks/useCheckout";
-import useCreateDraftOrder from "../hooks/useCreateDraftOrder";
-import useDiscountCodeUpdate from "../hooks/useDiscountCodeUpdate";
-
-//order
-import useDraftOrder from "../hooks/useDraftOrder";
-import useOrder from "../hooks/useOrder";
 
 //login
 import useMultiLogin from "../hooks/useMultiLogin";
@@ -42,46 +25,21 @@ export const CheckoutContext = createContext({});
 
 export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
     const buyContext = useContext(BuyContext);
-    const client = useApolloClient();
     const eftIdString = typeof eftId === "function" ? eftId() : eftId;
-    const executedRef = useRef(false);
 
     //helpers
-    const getProductBySku = useProductBySku(buyContext.shop, client);
-    const getProductById = useProductById(buyContext.shop, client);
-    const getProductList = useProductList(buyContext.shop, client);
+    const getProductBySku = useProductBySku(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
+    const getProductById = useProductById(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
 
     //cart
-    const cartById = useCart(buyContext.shop, client);
+    const cartById = useCart(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
     const finishedCartById = useFinishedCart(buyContext.shop, buyContext.cartUri);
-    const cartCreate = useCartCreate(buyContext.shop, client);
-    const addProductLine = useAddProductLine(buyContext.shop, client, "cart");
-    const deleteProductLine = useDeleteProductLine(buyContext.shop, client, "cart");
-    const updateProductLine = useUpdateProductLine(buyContext.shop, client, "cart");
-    const shippingAddressUpdate = useShippingAddressUpdate(buyContext.shop, client, "cart");
-    const billingAddressUpdate = useBillingAddressUpdate(buyContext.shop, client, "cart");
-    const deliveryMethodUpdate = useDeliveryMethodUpdate(buyContext.shop, client, "cart");
-    const discountCodeUpdate = useDiscountCodeUpdate(buyContext.shop, client, "cart");
-
-    //checkout
-    const checkoutByToken = useCheckout(buyContext.shop, client);
-    const checkoutCreate = useCheckoutCreate(buyContext.shop, client);
-    const addProductLineCheckout = useAddProductLine(buyContext.shop, client, "checkout");
-    const deleteProductLineCheckout = useDeleteProductLine(buyContext.shop, client, "checkout");
-    const shippingAddressUpdateCheckout = useShippingAddressUpdate(buyContext.shop, client, "checkout");
-    const billingAddressUpdateCheckout = useBillingAddressUpdate(buyContext.shop, client, "checkout");
-    const emailUpdateCheckout = useEmailUpdate(buyContext.shop, client, "checkout");
-    const deliveryMethodUpdateCheckout = useDeliveryMethodUpdate(buyContext.shop, client, "checkout");
-    const discountCodeUpdateCheckout = useDiscountCodeUpdate(buyContext.shop, client, "checkout");
+    const cartCreate = useCartCreate(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
+    const addProductLine = useAddProductLine(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
 
     //login
     const [nextDisplayState, setNextDisplayState, removeNextDisplayState] = useLocalStorage(CONST.NEXT_DISPLAY_STATE_KEY);
     const multiLogin = useMultiLogin(buyContext.shop, buyContext.multipassUri);
-
-    //order
-    const createDraftOrder = useCreateDraftOrder(buyContext.shop, client, buyContext.webhookUri);
-    const draftOrderById = useDraftOrder(buyContext.shop, client, buyContext.webhookUri);
-    const orderById = useOrder(buyContext.shop, client);
 
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
@@ -154,21 +112,21 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
         }
     };
 
-    const createCheckout = async ({lines, openCheckoutPage}) => {
-        try {
-            const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
-            const redirectToMultipass = openCheckoutPage && isShopifyCheckout;
-            const {checkoutToken, webUrl} = await checkoutCreate({channel, lineItems: lines});
-            setCheckoutToken(checkoutToken);
-            if (redirectToMultipass) {
-                const {token, url} = await multipass({webUrl, overwriteToken: checkoutToken});
-                window.location.href = url;
-            }
-        } catch (e) {
-            console.log("error in createCheckout");
-            console.log(e);
-        }
-    };
+    // const createCheckout = async ({lines, openCheckoutPage}) => {
+    //     try {
+    //         const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
+    //         const redirectToMultipass = openCheckoutPage && isShopifyCheckout;
+    //         const {checkoutToken, webUrl} = await checkoutCreate({channel, lineItems: lines});
+    //         setCheckoutToken(checkoutToken);
+    //         if (redirectToMultipass) {
+    //             const {token, url} = await multipass({webUrl, overwriteToken: checkoutToken});
+    //             window.location.href = url;
+    //         }
+    //     } catch (e) {
+    //         console.log("error in createCheckout");
+    //         console.log(e);
+    //     }
+    // };
 
     const addItemToCart = async ({product, variantId, quantity = 1, attributes, openCheckoutPage = false}) => {
         const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
@@ -232,61 +190,61 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
         setLoadingLineItems(false);
     };
 
-    const addItemToCheckout = async ({product, variantId, quantity = 1, attributes, openCheckoutPage = false}) => {
-        const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
-        if (openCheckoutPage && !isShopifyCheckout) {
-            setDisplayState("cartFullPage");
-        }
-        if (!isCartOpen && !openCheckoutPage) {
-            setCartOpen(true);
-        }
+    // const addItemToCheckout = async ({product, variantId, quantity = 1, attributes, openCheckoutPage = false}) => {
+    //     const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
+    //     if (openCheckoutPage && !isShopifyCheckout) {
+    //         setDisplayState("cartFullPage");
+    //     }
+    //     if (!isCartOpen && !openCheckoutPage) {
+    //         setCartOpen(true);
+    //     }
 
-        const lines = [];
-        if (product) {
-            const line = {
-                quantity: quantity,
-                merchandiseId: product.variants?.nodes?.[0]?.id,
-            };
-            if (product.sellingPlanGroups?.nodes?.[0]?.sellingPlans?.nodes?.[0]?.id) {
-                line.sellingPlanId = product.sellingPlanGroups.nodes[0].sellingPlans.nodes[0].id;
-            }
-            lines.push(line);
-        } else {
-            lines.push({
-                quantity: quantity,
-                merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", ""),
-            });
-        }
+    //     const lines = [];
+    //     if (product) {
+    //         const line = {
+    //             quantity: quantity,
+    //             merchandiseId: product.variants?.nodes?.[0]?.id,
+    //         };
+    //         if (product.sellingPlanGroups?.nodes?.[0]?.sellingPlans?.nodes?.[0]?.id) {
+    //             line.sellingPlanId = product.sellingPlanGroups.nodes[0].sellingPlans.nodes[0].id;
+    //         }
+    //         lines.push(line);
+    //     } else {
+    //         lines.push({
+    //             quantity: quantity,
+    //             merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", ""),
+    //         });
+    //     }
 
-        if (attributes?.length) {
-            lines[0].attributes = attributes;
-        }
+    //     if (attributes?.length) {
+    //         lines[0].attributes = attributes;
+    //     }
 
-        if (!checkout) {
-            return createCheckout({lines, openCheckoutPage});
-        }
+    //     if (!checkout) {
+    //         return createCheckout({lines, openCheckoutPage});
+    //     }
 
-        setLoadingLineItems(true);
-        try {
-            const checkoutData = await addProductLineCheckout({
-                checkoutToken,
-                lines: lines,
-                totalQuantity: cart.totalQuantity,
-            });
-            setCheckout({
-                ...(checkout || {}),
-                ...checkoutData
-            });
-            const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
-            if (openCheckoutPage && isShopifyCheckout) {
-                const {token, url} = await multipass({});
-                window.location.href = url;
-            }
-        } catch (e) {
-            await getCheckoutByToken();
-        }
-        setLoadingLineItems(false);
-    };
+    //     setLoadingLineItems(true);
+    //     try {
+    //         const checkoutData = await addProductLineCheckout({
+    //             checkoutToken,
+    //             lines: lines,
+    //             totalQuantity: cart.totalQuantity,
+    //         });
+    //         setCheckout({
+    //             ...(checkout || {}),
+    //             ...checkoutData
+    //         });
+    //         const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
+    //         if (openCheckoutPage && isShopifyCheckout) {
+    //             const {token, url} = await multipass({});
+    //             window.location.href = url;
+    //         }
+    //     } catch (e) {
+    //         await getCheckoutByToken();
+    //     }
+    //     setLoadingLineItems(false);
+    // };
 
     const updateCartItems = async ({lineId, variantId, quantity, attributes, bonusProduct}) => {
         if (!isCartOpen) {
@@ -421,152 +379,151 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
 
     };
 
-    const applyDiscountCode = async (discountCodes = [""]) => {
-        if (!cart) {
-            return;
-        }
+    // const applyDiscountCode = async (discountCodes = [""]) => {
+    //     if (!cart) {
+    //         return;
+    //     }
 
-        try {
-            const cartData = await discountCodeUpdate({
-                cartId,
-                discountCodes: discountCodes,
-                totalQuantity: cart.totalQuantity,
-            });
-            setCart({
-                ...(cart || {}),
-                ...cartData
-            });
-        } catch (e) {
-            console.log("catch applyDiscountCode");
-            await getCartById();
-            console.log(e);
-        }
-    }
+    //     try {
+    //         const cartData = await discountCodeUpdate({
+    //             cartId,
+    //             discountCodes: discountCodes,
+    //             totalQuantity: cart.totalQuantity,
+    //         });
+    //         setCart({
+    //             ...(cart || {}),
+    //             ...cartData
+    //         });
+    //     } catch (e) {
+    //         console.log("catch applyDiscountCode");
+    //         await getCartById();
+    //         console.log(e);
+    //     }
+    // }
 
-    const onBeforePayment = async () => {
-        console.log("onBeforePayment", cart);
-        if (!cart || !cart?.lines?.length) {
-            return;
-        }
+    // const onBeforePayment = async () => {
+    //     console.log("onBeforePayment", cart);
+    //     if (!cart || !cart?.lines?.length) {
+    //         return;
+    //     }
 
-        setLoadingDraftOrder(true);
-        const lineItems = cart.lines.map(line => ({
-            quantity: line.quantity || 1,
-            variantId: "gid://shopify/ProductVariant/" + String(line.variant.id).replace("gid://shopify/ProductVariant/", ""),
-            attributes: line.attributes,
-        }));
-        console.log("lineItems", lineItems);
-        const input = {
-            allowPartialAddresses: false,
-            lineItems: lineItems,
-            email: cart.email,
-            buyerIdentity: {
-                countryCode: cart.shippingAddress.countryCode || cart.buyerIdentity?.countryCode
-            },
-        };
-        console.log("input", input);
+    //     setLoadingDraftOrder(true);
+    //     const lineItems = cart.lines.map(line => ({
+    //         quantity: line.quantity || 1,
+    //         variantId: "gid://shopify/ProductVariant/" + String(line.variant.id).replace("gid://shopify/ProductVariant/", ""),
+    //         attributes: line.attributes,
+    //     }));
+    //     console.log("lineItems", lineItems);
+    //     const input = {
+    //         allowPartialAddresses: false,
+    //         lineItems: lineItems,
+    //         email: cart.email,
+    //         buyerIdentity: {
+    //             countryCode: cart.shippingAddress.countryCode || cart.buyerIdentity?.countryCode
+    //         },
+    //     };
+    //     console.log("input", input);
 
-        const foundAddress = getCurrentAddress([cart.shippingAddress, addressFormData, billingAddress]);
-        console.log("foundAddress", foundAddress, "selectedShippingAddressId", selectedShippingAddressId);
-        input.shippingAddress = {
-            address1: foundAddress.streetAddress1,
-            address2: foundAddress.streetAddress2,
-            city: foundAddress.city,
-            company: foundAddress.companyName,
-            country: foundAddress.countryCode || foundAddress.country,
-            firstName: foundAddress.firstName,
-            lastName: foundAddress.lastName,
-            province: foundAddress.countryArea,
-            zip: foundAddress.postalCode
-        };
+    //     const foundAddress = getCurrentAddress([cart.shippingAddress, addressFormData, billingAddress]);
+    //     console.log("foundAddress", foundAddress, "selectedShippingAddressId", selectedShippingAddressId);
+    //     input.shippingAddress = {
+    //         address1: foundAddress.streetAddress1,
+    //         address2: foundAddress.streetAddress2,
+    //         city: foundAddress.city,
+    //         company: foundAddress.companyName,
+    //         country: foundAddress.countryCode || foundAddress.country,
+    //         firstName: foundAddress.firstName,
+    //         lastName: foundAddress.lastName,
+    //         province: foundAddress.countryArea,
+    //         zip: foundAddress.postalCode
+    //     };
 
-        let paymentCheckoutToken = await checkoutCreate({channel, input});
-        let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
-        if (paymentCheckoutData.requiresShipping) {
-            paymentCheckoutData.shippingMethods.forEach(rate => {
-                if (rate.name === cart.shippingMethod.name) {
-                    paymentCheckoutData.shippingMethod = {
-                        price: {
-                            amount: rate.price.amount
-                        },
-                        id: rate.id,
-                        name: rate.name
-                    };
-                }
-            });
-        }
+    //     let paymentCheckoutToken = await checkoutCreate({channel, input});
+    //     let paymentCheckoutData = await checkoutByToken(paymentCheckoutToken);
+    //     if (paymentCheckoutData.requiresShipping) {
+    //         paymentCheckoutData.shippingMethods.forEach(rate => {
+    //             if (rate.name === cart.shippingMethod.name) {
+    //                 paymentCheckoutData.shippingMethod = {
+    //                     price: {
+    //                         amount: rate.price.amount
+    //                     },
+    //                     id: rate.id,
+    //                     name: rate.name
+    //                 };
+    //             }
+    //         });
+    //     }
 
-        if (cart.discountCodes.length) {
-            for (let i = 0; cart.discountCodes.length > i; i++) {
-                try {
-                    await discountCodeUpdateCheckout({
-                        checkoutToken: paymentCheckoutToken,
-                        discountCode: cart.discountCodes[i].code
-                    });
-                } catch (e) {
-                    console.log("error in discountCodeUpdateCheckout");
-                    console.log(e);
-                }
-            }
-        }
+    //     if (cart.discountCodes.length) {
+    //         for (let i = 0; cart.discountCodes.length > i; i++) {
+    //             try {
+    //                 await discountCodeUpdateCheckout({
+    //                     checkoutToken: paymentCheckoutToken,
+    //                     discountCode: cart.discountCodes[i].code
+    //                 });
+    //             } catch (e) {
+    //                 console.log("error in discountCodeUpdateCheckout");
+    //                 console.log(e);
+    //             }
+    //         }
+    //     }
 
-        const draftOrderInput = {
-            checkoutToken: paymentCheckoutToken,
-            checkout: paymentCheckoutData,
-            webhookUri: buyContext.webhookUri,
-            billingAddress: isBillingAddressDeviating ? {
-                ...billingAddress,
-                email: addressFormData.email
-            } : paymentCheckoutData.shippingAddress,
-            selectedPaymentGatewayId: selectedPaymentGatewayId,
-        };
-        if (selectedShippingAddressId) {
-            draftOrderInput.attributes.push({
-                key: "shipping_address_id",
-                value: selectedShippingAddressId,
-            });
-        }
-        if (selectedBillingAddressId) {
-            draftOrderInput.attributes.push({
-                key: "billing_address_id",
-                value: selectedBillingAddressId,
-            });
-        }
-        console.log("draftOrderInput.attributes", draftOrderInput.attributes);
+    //     const draftOrderInput = {
+    //         checkoutToken: paymentCheckoutToken,
+    //         checkout: paymentCheckoutData,
+    //         webhookUri: buyContext.webhookUri,
+    //         billingAddress: isBillingAddressDeviating ? {
+    //             ...billingAddress,
+    //             email: addressFormData.email
+    //         } : paymentCheckoutData.shippingAddress,
+    //         selectedPaymentGatewayId: selectedPaymentGatewayId,
+    //     };
+    //     if (selectedShippingAddressId) {
+    //         draftOrderInput.attributes.push({
+    //             key: "shipping_address_id",
+    //             value: selectedShippingAddressId,
+    //         });
+    //     }
+    //     if (selectedBillingAddressId) {
+    //         draftOrderInput.attributes.push({
+    //             key: "billing_address_id",
+    //             value: selectedBillingAddressId,
+    //         });
+    //     }
+    //     console.log("draftOrderInput.attributes", draftOrderInput.attributes);
 
-        const checkoutData = await createDraftOrder(draftOrderInput);
-        setCheckout({
-            ...(checkout || {}),
-            ...checkoutData
-        });
-        document.cookie = CONST.DRAFT_ORDER_ID_COOKIE_NAME + "=" + checkoutData?.draftOrder?.id + ";max-age-in-seconds=" + 60*60*24*7 + ";path=/;SameSite=strict";
-        setCheckoutToken(paymentCheckoutToken);
+    //     const checkoutData = await createDraftOrder(draftOrderInput);
+    //     setCheckout({
+    //         ...(checkout || {}),
+    //         ...checkoutData
+    //     });
+    //     document.cookie = CONST.DRAFT_ORDER_ID_COOKIE_NAME + "=" + checkoutData?.draftOrder?.id + ";max-age-in-seconds=" + 60*60*24*7 + ";path=/;SameSite=strict";
+    //     setCheckoutToken(paymentCheckoutToken);
 
-        setLoadingDraftOrder(false);
-        setDisplayState("payment");
-    };
+    //     setLoadingDraftOrder(false);
+    //     setDisplayState("payment");
+    // };
 
-    const getCurrentAddress = (addresses = []) => {
-        console.log("getCurrentAddress", addresses);
-        for (let i = 0; i < addresses.length; i++) {
-            const isValid = isValidAddress(addresses[i]);
-            if (isValid) {
-                return addresses[i];
-            }
-        }
-    }
+    // const getCurrentAddress = (addresses = []) => {
+    //     for (let i = 0; i < addresses.length; i++) {
+    //         const isValid = isValidAddress(addresses[i]);
+    //         if (isValid) {
+    //             return addresses[i];
+    //         }
+    //     }
+    // }
 
-    const isValidAddress = (address) => {
-        const {
-            firstName,
-            lastName,
-            streetAddress1,
-            city,
-            country,
-            postalCode,
-        } = address;
-        return firstName && lastName && streetAddress1 && city && country && postalCode;
-    };
+    // const isValidAddress = (address) => {
+    //     const {
+    //         firstName,
+    //         lastName,
+    //         streetAddress1,
+    //         city,
+    //         country,
+    //         postalCode,
+    //     } = address;
+    //     return firstName && lastName && streetAddress1 && city && country && postalCode;
+    // };
 
     const getCartById = async () => {
         try {
@@ -593,56 +550,54 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
         }
     };
 
-    const getCheckoutByToken = async () => {
-        try {
-            if (checkoutToken) {
-                const data = await checkoutByToken(checkoutToken);
-                setCheckout({
-                    ...(checkout || {}),
-                    ...data
-                });
-            } else {
-                setCheckout(null);
-            }
-        } catch (e) {
-            console.log("error in getCheckoutByToken");
-            console.log(e)
-        }
-    };
+    // const getCheckoutByToken = async () => {
+    //     try {
+    //         if (checkoutToken) {
+    //             const data = await checkoutByToken(checkoutToken);
+    //             setCheckout({
+    //                 ...(checkout || {}),
+    //                 ...data
+    //             });
+    //         } else {
+    //             setCheckout(null);
+    //         }
+    //     } catch (e) {
+    //         console.log("error in getCheckoutByToken");
+    //         console.log(e)
+    //     }
+    // };
 
-    const isAddressDataValid = (addressData) => {
-        const {firstName, lastName, streetAddress1, city, country, postalCode} = addressData;
-        return firstName && lastName && streetAddress1 && city && country && postalCode;
-    }
+    // const isAddressDataValid = (addressData) => {
+    //     const {firstName, lastName, streetAddress1, city, country, postalCode} = addressData;
+    //     return firstName && lastName && streetAddress1 && city && country && postalCode;
+    // }
 
-    const isInputAddressDifferentFromCheckoutAddress = (inputAddress) => {
-        let foundDiff = false;
-        let checkoutAddress = checkout?.shippingAddress;
+    // const isInputAddressDifferentFromCheckoutAddress = (inputAddress) => {
+    //     let foundDiff = false;
+    //     let checkoutAddress = checkout?.shippingAddress;
 
-        if (!checkoutAddress) {
-            return true;
-        }
+    //     if (!checkoutAddress) {
+    //         return true;
+    //     }
 
-        Object.keys(inputAddress).forEach(key => {
-            if (inputAddress[key] !== checkoutAddress[key] && key !== "email") {
-                foundDiff = true;
-            }
-        });
-        Object.keys(checkoutAddress).forEach(key => {
-            if (inputAddress[key] !== checkoutAddress[key] && key !== "email") {
-                foundDiff = true;
-            }
-        });
+    //     Object.keys(inputAddress).forEach(key => {
+    //         if (inputAddress[key] !== checkoutAddress[key] && key !== "email") {
+    //             foundDiff = true;
+    //         }
+    //     });
+    //     Object.keys(checkoutAddress).forEach(key => {
+    //         if (inputAddress[key] !== checkoutAddress[key] && key !== "email") {
+    //             foundDiff = true;
+    //         }
+    //     });
 
-        return foundDiff;
-    };
+    //     return foundDiff;
+    // };
 
     const onSelectAddressBookEntry = async (addressId) => {
-        console.log("onSelectAddressBookEntry", addressId);
         if (addressBook?.length) {
             const updateAddress = addressBook.find(address => address.id === addressId);
             if (updateAddress) {
-                console.log("updateAddress", updateAddress);
                 await setCartAddress({
                     company: updateAddress.company,
                     firstName: updateAddress.firstName,
@@ -661,7 +616,6 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
                     country: updateAddress.country,
                     postalCode: updateAddress.postalCode,
                 });
-                console.log("onSelectAddressBookEntry, after, now set to:", addressId);
                 setSelectedShippingAddressId(addressId);
             }
         }
@@ -704,9 +658,9 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
 
     }, [email]);
 
-    useEffect(() => {
-        getCheckoutByToken();
-    }, [checkoutToken]);
+    // useEffect(() => {
+    //     getCheckoutByToken();
+    // }, [checkoutToken]);
 
     useEffect(() => {
         if (cartId) {
@@ -777,16 +731,17 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
         <CheckoutContext.Provider value={{
             checkout,
             cart,
-            checkoutByToken,
+            // checkoutByToken,
             createCart,
-            createCheckout,
-            addItemToCart: buyContext.cartType === "checkout" ? addItemToCheckout : addItemToCart,
+            // createCheckout,
+            // addItemToCart: buyContext.cartType === "checkout" ? addItemToCheckout : addItemToCart,
+            addItemToCart: addItemToCart,
             removeItemFromCart: buyContext.cartType === "checkout" ? removeItemFromCheckout : removeItemFromCart,
             updateCartItems: buyContext.cartType === "checkout" ? updateCheckoutItems : updateCartItems,
             setCartAddress: buyContext.cartType === "checkout" ? setCheckoutAddress : setCartAddress,
             setCartDeliveryMethod: buyContext.cartType === "checkout" ? setCheckoutDeliveryMethod : setCartDeliveryMethod,
-            onBeforePayment,
-            getProductList,
+            // onBeforePayment,
+            // getProductList,
             getProductBySku,
             getProductById,
             displayState,
@@ -811,7 +766,7 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
             loadingDraftOrder,
             removeCartId,
             removeCheckoutToken,
-            applyDiscountCode,
+            // applyDiscountCode,
             reset,
             hideEmailInput,
             setHideEmailInput,
@@ -826,8 +781,6 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
             nextDisplayState,
             setNextDisplayState,
             removeNextDisplayState,
-            draftOrderById,
-            orderById,
             multipass,
         }}>
             {children}

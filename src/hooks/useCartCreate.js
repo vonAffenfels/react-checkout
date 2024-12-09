@@ -1,17 +1,13 @@
-import React, {useContext} from "react";
-import BuyContext from "../context/BuyContext";
+import React from "react";
 
 //saleor
 
 //shopify
-import SHOPIFY_CHECKOUT_CREATE from "../mutations/shopify/checkoutCreate";
 import SHOPIFY_CART_CREATE from "../mutations/shopify/cartCreate";
 import checkQuantityMissing from "../lib/checkQuantityMissing";
 
-const useCartCreate = (shop, client) => {
-    const {webhookUri} = useContext(BuyContext);
-
-    if (!shop || !client) {
+const useCartCreate = (shop, uri, apiKey) => {
+    if (!shop) {
         return {};
     }
 
@@ -23,15 +19,22 @@ const useCartCreate = (shop, client) => {
         return async ({lines, redirectToMultipass}) => {
             const updatedVariantId = lines?.[0]?.merchandiseId;
             const requestedQuantity = lines?.[0]?.quantity;
-            const {data} = await client.mutate({
-                mutation: SHOPIFY_CART_CREATE,
-                variables: {
-                    input: {
-                        lines: lines,
-                    },
-                    linesCount: lines.length,
-                }
-            });
+            const {data} = await fetch(uri, {
+                method: "POST",
+                headers: {
+                    "X-Shopify-Storefront-Access-Token": apiKey,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    query: SHOPIFY_CART_CREATE,
+                    variables: {
+                        input: {
+                            lines: lines,
+                        },
+                        linesCount: lines.length,
+                    }
+                }),
+            }).then(res => res.json());
 
             if (data?.cartCreate?.userErrors?.length) {
                 data.cartCreate.userErrors.forEach(err => console.warn(err));

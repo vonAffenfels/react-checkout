@@ -10,7 +10,7 @@ const ProductInput = ({}) => {
         setReady(true);
     }, []);
 
-    const [variantId, setVariantId] = useState("41300575387780");
+    const [variantId, setVariantId] = useState("49763706405193");
 
     const onChange = (e) => {
         setVariantId(e.target.value);
@@ -18,9 +18,9 @@ const ProductInput = ({}) => {
 
     const onClick = async () => {
         await addItemToCart({
-            variantId: "41300575387780",
+            variantId: variantId,
             quantity: 1,
-            attributes: [{key: "starting_magazine_id", value: "83"}],
+            // attributes: [{key: "starting_magazine_id", value: "83"}],
             openCheckoutPage: false,
         });
     };
