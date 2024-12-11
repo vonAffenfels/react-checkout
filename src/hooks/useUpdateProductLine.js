@@ -10,8 +10,8 @@ import checkQuantityMissing from "../lib/checkQuantityMissing";
 /*
 type may be "cart" or "checkout"
  */
-const useAddProductLine = (shop, uri, apiKey) => {
-    if (!shop || !client) {
+const useUpdateProductLine = (shop, uri, apiKey) => {
+    if (!shop) {
         return {};
     }
 
@@ -54,4 +54,4 @@ const useAddProductLine = (shop, uri, apiKey) => {
     }
 }
 
-export default useAddProductLine;
+export default useUpdateProductLine;

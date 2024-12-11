@@ -738,7 +738,7 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
             // addItemToCart: buyContext.cartType === "checkout" ? addItemToCheckout : addItemToCart,
             addItemToCart: addItemToCart,
             removeItemFromCart: buyContext.cartType === "checkout" ? removeItemFromCheckout : removeItemFromCart,
-            updateCartItems: buyContext.cartType === "checkout" ? updateCheckoutItems : updateCartItems,
+            updateCartItems: updateCartItems,
             setCartAddress: buyContext.cartType === "checkout" ? setCheckoutAddress : setCartAddress,
             setCartDeliveryMethod: buyContext.cartType === "checkout" ? setCheckoutDeliveryMethod : setCartDeliveryMethod,
             // onBeforePayment,
