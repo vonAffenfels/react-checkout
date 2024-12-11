@@ -7,13 +7,13 @@ import useDebounce from "../hooks/useDebounce";
 //helpers
 import useProductBySku from "../hooks/useProductBySku";
 import useProductById from "../hooks/useProductById";
-// import useProductList from "../hooks/useProductList";
 
 //cart
 import useCartCreate from "../hooks/useCartCreate";
 import useFinishedCart from "../hooks/useFinishedCart";
 import useCart from "../hooks/useCart";
 import useAddProductLine from "../hooks/useAddProductLine";
+import useUpdateProductLine from "../hooks/useUpdateProductLine";
 
 //login
 import useMultiLogin from "../hooks/useMultiLogin";
@@ -36,6 +36,7 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
     const finishedCartById = useFinishedCart(buyContext.shop, buyContext.cartUri);
     const cartCreate = useCartCreate(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
     const addProductLine = useAddProductLine(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
+    const updateProductLine = useUpdateProductLine(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
 
     //login
     const [nextDisplayState, setNextDisplayState, removeNextDisplayState] = useLocalStorage(CONST.NEXT_DISPLAY_STATE_KEY);
