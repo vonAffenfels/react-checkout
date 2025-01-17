@@ -191,62 +191,6 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
         setLoadingLineItems(false);
     };
 
-    // const addItemToCheckout = async ({product, variantId, quantity = 1, attributes, openCheckoutPage = false}) => {
-    //     const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
-    //     if (openCheckoutPage && !isShopifyCheckout) {
-    //         setDisplayState("cartFullPage");
-    //     }
-    //     if (!isCartOpen && !openCheckoutPage) {
-    //         setCartOpen(true);
-    //     }
-
-    //     const lines = [];
-    //     if (product) {
-    //         const line = {
-    //             quantity: quantity,
-    //             merchandiseId: product.variants?.nodes?.[0]?.id,
-    //         };
-    //         if (product.sellingPlanGroups?.nodes?.[0]?.sellingPlans?.nodes?.[0]?.id) {
-    //             line.sellingPlanId = product.sellingPlanGroups.nodes[0].sellingPlans.nodes[0].id;
-    //         }
-    //         lines.push(line);
-    //     } else {
-    //         lines.push({
-    //             quantity: quantity,
-    //             merchandiseId: "gid://shopify/ProductVariant/" + String(variantId).replace("gid://shopify/ProductVariant/", ""),
-    //         });
-    //     }
-
-    //     if (attributes?.length) {
-    //         lines[0].attributes = attributes;
-    //     }
-
-    //     if (!checkout) {
-    //         return createCheckout({lines, openCheckoutPage});
-    //     }
-
-    //     setLoadingLineItems(true);
-    //     try {
-    //         const checkoutData = await addProductLineCheckout({
-    //             checkoutToken,
-    //             lines: lines,
-    //             totalQuantity: cart.totalQuantity,
-    //         });
-    //         setCheckout({
-    //             ...(checkout || {}),
-    //             ...checkoutData
-    //         });
-    //         const isShopifyCheckout = buyContext.multipassUri && (globalThis?.window?.location?.search?.indexOf?.("legacy-checkout") === -1);
-    //         if (openCheckoutPage && isShopifyCheckout) {
-    //             const {token, url} = await multipass({});
-    //             window.location.href = url;
-    //         }
-    //     } catch (e) {
-    //         await getCheckoutByToken();
-    //     }
-    //     setLoadingLineItems(false);
-    // };
-
     const updateCartItems = async ({lineId, variantId, quantity, attributes, bonusProduct}) => {
         if (!isCartOpen) {
             setCartOpen(true);
@@ -551,23 +495,6 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
         }
     };
 
-    // const getCheckoutByToken = async () => {
-    //     try {
-    //         if (checkoutToken) {
-    //             const data = await checkoutByToken(checkoutToken);
-    //             setCheckout({
-    //                 ...(checkout || {}),
-    //                 ...data
-    //             });
-    //         } else {
-    //             setCheckout(null);
-    //         }
-    //     } catch (e) {
-    //         console.log("error in getCheckoutByToken");
-    //         console.log(e)
-    //     }
-    // };
-
     // const isAddressDataValid = (addressData) => {
     //     const {firstName, lastName, streetAddress1, city, country, postalCode} = addressData;
     //     return firstName && lastName && streetAddress1 && city && country && postalCode;
@@ -659,10 +586,6 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
 
     }, [email]);
 
-    // useEffect(() => {
-    //     getCheckoutByToken();
-    // }, [checkoutToken]);
-
     useEffect(() => {
         if (cartId) {
             finishedCartById({cartToken: cartId}).then(cart => {
@@ -732,9 +655,7 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
         <CheckoutContext.Provider value={{
             checkout,
             cart,
-            // checkoutByToken,
             createCart,
-            // createCheckout,
             // addItemToCart: buyContext.cartType === "checkout" ? addItemToCheckout : addItemToCart,
             addItemToCart: addItemToCart,
             removeItemFromCart: buyContext.cartType === "checkout" ? removeItemFromCheckout : removeItemFromCart,
