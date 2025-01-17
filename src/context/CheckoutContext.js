@@ -28,19 +28,19 @@ export const CheckoutContextProvider = ({children, channel, eftId, portal}) => {
     const eftIdString = typeof eftId === "function" ? eftId() : eftId;
 
     //helpers
-    const getProductBySku = useProductBySku(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
-    const getProductById = useProductById(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
+    const getProductBySku = useProductBySku(buyContext.uri, buyContext.storefrontApiKey);
+    const getProductById = useProductById(buyContext.uri, buyContext.storefrontApiKey);
 
     //cart
-    const cartById = useCart(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
-    const finishedCartById = useFinishedCart(buyContext.shop, buyContext.cartUri);
-    const cartCreate = useCartCreate(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
-    const addProductLine = useAddProductLine(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
-    const updateProductLine = useUpdateProductLine(buyContext.shop, buyContext.uri, buyContext.storefrontApiKey);
+    const cartById = useCart(buyContext.uri, buyContext.storefrontApiKey);
+    const finishedCartById = useFinishedCart(buyContext.cartUri);
+    const cartCreate = useCartCreate(buyContext.uri, buyContext.storefrontApiKey);
+    const addProductLine = useAddProductLine(buyContext.uri, buyContext.storefrontApiKey);
+    const updateProductLine = useUpdateProductLine(buyContext.uri, buyContext.storefrontApiKey);
 
     //login
     const [nextDisplayState, setNextDisplayState, removeNextDisplayState] = useLocalStorage(CONST.NEXT_DISPLAY_STATE_KEY);
-    const multiLogin = useMultiLogin(buyContext.shop, buyContext.multipassUri);
+    const multiLogin = useMultiLogin(buyContext.multipassUri);
 
     const [checkoutToken, setCheckoutToken, removeCheckoutToken] = useLocalStorage(CONST.CHECKOUT_KEY);
     const [checkout, setCheckout] = useState(null);
