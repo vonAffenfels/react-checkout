@@ -1,11 +1,15 @@
+import React from "react";
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+// import * as zustandReact from "zustand/react";
+// console.log("zustandReact", zustandReact);
 import useCartCreate, { CreateCartParams } from "../hooks/useCartCreate";
 import useUpdateCartLine, { UpdateCartLineParams } from "../hooks/useUpdateCartLine";
 import useCreateCartLine, { CreateCartLineParams } from "../hooks/useAddProductLine";
 
-const ENDPOINT = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ENDPOINT || globalThis?.window.SHOPIFY_STOREFRONT_ENDPOINT;
-const TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN || globalThis?.window.SHOPIFY_STOREFRONT_TOKEN;
+// const ENDPOINT = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ENDPOINT || globalThis?.window.SHOPIFY_STOREFRONT_ENDPOINT;
+const ENDPOINT = globalThis?.window?.SHOPIFY_STOREFRONT_ENDPOINT;
+// const TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN || globalThis?.window.SHOPIFY_STOREFRONT_TOKEN;
+const TOKEN = globalThis?.window?.SHOPIFY_STOREFRONT_TOKEN;
 
 declare global {
     interface Window {
@@ -31,8 +35,9 @@ export type CartState = {
 // TODO use localStorage to store the cartId between sessions!
 // TODO everything multipass | one-click-checkout | insta-checkout
 // TODO everything discountCode etc
+// TODO browser fill process.env? => rollup-plugin-node-polyfills
 const useCartStore = create<CartState>()(
-    devtools((set, get, store) => ({
+    (set, get, store) => ({
         cart: null,
         email: "",
         isCartOpen: false,
@@ -64,7 +69,7 @@ const useCartStore = create<CartState>()(
                 isCartOpen: true,
             });
         },
-    }))
+    })
 );
 
 export default useCartStore;

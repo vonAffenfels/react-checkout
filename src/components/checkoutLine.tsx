@@ -3,7 +3,9 @@ import React, {useState} from "react";
 import Price from "./atoms/price";
 import {Spin} from "./atoms/animate";
 import useCartStore from "../stores/cartStore";
-import {useShallow} from "zustand/react/shallow";
+// import {useShallow} from "zustand/react/shallow";
+import * as shallow from "zustand/react/shallow";
+console.log("shallow", shallow);
 
 type CheckoutLineProps = CartLine;
 const CheckoutLine = ({
@@ -15,10 +17,10 @@ const CheckoutLine = ({
     discountAllocations,
     displayMessage = "",
 }: CheckoutLineProps) => {
-    const discountCodes = useCartStore(useShallow((store) => (store.cart?.discountCodes || []).map(v => v.code).join(", ")));
-    const updateCartLines = useCartStore(useShallow((store) => store.updateCartLines));
-    const cartId = useCartStore(useShallow((store) => store.cart?.id));
-    const linesCount = useCartStore(useShallow((store) => store.cart?.lines?.length || 1));
+    const discountCodes = useCartStore(shallow.useShallow((store) => (store.cart?.discountCodes || []).map(v => v.code).join(", ")));
+    const updateCartLines = useCartStore(shallow.useShallow((store) => store.updateCartLines));
+    const cartId = useCartStore(shallow.useShallow((store) => store.cart?.id));
+    const linesCount = useCartStore(shallow.useShallow((store) => store.cart?.lines?.length || 1));
 
     const [isLoadingQuantity, setLoadingQuantity] = useState(false);
     const overwriteImage = attributes.find(v => v.key === "overwrite_product_image_url");

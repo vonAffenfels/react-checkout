@@ -1,9 +1,15 @@
+"use client";
+
 import React, {useContext, useState, useEffect} from "react";
+// import {create} from "zustand";
+// import {useShallow} from "zustand/react/shallow";
 
 import ReactCheckout from "react-ez-checkout/dist/index.cjs.js";
 
 const ProductInput = ({}) => {
-    const {addItemToCart} = useContext(ReactCheckout.API);
+    console.log("create", create);
+    console.log("useShallow", useShallow);
+    console.log("ReactCheckout", ReactCheckout);
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
@@ -18,12 +24,6 @@ const ProductInput = ({}) => {
 
     const onClick = async () => {
         console.log("addItemToCart", variantId);
-        await addItemToCart({
-            variantId: variantId,
-            quantity: 1,
-            // attributes: [{key: "starting_magazine_id", value: "83"}],
-            openCheckoutPage: false,
-        });
     };
 
     if (!ready) {
