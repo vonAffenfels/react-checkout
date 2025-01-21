@@ -10,13 +10,14 @@ const ProductInput = ({}) => {
         setReady(true);
     }, []);
 
-    const [variantId, setVariantId] = useState("49763706405193");
+    const [variantId, setVariantId] = useState("54887811055991");
 
     const onChange = (e) => {
         setVariantId(e.target.value);
     };
 
     const onClick = async () => {
+        console.log("addItemToCart", variantId);
         await addItemToCart({
             variantId: variantId,
             quantity: 1,
